@@ -22,17 +22,13 @@ int main() {
 
 	glfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 
-	int display_w, display_h;
 
 	glfwMakeContextCurrent(glfwWindow);
-	glfwGetFramebufferSize(glfwWindow, &display_w, &display_h);
+	glfwGetFramebufferSize(glfwWindow, &width, &height);
 
-	width = display_w;
-	height = display_h;
+	glfwSetWindowPos(glfwWindow, (mode->width - width) / 2, (mode->height - height) / 2);
 
-	glfwSetWindowPos(glfwWindow, (mode->width - display_w) / 2, (mode->height - display_h) / 2);
-
-	if (!glfwWindow) 
+	if (!glfwWindow)
 	{
 		return -1;
 	}
@@ -42,7 +38,7 @@ int main() {
 
 	// Init GLEW
 	glewExperimental = true;
-	if (glewInit() != GLEW_OK) 
+	if (glewInit() != GLEW_OK)
 	{
 		return -1;
 	}
@@ -57,15 +53,28 @@ int main() {
 		<< "Aspect ratio = " << aspect_ratio << std::endl;
 	std::cout << "Press Escape key to exit" << std::endl;
 
+
 	while (!glfwWindowShouldClose(glfwWindow))
 	{
 		glfwMakeContextCurrent(glfwWindow);
+		// (100, 149, 237) is background color
 		glClearColor(static_cast<float>(100) / 255.0f, static_cast<float>(149) / 255.0f, static_cast<float>(237) / 255.0f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		// rendering loop
 		glMatrixMode(GL_MODELVIEW);
-
 		glPushMatrix();
+		
+		glColor3f(1, 1, 1);
+		glBegin(GL_POLYGON);
+		glVertex2f(0.5f, 0.5f);
+		glVertex2f(-0.5f, 0.5f);
+		glVertex2f(-0.5f, -0.5f);
+		glVertex2f(0.5f, -0.5f);
+		glEnd();
+		
 		glPopMatrix();
+		glFlush();
 
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
@@ -73,7 +82,7 @@ int main() {
 
 	glfwTerminate();
 
-	cout << "See U GELDA!" << endl;
+	std::cout << "See U GELDA!" << endl;
 
 	return 0;
 }
