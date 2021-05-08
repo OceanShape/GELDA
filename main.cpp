@@ -9,11 +9,19 @@
 
 using namespace std;
 
-float gPositionX = 0.5f;
-float gPositionY = 0.5f;
+// class : game
+GLFWwindow* glfwWindow = nullptr;
+int width = DEFAULT_WIDTH;
+int height = DEFAULT_HEIGHT;
+string title = "GELDA";
+
+// class : game object
+float positionX = 0.5f;
+float positionY = 0.5f;
 float moveX = 0.0f;
 float moveY = 0.0f;
 const float delta = 0.05f;
+
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -29,25 +37,20 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) moveY = 0.0f;
 }
 
-bool init(GLFWwindow** pGlfwWindow)
+bool init()
 {
-	int width = DEFAULT_WIDTH;
-	int height = DEFAULT_HEIGHT;
-	string title = "GELDA";
-
-
 	if (!glfwInit()) return false;
 
-	*pGlfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	glfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 
-	glfwMakeContextCurrent(*pGlfwWindow);
-	glfwSetKeyCallback(*pGlfwWindow, keyCallback);
-	glfwGetFramebufferSize(*pGlfwWindow, &width, &height);
+	glfwMakeContextCurrent(glfwWindow);
+	glfwSetKeyCallback(glfwWindow, keyCallback);
+	glfwGetFramebufferSize(glfwWindow, &width, &height);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	glfwSetWindowPos(*pGlfwWindow, (mode->width - width) / 2, (mode->height - height) / 2);
+	glfwSetWindowPos(glfwWindow, (mode->width - width) / 2, (mode->height - height) / 2);
 
-	if (!*pGlfwWindow) return false;
+	if (!glfwWindow) return false;
 
 
 	// Init GLEW
@@ -71,8 +74,8 @@ bool init(GLFWwindow** pGlfwWindow)
 
 void update()
 {
-	gPositionX += moveX;
-	gPositionY += moveY;
+	positionX += moveX;
+	positionY += moveY;
 }
 
 void draw()
@@ -86,10 +89,10 @@ void draw()
 	{
 		glColor3f(0, 0, 0);
 		glBegin(GL_POLYGON);
-		glVertex2f(gPositionX, gPositionY);
-		glVertex2f(gPositionX - 1.0f, gPositionY);
-		glVertex2f(gPositionX - 1.0f, gPositionY - 1.0f);
-		glVertex2f(gPositionX, gPositionY - 1.0f);
+		glVertex2f(positionX, positionY);
+		glVertex2f(positionX - 1.0f, positionY);
+		glVertex2f(positionX - 1.0f, positionY - 1.0f);
+		glVertex2f(positionX, positionY - 1.0f);
 		glEnd();
 	}
 
@@ -99,9 +102,8 @@ void draw()
 }
 
 int main() {
-	GLFWwindow* glfwWindow = nullptr;
 
-	init(&glfwWindow);
+	init();
 
 	while (!glfwWindowShouldClose(glfwWindow))
 	{
