@@ -1,7 +1,8 @@
 #include "Resource.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+float gTextureSize = 0.0625f;
 
 void Resource::init(const std::string fileName[])
 {
@@ -62,7 +63,7 @@ void Resource::draw(int textureNumber)
 
 	glPushMatrix();
 	{
-		glScalef(1.0f, 1.0f, 1.0f);
+		glScalef(gTextureSize, gTextureSize, gTextureSize);
 
 		glBindTexture(GL_TEXTURE_2D, mTexture[textureNumber]);
 
@@ -70,10 +71,10 @@ void Resource::draw(int textureNumber)
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 1.0f);
 		glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, -1.0f);
 		glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, -1.0f);
 		glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 1.0f);
 
 		glEnd();
 	}
