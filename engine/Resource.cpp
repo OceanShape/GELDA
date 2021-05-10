@@ -4,6 +4,9 @@
 
 float gTextureSize = 0.0625f;
 
+extern float positionX;
+extern float positionY;
+
 void Resource::init(const std::string fileName[])
 {
 	glEnable(GL_BLEND);
@@ -71,10 +74,10 @@ void Resource::draw(int textureNumber)
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 1.0f);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, -1.0f);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, -1.0f);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(positionX - 1.0f, positionY + 1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(positionX - 1.0f, positionY - 1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(positionX + 1.0f, positionY - 1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(positionX + 1.0f, positionY + 1.0f);
 
 		glEnd();
 	}

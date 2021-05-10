@@ -1,10 +1,10 @@
 #include "Game.h"
 
-float positionX = 0.5f;
-float positionY = 0.5f;
+float positionX = 0.0f;
+float positionY = 0.0f;
 float moveX = 0.0f;
 float moveY = 0.0f;
-const float delta = 0.05f;
+const float delta = 0.5f;
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -69,23 +69,9 @@ void Game::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
-	glPushMatrix();
-
-	{
-		glColor3f(0, 0, 0);
-		glBegin(GL_POLYGON);
-		glVertex2f(positionX, positionY);
-		glVertex2f(positionX - 1.0f, positionY);
-		glVertex2f(positionX - 1.0f, positionY - 1.0f);
-		glVertex2f(positionX, positionY - 1.0f);
-		glEnd();
-	}
-
-	glPopMatrix();
+	mResource->draw(0);
 
 	glFlush();
-
-	mResource->draw(0);
 }
 
 void Game::run()
