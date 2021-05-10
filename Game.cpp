@@ -49,6 +49,12 @@ Game::Game()
 		<< "Display height = " << height << std::endl
 		<< "Aspect ratio = " << aspect_ratio << std::endl;
 	std::cout << "Press Escape key to exit" << std::endl;
+
+	std::string name[] = { "./sample_sprite.png" };
+
+	mResource = new Resource(name, 1);
+
+
 }
 
 void Game::update()
@@ -78,6 +84,8 @@ void Game::draw()
 	glPopMatrix();
 
 	glFlush();
+
+	mResource->draw(0);
 }
 
 void Game::run()
