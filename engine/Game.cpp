@@ -22,6 +22,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
 Game::Game()
 {
+	mGameObject = new GameObject();
+	
 	assert(glfwInit());
 
 	glfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
@@ -49,12 +51,6 @@ Game::Game()
 		<< "Display height = " << height << std::endl
 		<< "Aspect ratio = " << aspect_ratio << std::endl;
 	std::cout << "Press Escape key to exit" << std::endl;
-
-	std::string name[] = { "./sample_sprite.png" };
-
-	mResource = new Resource(name, 1);
-
-
 }
 
 void Game::update()
@@ -69,7 +65,7 @@ void Game::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
-	mResource->draw(0);
+	//mResource->draw(0);
 
 	glFlush();
 }

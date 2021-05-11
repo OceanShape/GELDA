@@ -16,6 +16,11 @@ public:
 		init(fileName);
 	}
 
+	~Resource()
+	{
+		delete[] mTexture;
+	}
+
 	void draw(int textureNumber);
 
 private:

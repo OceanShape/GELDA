@@ -26,7 +26,7 @@ void Resource::init(const std::string fileName[])
 	{
 		data = stbi_load(fileName[count].c_str(), &width, &height, &number_channel, 0);
 
-		if (data == NULL)
+		if (data == nullptr)
 		{
 			std::cout << "  notice : Failed to load texture \"" << fileName[count] << "\"" << std::endl;
 		}
