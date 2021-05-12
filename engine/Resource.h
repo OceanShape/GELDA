@@ -7,8 +7,8 @@
 class Resource
 {
 public:
-	GLuint* mTexture = nullptr;
-	int mTextureCount = 0;
+	GLuint* mTexture;
+	int mTextureCount;
 
 	Resource(const std::string fileName[], int resourceCount)
 	{

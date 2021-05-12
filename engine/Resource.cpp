@@ -13,49 +13,48 @@ void Resource::init(const std::string fileName[])
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
+	int width;
+	int height;
+	int numberChannel;
+	unsigned char* data = nullptr;
 	mTexture = new GLuint[mTextureCount];
 	glGenTextures(mTextureCount, mTexture);
 
-	unsigned char* data = nullptr;
-	int width;
-	int height;
-	int number_channel;
-
-	for (int count = 0; count < mTextureCount; count++)
+	for (int count = 0; count < mTextureCount; ++count)
 	{
-		data = stbi_load(fileName[count].c_str(), &width, &height, &number_channel, 0);
+		data = stbi_load(fileName[count].c_str(), &width, &height, &numberChannel, 0);
 
-		if (data == nullptr)
+		if (data)
+		{
+			glBindTexture(GL_TEXTURE_2D, mTexture[count]);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			if (numberChannel == 4)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			}
+			else if (numberChannel == 3)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			}
+			else
+			{
+				std::cout << "  notice : Use RGB or RGBA images. Your input image has " << numberChannel << "channels." << std::endl;
+			}
+
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
 		{
 			std::cout << "  notice : Failed to load texture \"" << fileName[count] << "\"" << std::endl;
 		}
 
-		glBindTexture(GL_TEXTURE_2D, mTexture[count]);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		if (number_channel == 4)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		}
-		else if (number_channel == 3)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		}
-		else
-		{
-			std::cout << "  notice : Use RGB or RGBA images. Your input image has " << number_channel << "channels." << std::endl;
-		}
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-
 		stbi_image_free(data);
 	}
-
 }
 
 void Resource::draw(int textureNumber)
