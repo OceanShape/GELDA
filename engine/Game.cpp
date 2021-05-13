@@ -22,30 +22,35 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
 Game::Game()
 {
-	mGameObject = new GameObject();
-	
 	assert(glfwInit());
 
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
 	glfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+
 
 	glfwMakeContextCurrent(glfwWindow);
 	glfwSetKeyCallback(glfwWindow, keyCallback);
 	glfwGetFramebufferSize(glfwWindow, &width, &height);
-
-	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	glfwSetWindowPos(glfwWindow, (mode->width - width) / 2, (mode->height - height) / 2);
 
+
 	assert(glfwWindow);
+	glfwSwapInterval(1); // 60fps
+
 
 	// Init GLEW
 	glewExperimental = true;
 	assert(glewInit() == GLEW_OK);
 
-	glfwSwapInterval(1); // 60fps
 
 	glViewport(0, 0, width, height);
 	const float aspect_ratio = (float)width / (float)height;
 	glOrtho(-aspect_ratio, aspect_ratio, -1.0, 1.0, -1.0, 1.0);
+
+	
+	mGameObject = new GameObject();
+
 
 	std::cout << "Display width = " << width << std::endl
 		<< "Display height = " << height << std::endl

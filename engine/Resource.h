@@ -7,7 +7,7 @@
 class Resource
 {
 public:
-	GLuint* mTexture;
+	unsigned int* mTexture;
 	int mTextureCount;
 
 	Resource(const std::string fileName[], int resourceCount)

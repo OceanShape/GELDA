@@ -17,7 +17,7 @@ void Resource::init(const std::string fileName[])
 	int height;
 	int numberChannel;
 	unsigned char* data = nullptr;
-	mTexture = new GLuint[mTextureCount];
+	mTexture = new unsigned int[mTextureCount];
 	glGenTextures(mTextureCount, mTexture);
 
 	for (int count = 0; count < mTextureCount; ++count)
