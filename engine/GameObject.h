@@ -1,25 +1,30 @@
 #pragma once
-#include "Resource.h"
+#include <iostream>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <cassert>
 
 class GameObject
 {
 private:
 	float mPosX = 0.0f; // position x
 	float mPosY = 0.0f; // position y
-	Resource* mResource;
+	GLuint* mTexture;
+	int mTextureCount;
 
 public:
 	GameObject()
 	{
 		std::string name[] = { "./sample_sprite.png" };
-		mResource = new Resource(name, 1);
+		mTextureCount = 1; // for Test
+		initTexture(name);
 	}
 
 	~GameObject()
 	{
-		delete mResource;
 	}
 
-	void draw();
+	void draw(int textureNumber);
 
+	void initTexture(const std::string fileName[]);
 };

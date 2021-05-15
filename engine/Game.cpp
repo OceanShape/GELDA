@@ -49,6 +49,7 @@ Game::Game()
 	glOrtho(-aspect_ratio, aspect_ratio, -1.0, 1.0, -1.0, 1.0);
 
 	
+	// Init GameObejcts
 	mGameObject = new GameObject();
 
 
@@ -70,7 +71,7 @@ void Game::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
-	mGameObject->draw();
+	mGameObject->draw(0); // for Test
 
 	glFlush();
 }

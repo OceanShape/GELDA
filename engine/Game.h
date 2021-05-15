@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <vector>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -12,6 +14,7 @@ private:
 	int width = 512;
 	int height = 512;
 	std::string title = "GELDA";
+	std::vector<GameObject> v;
 	GameObject* mGameObject;
 
 public:
