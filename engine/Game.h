@@ -13,7 +13,7 @@ class Game
 {
 private:
 	GLFWwindow* glfwWindow = nullptr;
-	GameObject* mGameObject;
+	GameObject* mGameObject = nullptr;
 
 	std::map<int, bool> keyStatus;
 	float moveX = 0.0f;
@@ -24,7 +24,6 @@ public:
 	Game(const std::string title, int width, int height);
 	~Game()
 	{
-		delete mGameObject;
 	}
 
 	void run();		// entire game loop

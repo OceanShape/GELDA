@@ -14,9 +14,8 @@ private:
 	float gTextureSize = 0.0625f;
 
 public:
-	GameObject()
+	GameObject(std::string name[])
 	{
-		std::string name[] = { "./sample_sprite.png" };
 		mTextureCount = 1; // for Test
 		initTexture(name);
 	}
