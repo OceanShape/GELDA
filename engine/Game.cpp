@@ -6,20 +6,6 @@ float moveX = 0.0f;
 float moveY = 0.0f;
 const float delta = 0.5f;
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)	glfwSetWindowShouldClose(window, GLFW_TRUE);
-
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) moveX = -delta;
-	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE)	moveX = 0.0f;
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) moveX = delta;
-	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) moveX = 0.0f;
-	if (key == GLFW_KEY_UP && action == GLFW_PRESS) moveY = delta;
-	if (key == GLFW_KEY_UP && action == GLFW_RELEASE) moveY = 0.0f;
-	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) moveY = -delta;
-	if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) moveY = 0.0f;
-}
-
 Game::Game()
 {
 	assert(glfwInit());
@@ -30,7 +16,6 @@ Game::Game()
 
 
 	glfwMakeContextCurrent(glfwWindow);
-	glfwSetKeyCallback(glfwWindow, keyCallback);
 	glfwGetFramebufferSize(glfwWindow, &width, &height);
 	glfwSetWindowPos(glfwWindow, (mode->width - width) / 2, (mode->height - height) / 2);
 
@@ -61,6 +46,19 @@ Game::Game()
 
 void Game::update()
 {
+	if (isKeyDown(GLFW_KEY_ESCAPE)) glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+
+	if (isKeyDown(GLFW_KEY_LEFT))		moveX = -delta;
+	else if (isKeyUp(GLFW_KEY_LEFT))	moveX = 0.0f;
+	else if (isKeyDown(GLFW_KEY_RIGHT))	moveX = delta;
+	else if (isKeyUp(GLFW_KEY_RIGHT))	moveX = 0.0f;
+	else if (isKeyDown(GLFW_KEY_UP))	moveY = delta;
+	else if (isKeyUp(GLFW_KEY_UP))		moveY = 0.0f;
+	else if (isKeyDown(GLFW_KEY_DOWN))	moveY = -delta;
+	else if (isKeyUp(GLFW_KEY_DOWN))	moveY = 0.0f;
+
+	updateKeyStatus();
+
 	positionX += moveX;
 	positionY += moveY;
 }

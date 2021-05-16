@@ -31,6 +31,7 @@ public:
 	void update();	// update input and gameobject status
 	void draw();	// draw all gameobjects
 
+private:
 	void updateKeyStatus();
 	bool isKeyPressed(const int& key);
 	bool isKeyReleased(const int& key);
