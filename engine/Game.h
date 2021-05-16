@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -17,13 +18,22 @@ private:
 	std::vector<GameObject> v;
 	GameObject* mGameObject;
 
+	std::map<int, bool> keyStatus;
+
 public:
 	Game();
 	~Game()
 	{
 		delete mGameObject;
 	}
-	void update();
-	void draw();
-	void run();
+
+	void run();		// entire game loop
+	void update();	// update input and gameobject status
+	void draw();	// draw all gameobjects
+
+	void updateKeyStatus();
+	bool isKeyPressed(const int& key);
+	bool isKeyReleased(const int& key);
+	bool isKeyUp(const int& key);
+	bool isKeyDown(const int& key);
 };

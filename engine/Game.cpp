@@ -48,7 +48,7 @@ Game::Game()
 	const float aspect_ratio = (float)width / (float)height;
 	glOrtho(-aspect_ratio, aspect_ratio, -1.0, 1.0, -1.0, 1.0);
 
-	
+
 	// Init GameObejcts
 	mGameObject = new GameObject();
 
@@ -83,9 +83,46 @@ void Game::run()
 		update();
 		draw();
 
+		updateKeyStatus();
+
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
 	}
 
 	glfwTerminate();
+}
+
+void Game::updateKeyStatus()
+{
+	for (const auto& [key, value] : keyStatus)
+	{
+		if (glfwGetKey(glfwWindow, key) == GLFW_PRESS)
+		{
+			keyStatus[key] = true;
+		}
+		else if (glfwGetKey(glfwWindow, key) == GLFW_RELEASE)
+		{
+			keyStatus[key] = false;
+		}
+	}
+}
+
+bool Game::isKeyPressed(const int& key)
+{
+	return glfwGetKey(glfwWindow, key) == GLFW_PRESS;
+}
+
+bool Game::isKeyReleased(const int& key)
+{
+	return glfwGetKey(glfwWindow, key) == GLFW_RELEASE;
+}
+
+bool Game::isKeyUp(const int& key)
+{
+	return glfwGetKey(glfwWindow, key) == GLFW_RELEASE && keyStatus[key];
+}
+
+bool Game::isKeyDown(const int& key)
+{
+	return glfwGetKey(glfwWindow, key) == GLFW_PRESS && !keyStatus[key];
 }
