@@ -4,7 +4,7 @@
 
 int main() {
 
-	Game gameExample;
+	Game gameExample("GELDA", 1024, 1024);
 
 	gameExample.run();
 

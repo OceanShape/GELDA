@@ -7,10 +7,11 @@
 class GameObject
 {
 private:
-	float mPosX = 0.0f; // position x
-	float mPosY = 0.0f; // position y
+	float mPositionX = 0.0f;
+	float mPositionY = 0.0f;
 	GLuint* mTexture;
 	int mTextureCount;
+	float gTextureSize = 0.0625f;
 
 public:
 	GameObject()
@@ -24,7 +25,11 @@ public:
 	{
 	}
 
-	void draw(int textureNumber);
-
 	void initTexture(const std::string fileName[]);
+	void draw(const int& textureNumber);
+	void move(const float& moveX, const float& moveY)
+	{
+		mPositionX += moveX;
+		mPositionY += moveY;
+	}
 };

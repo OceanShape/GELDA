@@ -2,10 +2,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-float gTextureSize = 0.0625f;
-
-extern float positionX;
-extern float positionY;
 
 void GameObject::initTexture(const std::string fileName[])
 {
@@ -57,7 +53,7 @@ void GameObject::initTexture(const std::string fileName[])
 	}
 }
 
-void GameObject::draw(int textureNumber)
+void GameObject::draw(const int& textureNumber)
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
@@ -73,10 +69,10 @@ void GameObject::draw(int textureNumber)
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(positionX - 1.0f, positionY + 1.0f);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(positionX - 1.0f, positionY - 1.0f);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(positionX + 1.0f, positionY - 1.0f);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(positionX + 1.0f, positionY + 1.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(mPositionX - 1.0f, mPositionY + 1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(mPositionX - 1.0f, mPositionY - 1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(mPositionX + 1.0f, mPositionY - 1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(mPositionX + 1.0f, mPositionY + 1.0f);
 
 		glEnd();
 	}

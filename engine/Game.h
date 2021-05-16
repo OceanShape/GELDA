@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <string>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -12,16 +13,15 @@ class Game
 {
 private:
 	GLFWwindow* glfwWindow = nullptr;
-	int width = 512;
-	int height = 512;
-	std::string title = "GELDA";
-	std::vector<GameObject> v;
 	GameObject* mGameObject;
 
 	std::map<int, bool> keyStatus;
+	float moveX = 0.0f;
+	float moveY = 0.0f;
+	const float delta = 0.5f;
 
 public:
-	Game();
+	Game(const std::string title, int width, int height);
 	~Game()
 	{
 		delete mGameObject;

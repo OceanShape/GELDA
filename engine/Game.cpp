@@ -1,12 +1,6 @@
 #include "Game.h"
 
-float positionX = 0.0f;
-float positionY = 0.0f;
-float moveX = 0.0f;
-float moveY = 0.0f;
-const float delta = 0.5f;
-
-Game::Game()
+Game::Game(const std::string title, int width, int height)
 {
 	assert(glfwInit());
 
@@ -57,10 +51,9 @@ void Game::update()
 	else if (isKeyDown(GLFW_KEY_DOWN))	moveY = -delta;
 	else if (isKeyUp(GLFW_KEY_DOWN))	moveY = 0.0f;
 
-	updateKeyStatus();
+	mGameObject->move(moveX, moveY);
 
-	positionX += moveX;
-	positionY += moveY;
+	updateKeyStatus();
 }
 
 void Game::draw()
