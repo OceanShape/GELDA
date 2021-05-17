@@ -7,13 +7,15 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <vector>
+
 #include "GameObject.h"
 
 class Game
 {
 private:
 	GLFWwindow* glfwWindow = nullptr;
-	GameObject* mGameObject = nullptr;
+	std::vector<GameObject*> mGameObject;
 
 	std::map<int, bool> keyStatus;
 	float moveX = 0.0f;

@@ -22,6 +22,7 @@ public:
 
 	~GameObject()
 	{
+		delete mTexture;
 	}
 
 	void initTexture(const std::string fileName[]);

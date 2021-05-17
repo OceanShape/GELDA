@@ -30,7 +30,7 @@ Game::Game(const std::string title, int width, int height)
 
 	// Init GameObejcts
 	std::string name[] = { "./sample_sprite.png" };
-	mGameObject = new GameObject(name);
+	mGameObject.push_back(new GameObject(name));
 
 
 	std::cout << "Display width = " << width << std::endl
@@ -52,7 +52,11 @@ void Game::update()
 	else if (isKeyDown(GLFW_KEY_DOWN))	moveY = -delta;
 	else if (isKeyUp(GLFW_KEY_DOWN))	moveY = 0.0f;
 
-	mGameObject->move(moveX, moveY);
+
+	// update GameObject position
+	for (GameObject* g : mGameObject)
+		g->move(moveX, moveY);
+	
 
 	updateKeyStatus();
 }
@@ -63,7 +67,8 @@ void Game::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
-	mGameObject->draw(0); // for Test
+	for (GameObject* g : mGameObject)
+		g->draw(0); // static texture number 0 for test
 
 	glFlush();
 }
