@@ -1,0 +1,6 @@
+object
+    ./sample_playable.png
+endobject
+object
+    ./sample_ground.png
+endobject

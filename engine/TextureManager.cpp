@@ -20,8 +20,8 @@ TextureManager::TextureManager()
 	int textureCount[] = { 1, 1 };
 	std::string name[][1] =
 	{
-		{ "./sample_sprite.png" },
-		{ "./sample_sprite1.png" }
+		{ "./sample_playable.png" },
+		{ "./sample_ground.png" }
 	};
 
 
