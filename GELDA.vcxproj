@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="engine\Game.cpp" />
     <ClCompile Include="engine\GameObject.cpp" />
+    <ClCompile Include="engine\TextureManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,17 @@
 #pragma once
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <string>
+#include <vector>
+#include <cassert>
+
 class TextureManager
 {
 private:
+	static TextureManager* mInstance;
+	static std::vector<GLuint*> mTextures;
+
 	TextureManager();
 public:
-	static TextureManager getTextureManager()
-	{
-		TextureManager();
-	}
+	static GLuint* getTexture(const int& objectNumber);
 };

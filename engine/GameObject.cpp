@@ -1,7 +1,6 @@
 #include "GameObject.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
 
 void GameObject::initTexture(const std::string fileName[])
 {
@@ -16,6 +15,8 @@ void GameObject::initTexture(const std::string fileName[])
 	mTexture = new GLuint[mTextureCount];
 	glGenTextures(mTextureCount, mTexture);
 
+	// for test TextureManager.h
+	/*
 	for (int count = 0; count < mTextureCount; ++count)
 	{
 		data = stbi_load(fileName[count].c_str(), &width, &height, &numberChannel, 0);
@@ -51,6 +52,7 @@ void GameObject::initTexture(const std::string fileName[])
 
 		stbi_image_free(data);
 	}
+	*/
 }
 
 void GameObject::draw(const int& textureNumber)
@@ -61,7 +63,7 @@ void GameObject::draw(const int& textureNumber)
 
 	glPushMatrix();
 	{
-		glScalef(gTextureSize, gTextureSize, gTextureSize);
+		glScalef(mTextureSize, mTextureSize, mTextureSize);
 
 		glBindTexture(GL_TEXTURE_2D, mTexture[textureNumber]);
 

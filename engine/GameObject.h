@@ -7,11 +7,14 @@
 class GameObject
 {
 private:
-	float mPositionX = 0.0f;
-	float mPositionY = 0.0f;
 	GLuint* mTexture;
 	int mTextureCount;
-	float gTextureSize = 0.0625f;
+	float mTextureSize = 0.0625f;
+	
+
+	float mPositionX = 0.0f;
+	float mPositionY = 0.0f;
+	
 
 public:
 	GameObject(std::string name[])
