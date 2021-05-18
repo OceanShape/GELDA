@@ -29,8 +29,8 @@ Game::Game(const std::string title, int width, int height)
 
 
 	// Init GameObejcts
-	std::string name[] = { "./sample_sprite.png" };
-	mGameObject.push_back(new GameObject(name));
+	mGameObject.push_back(new GameObject(0));
+	mGameObject.push_back(new GameObject(1, 16.0f, 16.0f));
 
 
 	std::cout << "Display width = " << width << std::endl

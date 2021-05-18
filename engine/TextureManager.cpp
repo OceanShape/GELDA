@@ -9,8 +9,6 @@ std::vector<GLuint*> TextureManager::mTextures;
 
 GLuint* TextureManager::getTexture(const int& objectNumber)
 {
-	assert(mTextures.size() >= objectNumber);
-
 	if (mInstance == nullptr) mInstance = new TextureManager();
 
 	return mInstance->mTextures[objectNumber];
@@ -19,13 +17,13 @@ GLuint* TextureManager::getTexture(const int& objectNumber)
 TextureManager::TextureManager()
 {
 	int objectCount = 2;
-	int textureCount = 1;
+	int textureCount[] = { 1, 1 };
 	std::string name[][1] =
 	{
 		{ "./sample_sprite.png" },
 		{ "./sample_sprite1.png" }
 	};
-	
+
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -35,14 +33,13 @@ TextureManager::TextureManager()
 	int height;
 	int numberChannel;
 
-	mTextures.push_back(new GLuint[objectCount]);
-
 
 	for (int i = 0; i < objectCount; ++i)
 	{
-		glGenTextures(textureCount, mTextures[i]);
+		mTextures.push_back(new GLuint[textureCount[i]]);
+		glGenTextures(textureCount[i], mTextures[i]);
 
-		for (int j = 0; j < textureCount; ++j)
+		for (int j = 0; j < textureCount[i]; ++j)
 		{
 			unsigned char* data = stbi_load(name[i][j].c_str(), &width, &height, &numberChannel, 0);
 

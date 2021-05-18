@@ -26,6 +26,8 @@ public:
 	Game(const std::string title, int width, int height);
 	~Game()
 	{
+		for (GameObject* p : mGameObject)
+			delete p;
 	}
 
 	void run();		// entire game loop

@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <cassert>
 
+#include "TextureManager.h"
+
 class GameObject
 {
 private:
@@ -17,18 +19,25 @@ private:
 	
 
 public:
-	GameObject(std::string name[])
+	GameObject(const int& objectNumber)
 	{
 		mTextureCount = 1; // for Test
-		initTexture(name);
+		mTexture = TextureManager::getTexture(objectNumber);
+
+	}
+
+	GameObject(const int& objectNumber, const float& posX, const float& posY)
+	{
+		mTextureCount = 1; // for Test
+		mTexture = TextureManager::getTexture(objectNumber);
+		mPositionX = posX;
+		mPositionY = posY;
 	}
 
 	~GameObject()
 	{
-		delete mTexture;
 	}
 
-	void initTexture(const std::string fileName[]);
 	void draw(const int& textureNumber);
 	void move(const float& moveX, const float& moveY)
 	{

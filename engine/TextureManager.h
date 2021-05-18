@@ -12,6 +12,11 @@ private:
 	static std::vector<GLuint*> mTextures;
 
 	TextureManager();
+	~TextureManager()
+	{
+		for (GLuint* p : mTextures)
+			delete[] p;
+	}
 public:
 	static GLuint* getTexture(const int& objectNumber);
 };
