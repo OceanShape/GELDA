@@ -16,6 +16,7 @@ class Game
 private:
 	GLFWwindow* glfwWindow = nullptr;
 	std::vector<GameObject*> mGameObject;
+	std::vector<GLuint*> mTexture;
 
 	std::map<int, bool> keyStatus;
 	float moveX = 0.0f;
@@ -33,6 +34,7 @@ public:
 	void run();		// entire game loop
 	void update();	// update input and gameobject status
 	void draw();	// draw all gameobjects
+	void initTexture();
 
 private:
 	void updateKeyStatus();
