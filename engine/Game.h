@@ -17,13 +17,13 @@ private:
 	GLFWwindow* glfwWindow = nullptr;
 	std::vector<GameObject*> mGameObject;
 	std::vector<GLuint*> mTexture;
-
 	std::map<int, bool> keyStatus;
 	
 	bool isDrawGrid = false;
 	float moveX = 0.0f;
 	float moveY = 0.0f;
 	const float delta = 0.5f;
+	GameObject* controllable;
 
 public:
 	Game(const std::string title, int width, int height);

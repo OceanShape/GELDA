@@ -35,8 +35,14 @@ Game::Game(const std::string title, int width, int height)
 	initTexture();
 
 	// Init GameObejcts
-	mGameObject.push_back(new GameObject(mTexture[1], -15.0f, -15.0f));
 	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
+	for (int i = 0; i < 16; ++i)//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
+		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
+	for (int i = 0; i < 16; ++i)//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
+		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
+
+	// Set playable
+	controllable = mGameObject[0];
 
 
 	std::cout << "Display width = " << width << std::endl
@@ -125,8 +131,8 @@ void Game::update()
 	if (isKeyDown(GLFW_KEY_G))			isDrawGrid = !isDrawGrid;
 
 
-	// update GameObject position
-	mGameObject[1]->move(moveX, moveY);
+	// update game object position
+	controllable->move(moveX, moveY);
 
 	updateKeyStatus();
 }
@@ -149,31 +155,30 @@ void Game::draw()
 		float pos[2];
 
 		// vertical
+		pos[1] = -max_length;
 		for (float x = -max_length + interval; x < max_length; x += interval)
 		{
-			//drawLine(color, Vector2(x, -max_length), color, Vector2(x, max_length));
 			pos[0] = x;
-			pos[1] = -max_length;
 			glBegin(GL_LINES);
 			{
 				glColor3fv(white);
 				glVertex2fv(pos);
-				pos[1] = max_length;
+				pos[1] = -pos[1];
 				glVertex2fv(pos);
 			}
 			glEnd();
 		}
 
 		// horizontal
+		pos[0] = -max_length;
 		for (float y = -max_length + interval; y < max_length; y += interval)
 		{
-			pos[0] = -max_length;
 			pos[1] = y;
 			glBegin(GL_LINES);
 			{
 				glColor3fv(white);
 				glVertex2fv(pos);
-				pos[0] = max_length;
+				pos[0] = -pos[0];
 				glVertex2fv(pos);
 			}
 			glEnd();
