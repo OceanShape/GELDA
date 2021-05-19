@@ -35,8 +35,8 @@ Game::Game(const std::string title, int width, int height)
 	initTexture();
 
 	// Init GameObejcts
+	mGameObject.push_back(new GameObject(mTexture[1], -15.0f, -15.0f));
 	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
-	mGameObject.push_back(new GameObject(mTexture[1], 16.0f, 16.0f));
 
 
 	std::cout << "Display width = " << width << std::endl
@@ -110,7 +110,8 @@ void Game::initTexture()
 
 void Game::update()
 {
-	if (isKeyDown(GLFW_KEY_ESCAPE)) glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
+	// check control status
+	if (isKeyDown(GLFW_KEY_ESCAPE))		glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
 	if (isKeyDown(GLFW_KEY_LEFT))		moveX = -delta;
 	else if (isKeyUp(GLFW_KEY_LEFT))	moveX = 0.0f;
@@ -121,11 +122,11 @@ void Game::update()
 	else if (isKeyDown(GLFW_KEY_DOWN))	moveY = -delta;
 	else if (isKeyUp(GLFW_KEY_DOWN))	moveY = 0.0f;
 
+	if (isKeyDown(GLFW_KEY_G))			isDrawGrid = !isDrawGrid;
+
 
 	// update GameObject position
-	for (GameObject* g : mGameObject)
-		g->move(moveX, moveY);
-
+	mGameObject[1]->move(moveX, moveY);
 
 	updateKeyStatus();
 }
@@ -136,6 +137,51 @@ void Game::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
+
+	// draw grid line
+	if (isDrawGrid)
+	{
+		glLineWidth(1.0f);
+
+		float max_length = 2.0f;
+		float interval = 0.125f;
+		float white[3] = { 255.0f, 255.0f ,255.0f };
+		float pos[2];
+
+		// vertical
+		for (float x = -max_length + interval; x < max_length; x += interval)
+		{
+			//drawLine(color, Vector2(x, -max_length), color, Vector2(x, max_length));
+			pos[0] = x;
+			pos[1] = -max_length;
+			glBegin(GL_LINES);
+			{
+				glColor3fv(white);
+				glVertex2fv(pos);
+				pos[1] = max_length;
+				glVertex2fv(pos);
+			}
+			glEnd();
+		}
+
+		// horizontal
+		for (float y = -max_length + interval; y < max_length; y += interval)
+		{
+			pos[0] = -max_length;
+			pos[1] = y;
+			glBegin(GL_LINES);
+			{
+				glColor3fv(white);
+				glVertex2fv(pos);
+				pos[0] = max_length;
+				glVertex2fv(pos);
+			}
+			glEnd();
+		}
+	}
+
+
+	// draw game objects
 	for (GameObject* g : mGameObject)
 		g->draw(0); // static texture number 0 for test
 
