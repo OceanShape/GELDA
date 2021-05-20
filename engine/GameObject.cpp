@@ -8,7 +8,7 @@ void GameObject::draw(const int& textureNumber)
 	
 	glPushMatrix();
 	{
-		glScalef(mTextureSize, mTextureSize, mTextureSize);
+		glScalef(mTextureRate, mTextureRate, mTextureRate);
 
 		glBindTexture(GL_TEXTURE_2D, mTexture[textureNumber]);
 

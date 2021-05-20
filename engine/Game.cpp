@@ -34,11 +34,14 @@ Game::Game(const std::string title, int width, int height)
 	// Init textures
 	initTexture();
 
+	//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
+	//0 1 2 3 4  5  6  7 |  8  9 10 11 12 13 14 15
+
 	// Init GameObejcts
 	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
-	for (int i = 0; i < 16; ++i)//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
+	for (int i = 0; i < 16; ++i)
 		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
-	for (int i = 0; i < 16; ++i)//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
+	for (int i = 0; i < 16; ++i)
 		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
 
 	// Set playable
@@ -129,6 +132,9 @@ void Game::update()
 	else if (isKeyUp(GLFW_KEY_DOWN))	moveY = 0.0f;
 
 	if (isKeyDown(GLFW_KEY_G))			isDrawGrid = !isDrawGrid;
+
+
+	// update game object collision
 
 
 	// update game object position

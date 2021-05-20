@@ -9,7 +9,7 @@ class GameObject
 private:
 	GLuint* mTexture;
 	int mTextureCount;
-	float mTextureSize = 0.0625f;
+	float mTextureRate = 0.0625f;
 
 
 	float mPositionX = 0.0f;
@@ -35,4 +35,38 @@ public:
 		mPositionX += moveX;
 		mPositionY += moveY;
 	}
+
+	int isCollision(GameObject& obj)
+	{
+		//(x1, y1)------(x2, y1)
+		//	|			    |
+		//	|			    |
+		//	|			    |
+		//	|				|
+		//(x1, y2)------(x2, y2)
+
+		float r1x1 = mPositionX - 1.0f;
+		float r1x2 = mPositionX + 1.0f;
+		float r1y1 = mPositionY + 1.0f;
+		float r1y2 = mPositionY - 1.0f;
+
+		float r2x1 = obj.mPositionX - 1.0f;
+		float r2x2 = obj.mPositionX + 1.0f;
+		float r2y1 = obj.mPositionY + 1.0f;
+		float r2y2 = obj.mPositionY - 1.0f;
+		
+
+		if (
+			((r1x1 <= r2x1 && r2x1 <= r1x2) || (r1x1 <= r2x2 && r2x2 <= r1x2))
+			&& ((r1y2 <= r2y1 && r2y1 <= r1y1) || (r1y2 <= r2y2 && r2y2 <= r1y1))
+			)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 };
