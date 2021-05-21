@@ -36,7 +36,7 @@ public:
 		mPositionY += moveY;
 	}
 
-	int isCollision(GameObject& obj)
+	int isCollision(GameObject* obj)
 	{
 		//(x1, y1)------(x2, y1)
 		//	|			    |
@@ -50,10 +50,10 @@ public:
 		float r1y1 = mPositionY + 1.0f;
 		float r1y2 = mPositionY - 1.0f;
 
-		float r2x1 = obj.mPositionX - 1.0f;
-		float r2x2 = obj.mPositionX + 1.0f;
-		float r2y1 = obj.mPositionY + 1.0f;
-		float r2y2 = obj.mPositionY - 1.0f;
+		float r2x1 = obj->mPositionX - 1.0f;
+		float r2x2 = obj->mPositionX + 1.0f;
+		float r2y1 = obj->mPositionY + 1.0f;
+		float r2y2 = obj->mPositionY - 1.0f;
 		
 
 		if (
@@ -61,6 +61,7 @@ public:
 			&& ((r1y2 <= r2y1 && r2y1 <= r1y1) || (r1y2 <= r2y2 && r2y2 <= r1y1))
 			)
 		{
+			std::cout << "collision detected" << std::endl;
 			return true;
 		}
 		else

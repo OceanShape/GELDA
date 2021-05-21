@@ -39,13 +39,16 @@ Game::Game(const std::string title, int width, int height)
 
 	// Init GameObejcts
 	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
+
+	mGameObject.push_back(new GameObject(mTexture[1], 4.0f, 0.0f));
+
 	for (int i = 0; i < 16; ++i)
 		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
 	for (int i = 0; i < 16; ++i)
 		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
 
 	// Set playable
-	controllable = mGameObject[0];
+	mControllable = mGameObject[0];
 
 
 	std::cout << "Display width = " << width << std::endl
@@ -135,10 +138,10 @@ void Game::update()
 
 
 	// update game object collision
-
+	mControllable->isCollision(mGameObject[1]);
 
 	// update game object position
-	controllable->move(moveX, moveY);
+	mControllable->move(moveX, moveY);
 
 	updateKeyStatus();
 }

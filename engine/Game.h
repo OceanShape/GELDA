@@ -23,7 +23,7 @@ private:
 	float moveX = 0.0f;
 	float moveY = 0.0f;
 	const float delta = 0.5f;
-	GameObject* controllable;
+	GameObject* mControllable;
 
 public:
 	Game(const std::string title, int width, int height);
