@@ -138,7 +138,7 @@ void Game::update()
 
 
 	// update game object collision
-	mControllable->isCollision(mGameObject[1]);
+	mControllable->isCollision(mGameObject[1], mGameObject);
 
 	// update game object position
 	mControllable->move(moveX, moveY);

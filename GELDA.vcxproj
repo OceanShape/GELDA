@@ -148,6 +148,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionDirection.h" />
     <ClInclude Include="engine\Game.h" />
     <ClInclude Include="engine\GameObject.h" />
   </ItemGroup>
