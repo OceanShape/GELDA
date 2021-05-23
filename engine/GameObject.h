@@ -50,8 +50,8 @@ public:
 
 		// ¡Ø Notice: Only C++20 or later only
 		auto r = objects | std::views::filter([this](GameObject* g) {return
-			mPositionX - 3.0f < g->mPositionX && g->mPositionX < mPositionX + 3.0f &&
-			mPositionY - 3.0f < g->mPositionY && g->mPositionY < mPositionY + 3.0f; }) | std::views::reverse;
+			mPositionX - 2.0f <= g->mPositionX && g->mPositionX <= mPositionX + 2.0f &&
+			mPositionY - 2.0f <= g->mPositionY && g->mPositionY <= mPositionY + 2.0f; }) | std::views::reverse;
 
 		for (GameObject* g : r)
 		{
@@ -60,7 +60,7 @@ public:
 
 
 			// bottom collision
-			if (mPositionY - 2.0f <= g->mPositionY && g->mPositionY <= mPositionY - 1.0f)
+			if (g->mPositionY <= mPositionY - 1.0f)
 			{
 				bool isDownLeftCollision = false;
 				bool isDownRightCollision = false;
@@ -74,22 +74,23 @@ public:
 				{
 					if (g->mPositionX < mPositionX - 1.0f)
 					{
-						if (mPositionX - g->mPositionX <= 1.25f)
+						if (mPositionX - 1.8f <= g->mPositionX)
 							isDownLeftCollision = true;
 					}
 					else if (mPositionX + 1.0f < g->mPositionX)
 					{
-						if (g->mPositionX - mPositionX <= 1.25f)
+						if (g->mPositionX <= mPositionX + 1.8f)
 							isDownRightCollision = true;
 					}
 				}
 
-				isBottomCollision = (isDownCollision || isDownLeftCollision || isDownRightCollision) ? true : false;
+				isBottomCollision = (isDownCollision || (isDownLeftCollision || isDownRightCollision)) ? true : false;
 
 				if (isBottomCollision)
 				{
 					if (mPositionY < g->mPositionY + 2.0f)
 						mPositionY = g->mPositionY + 2.0f;
+
 					// jumpStatus = NO_JUMP;
 					// moveStatus = STAND;
 				}
@@ -98,20 +99,21 @@ public:
 
 			}
 			// top collision
-			else if (mPositionX - 1.0f < g->mPositionX && g->mPositionX < mPositionX + 1.0f &&
-				mPositionY + 1.0f < g->mPositionY && g->mPositionY < mPositionY + 3.0f)
+			else if (mPositionY + 1.0f <= g->mPositionY)
 			{
-
+				if (g->mPositionY - 2.0f < mPositionY)
+				{
+					mPositionY = g->mPositionY - 2.0f;
+					// jumpStatus = JUMP_FALL;
+				}
 			}
 			// right collision
-			else if (mPositionX + 1.0f < g->mPositionX && g->mPositionX < mPositionX + 3.0f &&
-				mPositionY - 1.0f < g->mPositionY && g->mPositionY < mPositionY + 1.0f)
+			else if (mPositionX + 1.0f < g->mPositionX && g->mPositionX < mPositionX + 3.0f)
 			{
 
 			}
 			// left collision
-			else if (mPositionX - 3.0f < g->mPositionX && g->mPositionX < mPositionX - 1.0f &&
-				mPositionY - 1.0f < g->mPositionY && g->mPositionY < mPositionY + 1.0f)
+			else if (mPositionX - 3.0f < g->mPositionX && g->mPositionX < mPositionX - 1.0f)
 			{
 
 			}
