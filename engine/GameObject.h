@@ -5,6 +5,9 @@
 #include <cassert>
 #include <vector>
 
+#include <ranges>		// ¡Ø Notice: Only C++20 or later only: reverse range
+#include <algorithm>	// for view
+
 #include "CollisionDirection.h"
 
 class GameObject
@@ -14,10 +17,10 @@ private:
 	int mTextureCount;
 	float mTextureRate = 0.0625f;
 
-
 	float mPositionX = 0.0f;
 	float mPositionY = 0.0f;
 
+	bool isBottomCollision = false;
 
 public:
 	GameObject(GLuint* texture, const float& posX, const float& posY)
@@ -39,219 +42,80 @@ public:
 		mPositionY += moveY;
 	}
 
-	int isCollision(GameObject* obj, std::vector<GameObject*> other)
+	void isCollision(std::vector<GameObject*> objects)
 	{
-		//(x1, y1)------(x2, y1)
-		//	|			    |
-		//	|			    |
-		//	|			    |
-		//	|				|
-		//(x1, y2)------(x2, y2)
-		
-		float r1x1 = mPositionX - 1.0f;
-		float r1x2 = mPositionX + 1.0f;
-		float r1y1 = mPositionY + 1.0f;
-		float r1y2 = mPositionY - 1.0f;
+		bool isLeftCollision = false;
+		bool isRightCollision = false;
+		bool isDownCollision = false;
 
-		float r2x1 = obj->mPositionX - 1.0f;
-		float r2x2 = obj->mPositionX + 1.0f;
-		float r2y1 = obj->mPositionY + 1.0f;
-		float r2y2 = obj->mPositionY - 1.0f;
+		// ¡Ø Notice: Only C++20 or later only
+		auto r = objects | std::views::filter([this](GameObject* g) {return
+			mPositionX - 3.0f < g->mPositionX && g->mPositionX < mPositionX + 3.0f &&
+			mPositionY - 3.0f < g->mPositionY && g->mPositionY < mPositionY + 3.0f; }) | std::views::reverse;
 
-
-		/*
-		bool is_left_block = false;
-		bool is_right_block = false;
-		bool is_bottom_collision = false;
-
-		
-		for (GameObject* g : other)
+		for (GameObject* g : r)
 		{
-			if (obj->mPositionX == g->mPositionX && obj->mPositionY == g->mPositionY)
-			{
+			if (this == g)
 				continue;
-			}
 
-			if (obj->mPositionX - 1.0f > g->mPositionX && obj->mPositionX - 3.0f < g->mPositionX &&
-				obj->mPositionY - 1.0f > g->mPositionY && obj->mPositionY - 3.0f < g->mPositionY)
+
+			// bottom collision
+			if (mPositionY - 2.0f <= g->mPositionY && g->mPositionY <= mPositionY - 1.0f)
 			{
-				
-			}
+				bool isDownLeftCollision = false;
+				bool isDownRightCollision = false;
+				bool isPreBottomCollision = isBottomCollision;
 
-			if (obj->mPositionX - 1.0f > g->mPositionX && obj->mPositionX + 1.0f < g->mPositionX &&
-				obj->mPositionY - 1.0f > g->mPositionY && obj->mPositionY - 3.0f < g->mPositionY)
+				if (mPositionX - 1.0f <= g->mPositionX && g->mPositionX <= mPositionX + 1.0f)
+					isDownCollision = true;
+
+
+				if (!isLeftCollision && !isRightCollision)
+				{
+					if (g->mPositionX < mPositionX - 1.0f)
+					{
+						if (mPositionX - g->mPositionX <= 1.25f)
+							isDownLeftCollision = true;
+					}
+					else if (mPositionX + 1.0f < g->mPositionX)
+					{
+						if (g->mPositionX - mPositionX <= 1.25f)
+							isDownRightCollision = true;
+					}
+				}
+
+				isBottomCollision = (isDownCollision || isDownLeftCollision || isDownRightCollision) ? true : false;
+
+				if (isBottomCollision)
+				{
+					if (mPositionY < g->mPositionY + 2.0f)
+						mPositionY = g->mPositionY + 2.0f;
+					// jumpStatus = NO_JUMP;
+					// moveStatus = STAND;
+				}
+				//else if ((jumpStatus == NO_JUMP) && isPreBottomCollision)
+					// jumpStatus = JUMP_FALL;
+
+			}
+			// top collision
+			else if (mPositionX - 1.0f < g->mPositionX && g->mPositionX < mPositionX + 1.0f &&
+				mPositionY + 1.0f < g->mPositionY && g->mPositionY < mPositionY + 3.0f)
 			{
 
 			}
+			// right collision
+			else if (mPositionX + 1.0f < g->mPositionX && g->mPositionX < mPositionX + 3.0f &&
+				mPositionY - 1.0f < g->mPositionY && g->mPositionY < mPositionY + 1.0f)
+			{
 
-			if (obj->mPositionX - 1.0f > g->mPositionX && obj->mPositionX + 1.0f < g->mPositionX &&
-				obj->mPositionY - 1.0f > g->mPositionY && obj->mPositionY - 3.0f < g->mPositionY)
+			}
+			// left collision
+			else if (mPositionX - 3.0f < g->mPositionX && g->mPositionX < mPositionX - 1.0f &&
+				mPositionY - 1.0f < g->mPositionY && g->mPositionY < mPositionY + 1.0f)
 			{
 
 			}
 		}
 
-
-		for (int i = 2; i >= 0; i--)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (i == 1 && j == 1)
-				{
-					continue;
-				}
-				
-				if (x_index - 1 + j < 0)
-				{
-					is_left_block = true;
-					if (center.x < x_index * unit_size - 1.0f + htbox.side.x / 2)
-					{
-						center.x = x_index * unit_size - 1.0f + htbox.side.x / 2;
-						htbox.update(center, size);
-					}
-				}
-				else if (map.x_total_size <= x_index - 1 + j)
-				{
-					is_right_block = true;
-					if (center.x > (x_index + 1) * unit_size - 1.0f - htbox.side.x / 2)
-					{
-						center.x = (x_index + 1) * unit_size - 1.0f - htbox.side.x / 2;
-						htbox.update(center, size);
-					}
-				}
-
-
-				if (y_index - 1 + i < 0 || map.y_size <= y_index - 1 + i) { continue; }
-
-				if (i == 0 && j == 1)
-				{
-
-					bool is_bottom_right_collision = false;
-					bool is_bottom_left_collision = false;
-					bool pre_is_bottom_total_collision = is_bottom_total_collision;
-
-					is_bottom_collision = map.htboxList[y_index - 1 + i][x_index - 1 + j] ? true : false;
-
-					if (is_left_block || is_right_block)
-					{
-					}
-					else if (map.htboxList[y_index - 1 + i][x_index - 1 + j - 1])
-					{
-						if (x_dec <= 0.25f)
-						{
-							is_bottom_left_collision = true;
-						}
-					}
-					else if (map.htboxList[y_index - 1 + i][x_index - 1 + j + 1])
-					{
-						if (x_dec >= 0.75f)
-						{
-							is_bottom_right_collision = true;
-						}
-					}
-
-					if (is_bottom_collision || (is_bottom_left_collision || is_bottom_right_collision))
-					{
-						is_bottom_total_collision = true;
-					}
-					else
-					{
-						is_bottom_total_collision = false;
-					}
-
-
-					if (is_bottom_total_collision)
-					{
-						if (center.y < y_index * unit_size - 1.0f + htbox.side.y / 2 - 0.01f)
-						{
-							center.y = y_index * unit_size - 1.0f + htbox.side.y / 2 - 0.01f;
-
-							time_check = 0.0f;
-							y_start_center = center.y;
-							if (jump_sound)
-							{
-								characterSound.stopSound("jump");
-								jump_sound = false;
-							}
-
-							jumpStatus = eJumpStatus::NO_JUMP;
-							moveStatus = eMoveStatus::STAND;
-
-						}
-					}
-					else if ((jumpStatus == eJumpStatus::NO_JUMP) && pre_is_bottom_total_collision)
-					{
-						jumpStatus = eJumpStatus::JUMP_FALL;
-					}
-
-					htbox.update(center, size);
-				}
-				else if (i == 2 && j == 1)
-				{
-					if (map.htboxList[y_index - 1 + i][x_index - 1 + j])
-					{
-						if (center.y > (y_index + 1) * unit_size - 1.0f - htbox.side.y / 2)
-						{
-							center.y = (y_index + 1) * unit_size - 1.0f - htbox.side.y / 2;
-
-							characterSound.stopSound("jump");
-
-							jumpStatus = eJumpStatus::JUMP_FALL;
-
-							htbox.update(center, size);
-						}
-					}
-					continue;
-				}
-
-				else if (i == 1 && j == 2)
-				{
-					if (map.htboxList[y_index - 1 + i][x_index - 1 + j])
-					{
-						is_right_block = true;
-						if (center.x > (x_index + 1) * unit_size - 1.0f - htbox.side.x / 2)
-						{
-							center.x = (x_index + 1) * unit_size - 1.0f - htbox.side.x / 2;
-							htbox.update(center, size);
-						}
-					}
-					else
-					{
-						is_right_block = false;
-					}
-				}
-				else if (i == 1 && j == 0)
-				{
-					if (map.htboxList[y_index - 1 + i][x_index - 1 + j])
-					{
-						is_left_block = true;
-						if (center.x < x_index * unit_size - 1.0f + htbox.side.x / 2)
-						{
-							center.x = x_index * unit_size - 1.0f + htbox.side.x / 2;
-							htbox.update(center, size);
-						}
-					}
-					else
-					{
-						is_left_block = false;
-					}
-				}
-			}
-		}
-		*/
-
-		if (
-			((r1x1 <= r2x1 && r2x1 <= r1x2) || (r1x1 <= r2x2 && r2x2 <= r1x2))
-			&& ((r1y2 <= r2y1 && r2y1 <= r1y1) || (r1y2 <= r2y2 && r2y2 <= r1y1))
-			)
-		{
-			std::cout << "collision detected" << std::endl;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
+	} // void isCollision(std::vector<GameObject*> obj)
 };
