@@ -137,11 +137,13 @@ void Game::update()
 	if (isKeyDown(GLFW_KEY_G))			isDrawGrid = !isDrawGrid;
 
 
-	// update game object collision
-	mControllable->isCollision(mGameObject);
-
 	// update game object position
 	mControllable->move(moveX, moveY);
+
+	// update game object physics status
+	mControllable->updateGravity();
+	mControllable->updateCollision(mGameObject);
+	
 
 	updateKeyStatus();
 }
