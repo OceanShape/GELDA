@@ -60,7 +60,7 @@ public:
 
 
 			// bottom collision
-			if (g->mPositionY <= mPositionY - 1.0f)
+			if (g->mPositionY + 1.5f <= mPositionY)
 			{
 				bool isDownLeftCollision = false;
 				bool isDownRightCollision = false;
@@ -99,23 +99,29 @@ public:
 
 			}
 			// top collision
-			else if (mPositionY + 1.0f <= g->mPositionY)
+			else if (g->mPositionX - 1.0f <= mPositionX && mPositionX <= g->mPositionX + 1.0f)
 			{
-				if (g->mPositionY - 2.0f < mPositionY)
+				if (g->mPositionY - 2.0f <= mPositionY)
 				{
 					mPositionY = g->mPositionY - 2.0f;
 					// jumpStatus = JUMP_FALL;
 				}
 			}
 			// right collision
-			else if (mPositionX + 1.0f < g->mPositionX && g->mPositionX < mPositionX + 3.0f)
+			else if (mPositionX < g->mPositionX - 1.0f)
 			{
+				isRightCollision = true;
 
+				if (g->mPositionX - 2.0f <= mPositionX)
+					mPositionX = g->mPositionX - 2.0f;
 			}
 			// left collision
-			else if (mPositionX - 3.0f < g->mPositionX && g->mPositionX < mPositionX - 1.0f)
+			else if (g->mPositionX + 1.0f < mPositionX)
 			{
+				isLeftCollision = true;
 
+				if (mPositionX <= g->mPositionX + 2.0f)
+					mPositionX = g->mPositionX + 2.0f;
 			}
 		}
 
