@@ -153,6 +153,7 @@
     <ClInclude Include="engine\CollisionDirection.h" />
     <ClInclude Include="engine\Game.h" />
     <ClInclude Include="engine\GameObject.h" />
+    <ClInclude Include="engine\Status.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

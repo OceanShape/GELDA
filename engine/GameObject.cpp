@@ -19,8 +19,9 @@ void GameObject::updateCollision(std::vector<GameObject*> objects)
 	for (GameObject* g : r)
 	{
 		if (this == g)
+		{
 			continue;
-
+		}
 
 		// bottom collision
 		if (g->mPositionY + 1.5f <= mPositionY)
@@ -30,20 +31,25 @@ void GameObject::updateCollision(std::vector<GameObject*> objects)
 			bool isPreBottomCollision = isBottomCollision;
 
 			if (mPositionX - 1.0f <= g->mPositionX && g->mPositionX <= mPositionX + 1.0f)
+			{
 				isDownCollision = true;
-
+			}
 
 			if (!isLeftCollision && !isRightCollision)
 			{
 				if (g->mPositionX < mPositionX - 1.0f)
 				{
 					if (mPositionX - 1.8f <= g->mPositionX)
+					{
 						isDownLeftCollision = true;
+					}
 				}
 				else if (mPositionX + 1.0f < g->mPositionX)
 				{
 					if (g->mPositionX <= mPositionX + 1.8f)
+					{
 						isDownRightCollision = true;
+					}
 				}
 			}
 
@@ -52,7 +58,9 @@ void GameObject::updateCollision(std::vector<GameObject*> objects)
 			if (isBottomCollision)
 			{
 				if (mPositionY < g->mPositionY + 2.0f)
+				{
 					mPositionY = g->mPositionY + 2.0f;
+				}
 
 				// jumpStatus = NO_JUMP;
 				// moveStatus = STAND;
@@ -76,7 +84,9 @@ void GameObject::updateCollision(std::vector<GameObject*> objects)
 			isRightCollision = true;
 
 			if (g->mPositionX - 2.0f <= mPositionX)
+			{
 				mPositionX = g->mPositionX - 2.0f;
+			}
 		}
 		// left collision
 		else if (g->mPositionX + 1.0f < mPositionX)
@@ -84,7 +94,9 @@ void GameObject::updateCollision(std::vector<GameObject*> objects)
 			isLeftCollision = true;
 
 			if (mPositionX <= g->mPositionX + 2.0f)
+			{
 				mPositionX = g->mPositionX + 2.0f;
+			}
 		}
 	}
 }
