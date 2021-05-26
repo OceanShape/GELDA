@@ -7,16 +7,23 @@ void GameObject::updateGravity()
 
 void GameObject::updateCollision(std::vector<GameObject*> objects)
 {
+	// ¡Ø Notice: Only C++20 or later only
+	auto reverseObjects = objects | std::views::filter([this](GameObject* g) {return
+		mPositionX - 2.0f <= g->mPositionX && g->mPositionX <= mPositionX + 2.0f &&
+		mPositionY - 2.0f <= g->mPositionY && g->mPositionY <= mPositionY + 2.0f; }) | std::views::reverse;
+
+
+	std::vector v = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+	auto view3 = v | std::views::filter([](int n) { return  n % 2 == 0; })
+		| std::views::take(3)
+		| std::views::reverse;
+	
+
 	bool isLeftCollision = false;
 	bool isRightCollision = false;
 	bool isDownCollision = false;
 
-	// ¡Ø Notice: Only C++20 or later only
-	auto r = objects | std::views::filter([this](GameObject* g) {return
-		mPositionX - 2.0f <= g->mPositionX && g->mPositionX <= mPositionX + 2.0f &&
-		mPositionY - 2.0f <= g->mPositionY && g->mPositionY <= mPositionY + 2.0f; }) | std::views::reverse;
-
-	for (GameObject* g : r)
+	for (GameObject* g : reverseObjects)
 	{
 		if (this == g)
 		{

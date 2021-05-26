@@ -43,9 +43,13 @@ Game::Game(const std::string title, int width, int height)
 	mGameObject.push_back(new GameObject(mTexture[1], 4.0f, 0.0f));
 
 	for (int i = 0; i < 16; ++i)
+	{
 		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
+	}
 	for (int i = 0; i < 16; ++i)
+	{
 		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
+	}
 
 	// Set playable
 	mControllable = mGameObject[0];
@@ -60,30 +64,57 @@ Game::Game(const std::string title, int width, int height)
 void Game::initTexture()
 {
 	int objectCount = 2;
-	int textureCount[] = { 1, 1 };
 	std::string name[][1] =
 	{
-		{ "./resource/sample_playable.png" },
-		{ "./resource/sample_ground.png" }
+		{ "./resource/sample_playable.png"},
+		{ "./resource/sample_ground.png"}
 	};
-
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	int width;
-	int height;
-	int numberChannel;
-
-
-	for (int i = 0; i < objectCount; ++i)
+	std::ifstream fin;
+	fin.open("Object.info");
 	{
-		mTexture.push_back(new GLuint[textureCount[i]]);
-		glGenTextures(textureCount[i], mTexture[i]);
-
-		for (int j = 0; j < textureCount[i]; ++j)
+		std::string line;
+		int count = 0;
+		while (true)
 		{
+			getline(fin, line);
+
+			if (fin.eof())
+			{
+				++count;
+				mTextureCount.push_back(count);
+				break;
+			}
+			else if (line.size() == 0)
+			{
+				mTextureCount.push_back(count);
+				count = 0;
+			}
+			else
+			{
+				++count;
+			}
+		}
+	}
+	fin.close();
+
+	for (int i = 0; i < mTextureCount.size(); ++i)
+	{
+		mTexture.push_back(new GLuint[mTextureCount[i]]);
+		glGenTextures(mTextureCount[i], mTexture[i]);
+		// ¡Ø test code for optimization: revise later
+		// mTexture[i] = (GLuint*)malloc(sizeof(GLuint) * mTextureCount[i]);
+
+
+		for (int j = 0; j < mTextureCount[i]; ++j)
+		{
+			int width;
+			int height;
+			int numberChannel;
 			unsigned char* data = stbi_load(name[i][j].c_str(), &width, &height, &numberChannel, 0);
 
 			if (data)
@@ -143,7 +174,7 @@ void Game::update()
 	// update game object physics status
 	mControllable->updateGravity();
 	mControllable->updateCollision(mGameObject);
-	
+
 
 	updateKeyStatus();
 }

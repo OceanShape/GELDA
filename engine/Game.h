@@ -1,15 +1,16 @@
 #pragma once
 #include <iostream>
-#include <vector>
-#include <map>
 #include <string>
+#include <map>
+#include <fstream>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <vector>
-
 #include "GameObject.h"
+
+#define MAX_LENGTH 1024
 
 class Game
 {
@@ -17,6 +18,8 @@ private:
 	GLFWwindow* glfwWindow = nullptr;
 	std::vector<GameObject*> mGameObject;
 	std::vector<GLuint*> mTexture;
+	// std::vector<std::vector<GLuint>*> mTexture;
+	std::vector<size_t> mTextureCount;
 	std::map<int, bool> keyStatus;
 	
 	bool isDrawGrid = false;
