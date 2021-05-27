@@ -54,11 +54,10 @@ Game::Game(const std::string title, int width, int height)
 	// Set playable
 	mControllable = mGameObject[0];
 
-
-	std::cout << "Display width = " << width << std::endl
-		<< "Display height = " << height << std::endl
-		<< "Aspect ratio = " << aspect_ratio << std::endl;
-	std::cout << "Press Escape key to exit" << std::endl;
+	printf("Display width = %d\n", width);
+	printf("Display height = %d\n", height);
+	printf("Aspect ratio = %f\n", aspect_ratio);
+	printf("Press Escape key to exit");
 }
 
 void Game::initTexture()
@@ -101,6 +100,29 @@ void Game::initTexture()
 		}
 	}
 	fin.close();
+
+	//FILE* fp;
+	//char* data;
+	//int fileSize;
+
+	//fopen_s(&fp, "./Object.info", "r");
+
+	//if (fp == NULL)
+	//{
+	//	exit(-1);
+	//}
+
+	//fseek(fp, 0L, SEEK_END);
+	//
+	//fileSize = ftell(fp);
+
+	//data = new char[fileSize];
+	//memset(data, 0, fileSize);
+	//fseek(fp, 0L, SEEK_SET);
+	////fread(data, sizeof(char) * fileSize, 1, fp);
+	//fread_s(data, sizeof(char) * fileSize, 1, sizeof(char) * fileSize, fp);
+
+	//fclose(fp);
 
 	for (int i = 0; i < mTextureCount.size(); ++i)
 	{
