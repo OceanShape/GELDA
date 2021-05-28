@@ -10,7 +10,7 @@
 
 #include "GameObject.h"
 
-#define MAX_LENGTH 1024
+#define LENGTH 1024
 
 class Game
 {
@@ -18,8 +18,7 @@ private:
 	GLFWwindow* glfwWindow = nullptr;
 	std::vector<GameObject*> mGameObject;
 	std::vector<GLuint*> mTexture;
-	// std::vector<std::vector<GLuint>*> mTexture;
-	std::vector<size_t> mTextureCount;
+	std::vector<GLuint> mTextureCount;
 	std::map<int, bool> keyStatus;
 	
 	bool isDrawGrid = false;
@@ -33,7 +32,14 @@ public:
 	~Game()
 	{
 		for (GameObject* p : mGameObject)
+		{
 			delete p;
+		}
+
+		for (GLuint* p : mTexture)
+		{
+			free(p);
+		}
 	}
 
 	void run();		// entire game loop
@@ -47,4 +53,5 @@ private:
 	bool isKeyReleased(const int& key);
 	bool isKeyUp(const int& key);
 	bool isKeyDown(const int& key);
+	void setTexture(GLuint* texture, const char* str);
 };

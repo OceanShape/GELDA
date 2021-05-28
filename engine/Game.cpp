@@ -8,7 +8,7 @@ Game::Game(const std::string title, int width, int height)
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-	glfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	glfwWindow = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
 
 	glfwMakeContextCurrent(glfwWindow);
@@ -40,15 +40,15 @@ Game::Game(const std::string title, int width, int height)
 	// Init GameObejcts
 	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
 
-	mGameObject.push_back(new GameObject(mTexture[1], 4.0f, 0.0f));
+	mGameObject.push_back(new GameObject(mTexture[1] + 2, 4.0f, 0.0f));
 
 	for (int i = 0; i < 16; ++i)
 	{
-		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
+		mGameObject.push_back(new GameObject(mTexture[1] + 0, -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
 	}
 	for (int i = 0; i < 16; ++i)
 	{
-		mGameObject.push_back(new GameObject(mTexture[1], -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
+		mGameObject.push_back(new GameObject(mTexture[1] + 1, -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
 	}
 
 	// Set playable
@@ -62,115 +62,116 @@ Game::Game(const std::string title, int width, int height)
 
 void Game::initTexture()
 {
-	int objectCount = 2;
-	std::string name[][1] =
-	{
-		{ "./resource/sample_playable.png"},
-		{ "./resource/sample_ground.png"}
-	};
+	char* fileData;
+	int fileSize;
+	FILE* fp;
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	std::ifstream fin;
-	fin.open("Object.info");
+	if (fopen_s(&fp, "./Object.info", "r") != 0)
 	{
-		std::string line;
-		int count = 0;
+		exit(-1);
+	}
+
+	{
+		fseek(fp, 0L, SEEK_END);
+		fileSize = ftell(fp);
+		fileData = new char[fileSize];
+		memset(fileData, 0, fileSize);
+		fseek(fp, 0L, SEEK_SET);
+		fread_s(fileData, sizeof(char) * fileSize, 1, sizeof(char) * fileSize, fp);
+		fclose(fp);
+	}
+
+	{
+		char buffer[LENGTH];
+		char* pData = fileData;
+		char* pBuffer = buffer;
+		int count = 1;
+		GLuint* texture = nullptr;
+
+		memset(buffer, NULL, LENGTH);
+
 		while (true)
 		{
-			getline(fin, line);
-
-			if (fin.eof())
+			while (*pData != '\n' && *pData != '\0')
 			{
-				++count;
-				mTextureCount.push_back(count);
-				break;
+				*pBuffer = *pData;
+				++pBuffer;
+				++pData;
 			}
-			else if (line.size() == 0)
+			*pBuffer = '\0';
+			pBuffer = buffer;
+
+			// load texture
 			{
-				mTextureCount.push_back(count);
-				count = 0;
-			}
-			else
-			{
-				++count;
-			}
-		}
-	}
-	fin.close();
+				int width;
+				int height;
+				int numberChannel;
+				unsigned char* imageData;
 
-	//FILE* fp;
-	//char* data;
-	//int fileSize;
+				texture = (GLuint*)realloc(texture, sizeof(GLuint) * count);
+				glGenTextures(1, texture + count - 1);
+				imageData = stbi_load(pBuffer, &width, &height, &numberChannel, 0);
 
-	//fopen_s(&fp, "./Object.info", "r");
-
-	//if (fp == NULL)
-	//{
-	//	exit(-1);
-	//}
-
-	//fseek(fp, 0L, SEEK_END);
-	//
-	//fileSize = ftell(fp);
-
-	//data = new char[fileSize];
-	//memset(data, 0, fileSize);
-	//fseek(fp, 0L, SEEK_SET);
-	////fread(data, sizeof(char) * fileSize, 1, fp);
-	//fread_s(data, sizeof(char) * fileSize, 1, sizeof(char) * fileSize, fp);
-
-	//fclose(fp);
-
-	for (int i = 0; i < mTextureCount.size(); ++i)
-	{
-		mTexture.push_back(new GLuint[mTextureCount[i]]);
-		glGenTextures(mTextureCount[i], mTexture[i]);
-		// ¡Ø test code for optimization: revise later
-		// mTexture[i] = (GLuint*)malloc(sizeof(GLuint) * mTextureCount[i]);
-
-
-		for (int j = 0; j < mTextureCount[i]; ++j)
-		{
-			int width;
-			int height;
-			int numberChannel;
-			unsigned char* data = stbi_load(name[i][j].c_str(), &width, &height, &numberChannel, 0);
-
-			if (data)
-			{
-				glBindTexture(GL_TEXTURE_2D, mTexture[i][j]);
-
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-				if (numberChannel == 4)
+				if (imageData)
 				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-				}
-				else if (numberChannel == 3)
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+					glBindTexture(GL_TEXTURE_2D, *(texture + count - 1));
+
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+					if (numberChannel == 4)
+					{
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+					}
+					else if (numberChannel == 3)
+					{
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+					}
+					else
+					{
+						std::cout << "notice : Use RGB or RGBA images. Your input image has " << numberChannel << "channels." << std::endl;
+					}
+
+					glGenerateMipmap(GL_TEXTURE_2D);
 				}
 				else
 				{
-					std::cout << "  notice : Use RGB or RGBA images. Your input image has " << numberChannel << "channels." << std::endl;
+					std::cout << "error : Failed to load texture \"" << pBuffer << "\"" << std::endl;
+					exit(-1);
 				}
 
-				glGenerateMipmap(GL_TEXTURE_2D);
+				stbi_image_free(imageData);
+			}
+
+			if (*pData == '\0')
+			{
+				mTexture.push_back(texture);
+				break;
+			}
+
+			++pData;
+
+			if (*pData == '\n')
+			{
+				++pData;
+				mTexture.push_back(texture);
+				texture = nullptr;
+				count = 1;
 			}
 			else
 			{
-				std::cout << "  notice : Failed to load texture \"" << name[i] << "\"" << std::endl;
+				++count;
 			}
-
-			stbi_image_free(data);
 		}
 	}
+
+	delete[] fileData;
 }
 
 void Game::update()
@@ -252,7 +253,9 @@ void Game::draw()
 
 	// draw game objects
 	for (GameObject* g : mGameObject)
+	{
 		g->draw(0); // static texture number 0 for test
+	}
 
 	glFlush();
 }
