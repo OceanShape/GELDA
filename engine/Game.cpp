@@ -2,7 +2,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Game::Game(const std::string title, int width, int height)
+Game::Game(const std::string& title, int width, int height,
+			const std::string& resourceDir, const std::string& objectDir)
 {
 	assert(glfwInit());
 
@@ -30,51 +31,42 @@ Game::Game(const std::string title, int width, int height)
 
 
 	// Init textures
-	initTexture();
+	initTexture(resourceDir);
 
 	// Init GameObejcts
-	initGameObject();
+	initGameObject(objectDir);
 
-
-	printf("Display width = %d\n", width);
-	printf("Display height = %d\n", height);
-	printf("Aspect ratio = %f\n", aspect_ratio);
-	printf("Press Escape key to exit");
+	std::cout << "Display width = " << width << std::endl
+			<< "Display height = " << height << std::endl
+			<< "Aspect ratio = " << aspect_ratio << std::endl
+			<< "Press Escape key to exit" << std::endl;
 }
 
-void Game::initTexture()
+void Game::initTexture(const std::string& dir)
 {
-	char* fileData;
-	int fileSize;
-	FILE* fp;
+	std::ifstream fin(dir, std::ios_base::in);
+	
+	if (fin.is_open() == false)
+	{
+		std::cout << "error: Reading " << dir << "failed\n" << std::endl;
+		exit(-1);
+	}
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	if (fopen_s(&fp, "./resource.info", "r") != 0)
-	{
-		exit(-1);
-	}
-
-	{
-		fseek(fp, 0L, SEEK_END);
-		fileSize = ftell(fp);
-		fileData = new char[fileSize];
-		memset(fileData, 0, fileSize);
-		fseek(fp, 0L, SEEK_SET);
-		fread_s(fileData, sizeof(char) * fileSize, 1, sizeof(char) * fileSize, fp);
-		fclose(fp);
-	}
-
 	{
 		char buffer[LENGTH];
-		char* pData = fileData;
 		char* pBuffer = buffer;
+		memset(buffer, NULL, LENGTH);
+
+		std::string data((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
+		const char* pData = data.c_str();
+
 		int count = 1;
 		GLuint* texture = nullptr;
 
-		memset(buffer, NULL, LENGTH);
 
 		while (true)
 		{
@@ -91,12 +83,12 @@ void Game::initTexture()
 			{
 				int width;
 				int height;
-				int numberChannel;
+				int channelCount;
 				unsigned char* imageData;
 
 				texture = (GLuint*)realloc(texture, sizeof(GLuint) * count);
 				glGenTextures(1, texture + count - 1);
-				imageData = stbi_load(pBuffer, &width, &height, &numberChannel, 0);
+				imageData = stbi_load(pBuffer, &width, &height, &channelCount, 0);
 
 				if (imageData)
 				{
@@ -107,17 +99,17 @@ void Game::initTexture()
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-					if (numberChannel == 4)
+					if (channelCount == 4)
 					{
 						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 					}
-					else if (numberChannel == 3)
+					else if (channelCount == 3)
 					{
 						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
 					}
 					else
 					{
-						std::cout << "notice : Use RGB or RGBA images. Your input image has " << numberChannel << "channels." << std::endl;
+						std::cout << "  notice : Use RGB or RGBA images. Your input image has " << channelCount << "channels." << std::endl;
 					}
 
 					glGenerateMipmap(GL_TEXTURE_2D);
@@ -152,21 +144,10 @@ void Game::initTexture()
 			}
 		}
 	}
-
-	delete[] fileData;
 }
 
-void Game::initGameObject()
+void Game::initGameObject(const std::string& dir)
 {
-	char* fileData;
-	int fileSize;
-	FILE* fp;
-
-	if (fopen_s(&fp, "./map.info", "r") != 0)
-	{
-		exit(-1);
-	}
-
 	//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
 	//0 1 2 3 4  5  6  7 |  8  9 10 11 12 13 14 15
 

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <sstream>
 #include <fstream>
 #include <vector>
 
@@ -20,7 +21,7 @@ private:
 	std::vector<GLuint*> mTexture;
 	std::vector<GLuint> mTextureCount;
 	std::map<int, bool> keyStatus;
-	
+
 	bool isDrawGrid = false;
 	float moveX = 0.0f;
 	float moveY = 0.0f;
@@ -28,7 +29,8 @@ private:
 	GameObject* mControllable;
 
 public:
-	Game(const std::string title, int width, int height);
+	Game(const std::string& title, int width, int height,
+			const std::string& resourceDir, const std::string& objectDir);
 	~Game()
 	{
 		for (GameObject* p : mGameObject)
@@ -42,11 +44,11 @@ public:
 		}
 	}
 
-	void run();				// entire game loop
-	void update();			// update input and game object status
-	void draw();			// draw all game objects
-	void initTexture();		// initialize textures
-	void initGameObject();	// initialize game objects(texture, position)
+	void run();										// Entire game loop
+	void update();									// Update input and game object status
+	void draw();									// Draw all game objects
+	void initTexture(const std::string& dir);		// Initialize textures
+	void initGameObject(const std::string& dir);	// Initialize game objects(texture, position)
 
 private:
 	void updateKeyStatus();
