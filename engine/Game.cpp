@@ -24,35 +24,17 @@ Game::Game(const std::string title, int width, int height)
 	glewExperimental = true;
 	assert(glewInit() == GLEW_OK);
 
-
 	glViewport(0, 0, width, height);
 	const float aspect_ratio = (float)width / (float)height;
 	glOrtho(-aspect_ratio, aspect_ratio, -1.0, 1.0, -1.0, 1.0);
 
 
-
 	// Init textures
 	initTexture();
 
-	//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
-	//0 1 2 3 4  5  6  7 |  8  9 10 11 12 13 14 15
-
 	// Init GameObejcts
-	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
+	initGameObject();
 
-	mGameObject.push_back(new GameObject(mTexture[1] + 2, 4.0f, 0.0f));
-
-	for (int i = 0; i < 16; ++i)
-	{
-		mGameObject.push_back(new GameObject(mTexture[1] + 0, -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
-	}
-	for (int i = 0; i < 16; ++i)
-	{
-		mGameObject.push_back(new GameObject(mTexture[1] + 1, -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
-	}
-
-	// Set playable
-	mControllable = mGameObject[0];
 
 	printf("Display width = %d\n", width);
 	printf("Display height = %d\n", height);
@@ -70,7 +52,7 @@ void Game::initTexture()
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	if (fopen_s(&fp, "./Object.info", "r") != 0)
+	if (fopen_s(&fp, "./resource.info", "r") != 0)
 	{
 		exit(-1);
 	}
@@ -172,6 +154,38 @@ void Game::initTexture()
 	}
 
 	delete[] fileData;
+}
+
+void Game::initGameObject()
+{
+	char* fileData;
+	int fileSize;
+	FILE* fp;
+
+	if (fopen_s(&fp, "./map.info", "r") != 0)
+	{
+		exit(-1);
+	}
+
+	//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
+	//0 1 2 3 4  5  6  7 |  8  9 10 11 12 13 14 15
+
+	// Set playable object
+	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
+	mControllable = mGameObject[0];
+
+
+	mGameObject.push_back(new GameObject(mTexture[1] + 2, 4.0f, 0.0f));
+
+	for (int i = 0; i < 16; ++i)
+	{
+		mGameObject.push_back(new GameObject(mTexture[1] + 0, -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
+	}
+	for (int i = 0; i < 16; ++i)
+	{
+		mGameObject.push_back(new GameObject(mTexture[1] + 1, -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
+	}
+
 }
 
 void Game::update()

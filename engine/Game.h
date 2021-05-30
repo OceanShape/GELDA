@@ -42,10 +42,11 @@ public:
 		}
 	}
 
-	void run();		// entire game loop
-	void update();	// update input and gameobject status
-	void draw();	// draw all gameobjects
-	void initTexture();
+	void run();				// entire game loop
+	void update();			// update input and game object status
+	void draw();			// draw all game objects
+	void initTexture();		// initialize textures
+	void initGameObject();	// initialize game objects(texture, position)
 
 private:
 	void updateKeyStatus();
@@ -53,5 +54,4 @@ private:
 	bool isKeyReleased(const int& key);
 	bool isKeyUp(const int& key);
 	bool isKeyDown(const int& key);
-	void setTexture(GLuint* texture, const char* str);
 };
