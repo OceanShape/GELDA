@@ -48,7 +48,7 @@ void Game::initTexture(const std::string& dir)
 
 	if (file.is_open() == false)
 	{
-		std::cout << "error: Reading " << dir << "failed\n" << std::endl;
+		std::cout << "error: Reading \"" << dir << "\"failed\n" << std::endl;
 		exit(-1);
 	}
 
@@ -159,7 +159,7 @@ void Game::initGameObject(const std::string& dir)
 
 	if (file.is_open() == false)
 	{
-		std::cout << "error: Reading " << dir << "failed\n" << std::endl;
+		std::cout << "error: Reading \"" << dir << "\"failed\n" << std::endl;
 		exit(-1);
 	}
 
