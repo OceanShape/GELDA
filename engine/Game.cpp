@@ -44,6 +44,10 @@ Game::Game(const std::string& title, int width, int height,
 
 void Game::initTexture(const std::string& dir)
 {
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	std::ifstream file(dir, std::ios_base::in);
 
 	if (file.is_open() == false)
@@ -52,105 +56,70 @@ void Game::initTexture(const std::string& dir)
 		exit(-1);
 	}
 
-	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	std::string data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	std::string delim("\n");
 
+	char* next = nullptr;
+	char* str = strtok_s((char*)data.c_str(), delim.c_str(), &next);
+	GLuint* texture = nullptr;
+
+	for (size_t i = 1; str != NULL; ++i)
 	{
-		char buffer[LENGTH];
-		char* pBuffer = buffer;
-		const char* pData;
-		int count = 1;
-		GLuint* texture = nullptr;
-
-		memset(buffer, NULL, LENGTH);
-
-		std::string data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-
-		if (data.size() == 0)
+		if (str[0] == '#')
 		{
-			std::cout << "error: \"" << dir << "\" is not a valid file" << std::endl;
-			exit(-1);
+			mTexture.push_back(texture);
+			texture = nullptr;
+			i = 0;
 		}
-
-		pData = data.c_str();
-
-		while (true)
+		else 
 		{
-			while (*pData != '\n' && *pData != '\0')
-			{
-				*pBuffer = *pData;
-				++pBuffer;
-				++pData;
-			}
-			*pBuffer = '\0';
-			pBuffer = buffer;
-
 			// load texture
+			int width;
+			int height;
+			int channelCount;
+			unsigned char* imageData;
+
+			texture = (GLuint*)realloc(texture, sizeof(GLuint) * i);
+			glGenTextures(1, texture + i - 1);
+			imageData = stbi_load(str, &width, &height, &channelCount, 0);
+
+			if (imageData)
 			{
-				int width;
-				int height;
-				int channelCount;
-				unsigned char* imageData;
+				glBindTexture(GL_TEXTURE_2D, *(texture + i - 1));
 
-				texture = (GLuint*)realloc(texture, sizeof(GLuint) * count);
-				glGenTextures(1, texture + count - 1);
-				imageData = stbi_load(pBuffer, &width, &height, &channelCount, 0);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-				if (imageData)
+				if (channelCount == 4)
 				{
-					glBindTexture(GL_TEXTURE_2D, *(texture + count - 1));
-
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-					if (channelCount == 4)
-					{
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-					}
-					else if (channelCount == 3)
-					{
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-					}
-					else
-					{
-						std::cout << "  notice : Use RGB or RGBA images. Your input image has " << channelCount << "channels." << std::endl;
-					}
-
-					glGenerateMipmap(GL_TEXTURE_2D);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+				}
+				else if (channelCount == 3)
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
 				}
 				else
 				{
-					std::cout << "error : Failed to load texture \"" << pBuffer << "\"" << std::endl;
-					exit(-1);
+					std::cout << "  notice : Use RGB or RGBA images. Your input image has " << channelCount << "channels." << std::endl;
 				}
 
-				stbi_image_free(imageData);
-			}
-
-			if (*pData == '\0')
-			{
-				mTexture.push_back(texture);
-				break;
-			}
-
-			++pData;
-
-			if (*pData == '\n')
-			{
-				++pData;
-				mTexture.push_back(texture);
-				texture = nullptr;
-				count = 1;
+				glGenerateMipmap(GL_TEXTURE_2D);
 			}
 			else
 			{
-				++count;
+				std::cout << "error : Failed to load texture \"" << str << "\"" << std::endl;
+				exit(-1);
 			}
+
+			stbi_image_free(imageData);
 		}
+
+		str = strtok_s(NULL, delim.c_str(), &next);
 	}
+
+	mTexture.push_back(texture);
 }
 
 void Game::initGameObject(const std::string& dir)
@@ -166,16 +135,19 @@ void Game::initGameObject(const std::string& dir)
 	std::string data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	std::string delim(",\n");
 
+	if (data.size() == 0)
+	{
+		std::cout << "error: \"" << dir << "\" is not a valid file" << std::endl;
+		exit(-1);
+	}
+
 	char* context = nullptr;
-	char* c = strtok_s((char*)data.c_str(), delim.c_str(), &context);
+	char* str = strtok_s((char*)data.c_str(), delim.c_str(), &context);
 	int buffer[4];
 
-	for (size_t i = 0; c != NULL;)
+	for (size_t i = 0; str != NULL;)
 	{
-		buffer[i] = atoi(c);
-
-
-		c = strtok_s(NULL, delim.c_str(), &context);
+		buffer[i] = atoi(str);
 
 		if (i == 3)
 		{
@@ -187,10 +159,9 @@ void Game::initGameObject(const std::string& dir)
 		else {
 			++i;
 		}
-	}
 
-	//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
-	//0 1 2 3 4  5  6  7 |  8  9 10 11 12 13 14 15
+		str = strtok_s(NULL, delim.c_str(), &context);
+	}
 
 	// Set playable object
 	mControllable = mGameObject[0];
