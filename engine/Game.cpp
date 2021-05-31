@@ -3,7 +3,7 @@
 #include "stb_image.h"
 
 Game::Game(const std::string& title, int width, int height,
-			const std::string& resourceDir, const std::string& objectDir)
+	const std::string& resourceDir, const std::string& objectDir)
 {
 	assert(glfwInit());
 
@@ -37,16 +37,16 @@ Game::Game(const std::string& title, int width, int height,
 	initGameObject(objectDir);
 
 	std::cout << "Display width = " << width << std::endl
-			<< "Display height = " << height << std::endl
-			<< "Aspect ratio = " << aspect_ratio << std::endl
-			<< "Press Escape key to exit" << std::endl;
+		<< "Display height = " << height << std::endl
+		<< "Aspect ratio = " << aspect_ratio << std::endl
+		<< "Press Escape key to exit" << std::endl;
 }
 
 void Game::initTexture(const std::string& dir)
 {
-	std::ifstream fin(dir, std::ios_base::in);
-	
-	if (fin.is_open() == false)
+	std::ifstream file(dir, std::ios_base::in);
+
+	if (file.is_open() == false)
 	{
 		std::cout << "error: Reading " << dir << "failed\n" << std::endl;
 		exit(-1);
@@ -59,14 +59,21 @@ void Game::initTexture(const std::string& dir)
 	{
 		char buffer[LENGTH];
 		char* pBuffer = buffer;
-		memset(buffer, NULL, LENGTH);
-
-		std::string data((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
-		const char* pData = data.c_str();
-
+		const char* pData;
 		int count = 1;
 		GLuint* texture = nullptr;
 
+		memset(buffer, NULL, LENGTH);
+
+		std::string data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+		if (data.size() == 0)
+		{
+			std::cout << "error: \"" << dir << "\" is not a valid file" << std::endl;
+			exit(-1);
+		}
+
+		pData = data.c_str();
 
 		while (true)
 		{
@@ -148,25 +155,45 @@ void Game::initTexture(const std::string& dir)
 
 void Game::initGameObject(const std::string& dir)
 {
+	std::ifstream file(dir, std::ios_base::in);
+
+	if (file.is_open() == false)
+	{
+		std::cout << "error: Reading " << dir << "failed\n" << std::endl;
+		exit(-1);
+	}
+
+	std::string data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	std::string delim(",\n");
+
+	char* context = nullptr;
+	char* c = strtok_s((char*)data.c_str(), delim.c_str(), &context);
+	int buffer[4];
+
+	for (size_t i = 0; c != NULL;)
+	{
+		buffer[i] = atoi(c);
+
+
+		c = strtok_s(NULL, delim.c_str(), &context);
+
+		if (i == 3)
+		{
+			mGameObject.push_back(new GameObject(mTexture[buffer[0]] + buffer[1],
+				buffer[2] * 2 + 1.0f,	// x position
+				buffer[3] * 2 + 1.0f)); // y position
+			i = 0;
+		}
+		else {
+			++i;
+		}
+	}
+
 	//1 3 5 7 9 11 13 15 | 17 19 21 23 25 27 29 31
 	//0 1 2 3 4  5  6  7 |  8  9 10 11 12 13 14 15
 
 	// Set playable object
-	mGameObject.push_back(new GameObject(mTexture[0], 0.0f, 0.0f));
 	mControllable = mGameObject[0];
-
-
-	mGameObject.push_back(new GameObject(mTexture[1] + 2, 4.0f, 0.0f));
-
-	for (int i = 0; i < 16; ++i)
-	{
-		mGameObject.push_back(new GameObject(mTexture[1] + 0, -16.0f + i * 2 + 1.0f, -16.0f + 1.0f));
-	}
-	for (int i = 0; i < 16; ++i)
-	{
-		mGameObject.push_back(new GameObject(mTexture[1] + 1, -16.0f + i * 2 + 1.0f, -16.0f + 3.0f));
-	}
-
 }
 
 void Game::update()
@@ -190,7 +217,7 @@ void Game::update()
 	mControllable->move(moveX, moveY);
 
 	// update game object physics status
-	mControllable->updateGravity();
+	//mControllable->updateGravity();
 	mControllable->updateCollision(mGameObject);
 
 
