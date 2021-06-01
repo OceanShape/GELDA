@@ -1,8 +1,13 @@
 #include "GameObject.h"
 
-void GameObject::updateGravity()
+void GameObject::updateGravity(const bool& isJumpPressed)
 {
-	mPositionY += -0.25f;
+	mPositionY += gravityAccelerationY;
+
+	if (isJumpPressed == true)
+	{
+		mPositionY += 0.5f;
+	}
 }
 
 void GameObject::updateCollision(const std::vector<GameObject*>& objects)
@@ -12,12 +17,6 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 		mPositionX - 2.0f <= g->mPositionX && g->mPositionX <= mPositionX + 2.0f &&
 		mPositionY - 2.0f <= g->mPositionY && g->mPositionY <= mPositionY + 2.0f; }) | std::views::reverse;
 
-
-	std::vector v = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-	auto view3 = v | std::views::filter([](int n) { return  n % 2 == 0; })
-		| std::views::take(3)
-		| std::views::reverse;
-	
 
 	bool isLeftCollision = false;
 	bool isRightCollision = false;

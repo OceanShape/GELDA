@@ -18,10 +18,16 @@ private:
 	int mTextureCount;
 	float mTextureRate = 0.0625f;
 
+
 	float mPositionX = 0.0f;
 	float mPositionY = 0.0f;
 
+	float gravityAccelerationY = -0.15f;
+	float jumpStartPositionY = 0.0f;
+	float jumpDecelerationStartPositionY = 0.0f;
+
 	bool isBottomCollision = false;
+	bool isJumpDeceleration = false;
 
 	eDirectionStatus mDirectionStatus = eDirectionStatus::RIGHT;
 	eMoveStatus mMoveStatus = eMoveStatus::STOP;
@@ -45,7 +51,7 @@ public:
 		mPositionX += deltaX;
 		mPositionY += deltaY;
 	}
-	void updateGravity();
+	void updateGravity(const bool& isJumpPressed);
 	void updateCollision(const std::vector<GameObject*>& objects);
 	void draw(const int& textureNumber);
 };

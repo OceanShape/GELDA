@@ -175,6 +175,7 @@ void Game::update()
 
 	static float deltaX = 0.0f;
 	static float deltaY = 0.0f;
+	static bool isJumpPressed = false;
 
 	if (isEditorMode == true)
 	{
@@ -187,6 +188,16 @@ void Game::update()
 		else if (isKeyDown(GLFW_KEY_DOWN))	deltaY = -0.5f;
 		else if (isKeyUp(GLFW_KEY_DOWN))	deltaY = 0.0f;
 	}
+	else
+	{
+		if (isKeyDown(GLFW_KEY_LEFT))		deltaX = -0.5f;
+		else if (isKeyUp(GLFW_KEY_LEFT))	deltaX = 0.0f;
+		else if (isKeyDown(GLFW_KEY_RIGHT))	deltaX = 0.5f;
+		else if (isKeyUp(GLFW_KEY_RIGHT))	deltaX = 0.0f;
+		
+		if (isKeyDown(GLFW_KEY_X))			isJumpPressed = true;
+		else if (isKeyUp(GLFW_KEY_X))		isJumpPressed = false;
+	}
 
 
 	// update game object position
@@ -196,10 +207,10 @@ void Game::update()
 	// update game object physics status
 	if (isEditorMode == false)
 	{
-		mControllable->updateGravity();
+		mControllable->updateGravity(isJumpPressed);
+		mControllable->updateCollision(mGameObject);
 	}
 
-	mControllable->updateCollision(mGameObject);
 
 	updateKeyStatus();
 }

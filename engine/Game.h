@@ -53,4 +53,5 @@ private:
 	bool isKeyReleased(const int& key);
 	bool isKeyUp(const int& key);
 	bool isKeyDown(const int& key);
+
 };
