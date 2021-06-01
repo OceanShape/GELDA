@@ -194,9 +194,9 @@ void Game::update()
 		else if (isKeyUp(GLFW_KEY_LEFT))	deltaX = 0.0f;
 		else if (isKeyDown(GLFW_KEY_RIGHT))	deltaX = 0.5f;
 		else if (isKeyUp(GLFW_KEY_RIGHT))	deltaX = 0.0f;
-		
-		if (isKeyDown(GLFW_KEY_X))			isJumpPressed = true;
-		else if (isKeyUp(GLFW_KEY_X))		isJumpPressed = false;
+
+		if (isKeyPressed(GLFW_KEY_X))		isJumpPressed = true;
+		else if (isKeyReleased(GLFW_KEY_X))	isJumpPressed = false;
 	}
 
 
@@ -293,14 +293,7 @@ void Game::updateKeyStatus()
 {
 	for (const auto& [key, value] : keyStatus)
 	{
-		if (glfwGetKey(glfwWindow, key) == GLFW_PRESS)
-		{
-			keyStatus[key] = true;
-		}
-		else if (glfwGetKey(glfwWindow, key) == GLFW_RELEASE)
-		{
-			keyStatus[key] = false;
-		}
+		keyStatus[key] = (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
 	}
 }
 
@@ -316,10 +309,10 @@ bool Game::isKeyReleased(const int& key)
 
 bool Game::isKeyUp(const int& key)
 {
-	return glfwGetKey(glfwWindow, key) == GLFW_RELEASE && keyStatus[key];
+	return glfwGetKey(glfwWindow, key) == GLFW_RELEASE && keyStatus[key] == true;
 }
 
 bool Game::isKeyDown(const int& key)
 {
-	return glfwGetKey(glfwWindow, key) == GLFW_PRESS && !keyStatus[key];
+	return glfwGetKey(glfwWindow, key) == GLFW_PRESS && keyStatus[key] == false;
 }

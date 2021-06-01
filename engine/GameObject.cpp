@@ -61,18 +61,20 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 
 			isBottomCollision = (isDownCollision || (isDownLeftCollision || isDownRightCollision)) ? true : false;
 
-			if (isBottomCollision)
+			if (isBottomCollision == true)
 			{
 				if (mPositionY < g->mPositionY + 2.0f)
 				{
 					mPositionY = g->mPositionY + 2.0f;
 				}
 
-				// jumpStatus = NO_JUMP;
-				// moveStatus = STAND;
+				 mJumpStatus = eJumpStatus::NO_JUMP;
+				 // mMoveStatus = eMoveStatus::STOP;
 			}
-			//else if ((jumpStatus == NO_JUMP) && isPreBottomCollision)
-				// jumpStatus = JUMP_FALL;
+			else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
+			{
+				mJumpStatus = eJumpStatus::FALL;
+			}
 
 		}
 		// top collision
@@ -81,7 +83,7 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 			if (g->mPositionY - 2.0f <= mPositionY)
 			{
 				mPositionY = g->mPositionY - 2.0f;
-				// jumpStatus = JUMP_FALL;
+				mJumpStatus = eJumpStatus::FALL;
 			}
 		}
 		// right collision
