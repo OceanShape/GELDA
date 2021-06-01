@@ -2,8 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Game::Game(const std::string& title, int width, int height,
-	const std::string& resourceDir, const std::string& objectDir)
+Game::Game(const std::string& title, int width, int height, const std::string& resourceDir, const std::string& objectDir)
 {
 	assert(glfwInit());
 
@@ -71,7 +70,7 @@ void Game::initTexture(const std::string& dir)
 			texture = nullptr;
 			i = 0;
 		}
-		else 
+		else
 		{
 			// load texture
 			int width;
@@ -172,25 +171,35 @@ void Game::update()
 	// check control status
 	if (isKeyDown(GLFW_KEY_ESCAPE))		glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
-	if (isKeyDown(GLFW_KEY_LEFT))		moveX = -delta;
-	else if (isKeyUp(GLFW_KEY_LEFT))	moveX = 0.0f;
-	else if (isKeyDown(GLFW_KEY_RIGHT))	moveX = delta;
-	else if (isKeyUp(GLFW_KEY_RIGHT))	moveX = 0.0f;
-	else if (isKeyDown(GLFW_KEY_UP))	moveY = delta;
-	else if (isKeyUp(GLFW_KEY_UP))		moveY = 0.0f;
-	else if (isKeyDown(GLFW_KEY_DOWN))	moveY = -delta;
-	else if (isKeyUp(GLFW_KEY_DOWN))	moveY = 0.0f;
+	if (isKeyDown(GLFW_KEY_G))			isEditorMode = !isEditorMode;
 
-	if (isKeyDown(GLFW_KEY_G))			isDrawGrid = !isDrawGrid;
+	static float deltaX = 0.0f;
+	static float deltaY = 0.0f;
+
+	if (isEditorMode == true)
+	{
+		if (isKeyDown(GLFW_KEY_LEFT))		deltaX = -0.5f;
+		else if (isKeyUp(GLFW_KEY_LEFT))	deltaX = 0.0f;
+		else if (isKeyDown(GLFW_KEY_RIGHT))	deltaX = 0.5f;
+		else if (isKeyUp(GLFW_KEY_RIGHT))	deltaX = 0.0f;
+		else if (isKeyDown(GLFW_KEY_UP))	deltaY = 0.5f;
+		else if (isKeyUp(GLFW_KEY_UP))		deltaY = 0.0f;
+		else if (isKeyDown(GLFW_KEY_DOWN))	deltaY = -0.5f;
+		else if (isKeyUp(GLFW_KEY_DOWN))	deltaY = 0.0f;
+	}
 
 
 	// update game object position
-	mControllable->move(moveX, moveY);
+	mControllable->move(deltaX, deltaY);
+
 
 	// update game object physics status
-	//mControllable->updateGravity();
-	mControllable->updateCollision(mGameObject);
+	if (isEditorMode == false)
+	{
+		mControllable->updateGravity();
+	}
 
+	mControllable->updateCollision(mGameObject);
 
 	updateKeyStatus();
 }
@@ -203,7 +212,7 @@ void Game::draw()
 
 
 	// draw grid line
-	if (isDrawGrid)
+	if (isEditorMode == true)
 	{
 		glLineWidth(1.0f);
 

@@ -40,12 +40,12 @@ public:
 	{
 	}
 
-	void move(const float& moveX, const float& moveY)
+	void move(const float& deltaX, const float& deltaY)
 	{
-		mPositionX += moveX;
-		mPositionY += moveY;
+		mPositionX += deltaX;
+		mPositionY += deltaY;
 	}
 	void updateGravity();
-	void updateCollision(std::vector<GameObject*> objects);
+	void updateCollision(const std::vector<GameObject*>& objects);
 	void draw(const int& textureNumber);
 };

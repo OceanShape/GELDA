@@ -22,15 +22,12 @@ private:
 	std::vector<GLuint> mTextureCount;
 	std::map<int, bool> keyStatus;
 
-	bool isDrawGrid = false;
-	float moveX = 0.0f;
-	float moveY = 0.0f;
-	const float delta = 0.5f;
+	bool isEditorMode = true;
 	GameObject* mControllable;
 
 public:
-	Game(const std::string& title, int width, int height,
-			const std::string& resourceDir, const std::string& objectDir);
+	Game(const std::string& title, int width, int height, const std::string& resourceDir, const std::string& objectDir);
+
 	~Game()
 	{
 		for (GameObject* p : mGameObject)

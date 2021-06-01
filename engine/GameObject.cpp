@@ -5,7 +5,7 @@ void GameObject::updateGravity()
 	mPositionY += -0.25f;
 }
 
-void GameObject::updateCollision(std::vector<GameObject*> objects)
+void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 {
 	// ¡Ø Notice: Only C++20 or later only
 	auto reverseObjects = objects | std::views::filter([this](GameObject* g) {return
