@@ -22,9 +22,13 @@ private:
 	float mPositionX = 0.0f;
 	float mPositionY = 0.0f;
 
+	float deltaX = 0.0f;
+	float deltaY = 0.0f;
+
 	float gravityAccelerationY = -0.15f;
 	float jumpStartPositionY = 0.0f;
 	float jumpDecelerationStartPositionY = 0.0f;
+	float jumpDecelerationSpendTime = 0.0f;
 
 	bool isBottomCollision = false;
 	bool isJumpDeceleration = false;
@@ -46,12 +50,30 @@ public:
 	{
 	}
 
-	void move(const float& deltaX, const float& deltaY)
+	void input(const eInputStatus& input);
+	void setPlayMode()
 	{
+		mMoveStatus = eMoveStatus::STOP;
+		mJumpStatus = eJumpStatus::FALL;
+	}
+	void update(const bool& isEditorMode, const std::vector<GameObject*>& object)
+	{
+		if (isEditorMode == false)
+		{
+			updateGravity();
+		}
+
+		// update game object position
 		mPositionX += deltaX;
 		mPositionY += deltaY;
+
+		// update game object physics status
+		if (isEditorMode == false)
+		{
+			updateCollision(object);
+		}
 	}
-	void updateGravity(const bool& isJumpPressed);
+	void updateGravity();
 	void updateCollision(const std::vector<GameObject*>& objects);
 	void draw(const int& textureNumber);
 };

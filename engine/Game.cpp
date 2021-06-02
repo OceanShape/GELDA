@@ -82,7 +82,12 @@ void Game::initTexture(const std::string& dir)
 			glGenTextures(1, texture + i - 1);
 			imageData = stbi_load(str, &width, &height, &channelCount, 0);
 
-			if (imageData)
+			if (imageData == NULL)
+			{
+				std::cout << "error : Failed to load texture \"" << str << "\"" << std::endl;
+				exit(-1);
+			}
+			else
 			{
 				glBindTexture(GL_TEXTURE_2D, *(texture + i - 1));
 
@@ -106,11 +111,7 @@ void Game::initTexture(const std::string& dir)
 
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}
-			else
-			{
-				std::cout << "error : Failed to load texture \"" << str << "\"" << std::endl;
-				exit(-1);
-			}
+
 
 			stbi_image_free(imageData);
 		}
@@ -155,7 +156,8 @@ void Game::initGameObject(const std::string& dir)
 				buffer[3] * 2 + 1.0f)); // y position
 			i = 0;
 		}
-		else {
+		else
+		{
 			++i;
 		}
 
@@ -171,46 +173,36 @@ void Game::update()
 	// check control status
 	if (isKeyDown(GLFW_KEY_ESCAPE))		glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
-	if (isKeyDown(GLFW_KEY_G))			isEditorMode = !isEditorMode;
-
-	static float deltaX = 0.0f;
-	static float deltaY = 0.0f;
-	static bool isJumpPressed = false;
+	if (isKeyDown(GLFW_KEY_G))
+	{
+		isEditorMode = !isEditorMode;
+		mControllable->setPlayMode();
+	}
 
 	if (isEditorMode == true)
 	{
-		if (isKeyDown(GLFW_KEY_LEFT))		deltaX = -0.5f;
-		else if (isKeyUp(GLFW_KEY_LEFT))	deltaX = 0.0f;
-		else if (isKeyDown(GLFW_KEY_RIGHT))	deltaX = 0.5f;
-		else if (isKeyUp(GLFW_KEY_RIGHT))	deltaX = 0.0f;
-		else if (isKeyDown(GLFW_KEY_UP))	deltaY = 0.5f;
-		else if (isKeyUp(GLFW_KEY_UP))		deltaY = 0.0f;
-		else if (isKeyDown(GLFW_KEY_DOWN))	deltaY = -0.5f;
-		else if (isKeyUp(GLFW_KEY_DOWN))	deltaY = 0.0f;
+		if (isKeyDown(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::DEBUG_LEFT);
+		else if (isKeyDown(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::DEBUG_RIGHT);
+		else if (isKeyDown(GLFW_KEY_UP))	mControllable->input(eInputStatus::DEBUG_UP);
+		else if (isKeyDown(GLFW_KEY_DOWN))	mControllable->input(eInputStatus::DEBUG_DOWN);
+		else if (isKeyUp(GLFW_KEY_LEFT)
+			|| isKeyUp(GLFW_KEY_RIGHT)
+			|| isKeyUp(GLFW_KEY_UP)
+			|| isKeyUp(GLFW_KEY_DOWN))		mControllable->input(eInputStatus::DEBUG_ARROW_RELEASE);
 	}
 	else
 	{
-		if (isKeyDown(GLFW_KEY_LEFT))		deltaX = -0.5f;
-		else if (isKeyUp(GLFW_KEY_LEFT))	deltaX = 0.0f;
-		else if (isKeyDown(GLFW_KEY_RIGHT))	deltaX = 0.5f;
-		else if (isKeyUp(GLFW_KEY_RIGHT))	deltaX = 0.0f;
+		if (isKeyDown(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::LEFT);
+		else if (isKeyDown(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::RIGHT);
+		else if (isKeyUp(GLFW_KEY_LEFT)
+			|| isKeyUp(GLFW_KEY_RIGHT))		mControllable->input(eInputStatus::ARROW_RELEASE);
 
-		if (isKeyPressed(GLFW_KEY_X))		isJumpPressed = true;
-		else if (isKeyReleased(GLFW_KEY_X))	isJumpPressed = false;
+		if (isKeyPressed(GLFW_KEY_X))		mControllable->input(eInputStatus::JUMP_PRESS);
+		else if (isKeyReleased(GLFW_KEY_X))	mControllable->input(eInputStatus::JUMP_RELEASE);
 	}
 
 
-	// update game object position
-	mControllable->move(deltaX, deltaY);
-
-
-	// update game object physics status
-	if (isEditorMode == false)
-	{
-		mControllable->updateGravity(isJumpPressed);
-		mControllable->updateCollision(mGameObject);
-	}
-
+	mControllable->update(isEditorMode, mGameObject);
 
 	updateKeyStatus();
 }
@@ -293,7 +285,7 @@ void Game::updateKeyStatus()
 {
 	for (const auto& [key, value] : keyStatus)
 	{
-		keyStatus[key] = (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
+		keyStatus[key] = glfwGetKey(glfwWindow, key) == GLFW_PRESS;
 	}
 }
 

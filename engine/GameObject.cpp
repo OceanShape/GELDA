@@ -1,12 +1,89 @@
 #include "GameObject.h"
 
-void GameObject::updateGravity(const bool& isJumpPressed)
+void GameObject::input(const eInputStatus& input)
 {
-	mPositionY += gravityAccelerationY;
-
-	if (isJumpPressed == true)
+	if (input == eInputStatus::DEBUG_LEFT)
 	{
-		mPositionY += 0.5f;
+		deltaX = -0.5f;
+	}
+	else if (input == eInputStatus::DEBUG_RIGHT)
+	{
+		deltaX = 0.5f;
+	}
+	else if (input == eInputStatus::DEBUG_UP)
+	{
+		deltaY = 0.5f;
+	}
+	else if (input == eInputStatus::DEBUG_DOWN)
+	{
+		deltaY = -0.5f;
+	}
+	else if (input == eInputStatus::DEBUG_ARROW_RELEASE)
+	{
+		deltaX = 0.0f;
+		deltaY = 0.0f;
+	}
+	else if (input == eInputStatus::LEFT)
+	{
+		deltaX = -0.5f;
+		mMoveStatus = eMoveStatus::MOVE;
+		mDirectionStatus = eDirectionStatus::LEFT;
+	}
+	else if (input == eInputStatus::RIGHT)
+	{
+		deltaX = 0.5f;
+		mMoveStatus = eMoveStatus::MOVE;
+		mDirectionStatus = eDirectionStatus::RIGHT;
+	}
+	else if (input == eInputStatus::ARROW_RELEASE)
+	{
+		deltaX = 0.0f;
+		deltaY = 0.0f;
+		mMoveStatus = eMoveStatus::STOP;
+	}
+	else if (input == eInputStatus::JUMP_PRESS)
+	{
+		if (mJumpStatus == eJumpStatus::NO_JUMP)
+		{
+			jumpStartPositionY = mPositionY;
+			mJumpStatus = eJumpStatus::JUMP;
+		}
+	}
+	else if (input == eInputStatus::JUMP_RELEASE)
+	{
+		if (mJumpStatus == eJumpStatus::JUMP)
+		{
+			jumpDecelerationStartPositionY = mPositionY;
+			mJumpStatus = eJumpStatus::JUMP_DECELERATION;
+		}
+	}
+}
+
+void GameObject::updateGravity()
+{
+
+	if (mJumpStatus == eJumpStatus::JUMP)
+	{
+		mPositionY += 0.8f;
+		if (mPositionY - jumpStartPositionY > 3.5f * 2.0f)
+		{
+			jumpDecelerationStartPositionY = mPositionY;
+			mJumpStatus = eJumpStatus::JUMP_DECELERATION;
+		}
+	}
+	else if (mJumpStatus == eJumpStatus::FALL)
+	{
+		mPositionY -= 0.6f;
+	}
+	else if (mJumpStatus == eJumpStatus::JUMP_DECELERATION)
+	{
+		jumpDecelerationSpendTime += 1.0f;
+
+		mPositionY += 0.8f + (gravityAccelerationY / 2 * jumpDecelerationSpendTime);
+		if (jumpDecelerationStartPositionY > mPositionY)
+		{
+			mJumpStatus = eJumpStatus::FALL;
+		}
 	}
 }
 
@@ -41,7 +118,7 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 				isDownCollision = true;
 			}
 
-			if (!isLeftCollision && !isRightCollision)
+			if (isLeftCollision == false && isRightCollision == false)
 			{
 				if (g->mPositionX < mPositionX - 1.0f)
 				{
@@ -68,10 +145,14 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 					mPositionY = g->mPositionY + 2.0f;
 				}
 
-				 mJumpStatus = eJumpStatus::NO_JUMP;
-				 // mMoveStatus = eMoveStatus::STOP;
+				
+				jumpDecelerationSpendTime = 0.0f;
+				jumpStartPositionY = mPositionY;
+				
+				mJumpStatus = eJumpStatus::NO_JUMP;
+				mMoveStatus = eMoveStatus::STOP;
 			}
-			else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
+			else if ((mJumpStatus == eJumpStatus::NO_JUMP) && isPreBottomCollision == true)
 			{
 				mJumpStatus = eJumpStatus::FALL;
 			}
@@ -114,7 +195,7 @@ void GameObject::draw(const int& textureNumber)
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	glPushMatrix();
 	{
 		glScalef(mTextureRate, mTextureRate, mTextureRate);
