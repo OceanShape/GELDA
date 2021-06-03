@@ -176,15 +176,15 @@ void Game::update()
 	if (isKeyDown(GLFW_KEY_G))
 	{
 		isEditorMode = !isEditorMode;
-		mControllable->setPlayMode();
+		mControllable->setMode(isEditorMode);
 	}
 
 	if (isEditorMode == true)
 	{
-		if (isKeyDown(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::DEBUG_LEFT);
-		else if (isKeyDown(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::DEBUG_RIGHT);
-		else if (isKeyDown(GLFW_KEY_UP))	mControllable->input(eInputStatus::DEBUG_UP);
-		else if (isKeyDown(GLFW_KEY_DOWN))	mControllable->input(eInputStatus::DEBUG_DOWN);
+		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::DEBUG_LEFT);
+		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::DEBUG_RIGHT);
+		else if (isKeyPressed(GLFW_KEY_UP))	mControllable->input(eInputStatus::DEBUG_UP);
+		else if (isKeyPressed(GLFW_KEY_DOWN))	mControllable->input(eInputStatus::DEBUG_DOWN);
 		else if (isKeyUp(GLFW_KEY_LEFT)
 			|| isKeyUp(GLFW_KEY_RIGHT)
 			|| isKeyUp(GLFW_KEY_UP)
@@ -192,8 +192,8 @@ void Game::update()
 	}
 	else
 	{
-		if (isKeyDown(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::LEFT);
-		else if (isKeyDown(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::RIGHT);
+		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::LEFT);
+		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::RIGHT);
 		else if (isKeyUp(GLFW_KEY_LEFT)
 			|| isKeyUp(GLFW_KEY_RIGHT))		mControllable->input(eInputStatus::ARROW_RELEASE);
 

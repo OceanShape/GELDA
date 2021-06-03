@@ -7,6 +7,7 @@
 
 #include <ranges>		// reverse range(¡Ø Notice: Only C++20 or later only)
 #include <algorithm>	// for view
+#include <cfloat>
 
 #include "CollisionDirection.h"
 #include "Status.h"
@@ -51,10 +52,20 @@ public:
 	}
 
 	void input(const eInputStatus& input);
-	void setPlayMode()
+	void setMode(const bool& isEditorMode)
 	{
-		mMoveStatus = eMoveStatus::STOP;
-		mJumpStatus = eJumpStatus::FALL;
+		if (isEditorMode == true)
+		{
+			mDirectionStatus = eDirectionStatus::RIGHT;
+			mMoveStatus = eMoveStatus::STOP;
+			mJumpStatus = eJumpStatus::NO_JUMP;
+		}
+		else
+		{
+			mDirectionStatus = eDirectionStatus::RIGHT;
+			mMoveStatus = eMoveStatus::STOP;
+			mJumpStatus = eJumpStatus::FALL;
+		}
 	}
 	void update(const bool& isEditorMode, const std::vector<GameObject*>& object)
 	{

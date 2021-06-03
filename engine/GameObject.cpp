@@ -5,17 +5,21 @@ void GameObject::input(const eInputStatus& input)
 	if (input == eInputStatus::DEBUG_LEFT)
 	{
 		deltaX = -0.5f;
+		deltaY = 0.0f;
 	}
 	else if (input == eInputStatus::DEBUG_RIGHT)
 	{
 		deltaX = 0.5f;
+		deltaY = 0.0f;
 	}
 	else if (input == eInputStatus::DEBUG_UP)
 	{
+		deltaX = 0.0f;
 		deltaY = 0.5f;
 	}
 	else if (input == eInputStatus::DEBUG_DOWN)
 	{
+		deltaX = 0.0f;
 		deltaY = -0.5f;
 	}
 	else if (input == eInputStatus::DEBUG_ARROW_RELEASE)
@@ -38,7 +42,6 @@ void GameObject::input(const eInputStatus& input)
 	else if (input == eInputStatus::ARROW_RELEASE)
 	{
 		deltaX = 0.0f;
-		deltaY = 0.0f;
 		mMoveStatus = eMoveStatus::STOP;
 	}
 	else if (input == eInputStatus::JUMP_PRESS)
@@ -98,6 +101,10 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 	bool isLeftCollision = false;
 	bool isRightCollision = false;
 	bool isDownCollision = false;
+	bool isDownLeftCollision = false;
+	bool isDownRightCollision = false;
+	bool isPreBottomCollision = isBottomCollision;
+	float highestBottomPlatform = -FLT_MAX;
 
 	for (GameObject* g : reverseObjects)
 	{
@@ -109,13 +116,13 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 		// bottom collision
 		if (g->mPositionY + 1.5f <= mPositionY)
 		{
-			bool isDownLeftCollision = false;
-			bool isDownRightCollision = false;
-			bool isPreBottomCollision = isBottomCollision;
-
 			if (mPositionX - 1.0f <= g->mPositionX && g->mPositionX <= mPositionX + 1.0f)
 			{
 				isDownCollision = true;
+				if (g->mPositionY > highestBottomPlatform)
+				{
+					highestBottomPlatform = g->mPositionY;
+				}
 			}
 
 			if (isLeftCollision == false && isRightCollision == false)
@@ -125,6 +132,10 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 					if (mPositionX - 1.8f <= g->mPositionX)
 					{
 						isDownLeftCollision = true;
+						if (g->mPositionY > highestBottomPlatform)
+						{
+							highestBottomPlatform = g->mPositionY;
+						}
 					}
 				}
 				else if (mPositionX + 1.0f < g->mPositionX)
@@ -132,31 +143,13 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 					if (g->mPositionX <= mPositionX + 1.8f)
 					{
 						isDownRightCollision = true;
+						if (g->mPositionY > highestBottomPlatform)
+						{
+							highestBottomPlatform = g->mPositionY;
+						}
 					}
 				}
 			}
-
-			isBottomCollision = (isDownCollision || (isDownLeftCollision || isDownRightCollision)) ? true : false;
-
-			if (isBottomCollision == true)
-			{
-				if (mPositionY < g->mPositionY + 2.0f)
-				{
-					mPositionY = g->mPositionY + 2.0f;
-				}
-
-				
-				jumpDecelerationSpendTime = 0.0f;
-				jumpStartPositionY = mPositionY;
-				
-				mJumpStatus = eJumpStatus::NO_JUMP;
-				mMoveStatus = eMoveStatus::STOP;
-			}
-			else if ((mJumpStatus == eJumpStatus::NO_JUMP) && isPreBottomCollision == true)
-			{
-				mJumpStatus = eJumpStatus::FALL;
-			}
-
 		}
 		// top collision
 		else if (g->mPositionX - 1.0f <= mPositionX && mPositionX <= g->mPositionX + 1.0f)
@@ -188,6 +181,29 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 			}
 		}
 	}
+
+	isBottomCollision = (isDownCollision || (isDownLeftCollision || isDownRightCollision)) ? true : false;
+
+	if (isBottomCollision == true)
+	{
+		if (mPositionY < highestBottomPlatform + 2.0f)
+		{
+			mPositionY = highestBottomPlatform + 2.0f;
+		}
+
+		jumpDecelerationSpendTime = 0.0f;
+		jumpStartPositionY = mPositionY;
+
+		mJumpStatus = eJumpStatus::NO_JUMP;
+		mMoveStatus = eMoveStatus::STOP;
+		// std::cout << "[BOT COL]";
+	}
+	else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
+	{
+		mJumpStatus = eJumpStatus::FALL;
+		// std::cout << "[PLATFORM FALL]";
+	}
+	// std::cout << std::endl;
 }
 
 void GameObject::draw(const int& textureNumber)
