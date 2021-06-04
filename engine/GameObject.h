@@ -23,9 +23,6 @@ private:
 	float mPositionX = 0.0f;
 	float mPositionY = 0.0f;
 
-	float deltaX = 0.0f;
-	float deltaY = 0.0f;
-
 	float gravityAccelerationY = -0.15f;
 	float jumpStartPositionY = 0.0f;
 	float jumpDecelerationStartPositionY = 0.0f;
@@ -74,15 +71,13 @@ public:
 			updateGravity();
 		}
 
-		// update game object position
-		mPositionX += deltaX;
-		mPositionY += deltaY;
-
 		// update game object physics status
 		if (isEditorMode == false)
 		{
 			updateCollision(object);
 		}
+
+		mPositionY = (static_cast<int>(mPositionY * 10.0f) / 10.0f);
 	}
 	void updateGravity();
 	void updateCollision(const std::vector<GameObject*>& objects);
