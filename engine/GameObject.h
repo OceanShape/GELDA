@@ -23,7 +23,7 @@ private:
 	float mPositionX = 0.0f;
 	float mPositionY = 0.0f;
 
-	float gravityAccelerationY = -0.05f;
+	float gravityAccelerationY = -0.10f;
 	float jumpStartPositionY = 0.0f;
 	float jumpDecelerationStartPositionY = 0.0f;
 	float jumpDecelerationSpendTime = 0.0f;

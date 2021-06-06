@@ -29,13 +29,13 @@ void GameObject::input(const eInputStatus& input)
 	}
 	else if (input == eInputStatus::LEFT)
 	{
-		mPositionX += -0.1f;
+		mPositionX += -0.3f;
 		mMoveStatus = eMoveStatus::MOVE;
 		mDirectionStatus = eDirectionStatus::LEFT;
 	}
 	else if (input == eInputStatus::RIGHT)
 	{
-		mPositionX += 0.1f;
+		mPositionX += 0.3f;
 		mMoveStatus = eMoveStatus::MOVE;
 		mDirectionStatus = eDirectionStatus::RIGHT;
 	}
@@ -84,7 +84,7 @@ void GameObject::updateGravity()
 
 		float upSpeed = 0.8f + (gravityAccelerationY * jumpDecelerationSpendTime);
 
-		if (upSpeed < 0.0f)
+		if (upSpeed < -0.6f)
 		{
 			mJumpStatus = eJumpStatus::FALL;
 		}
