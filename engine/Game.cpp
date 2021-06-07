@@ -259,7 +259,21 @@ void Game::draw()
 	// draw game objects
 	for (GameObject* g : mGameObject)
 	{
-		g->draw(0); // static texture number 0 for test
+		if (g == mControllable)
+		{
+			if (g->mJumpStatus == eJumpStatus::NO_JUMP)
+			{
+				g->draw(0);
+			}
+			else
+			{
+				g->draw(1);
+			}
+		}
+		else
+		{
+			g->draw(0); // static texture number 0 for test
+		}
 	}
 
 	glFlush();

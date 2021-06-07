@@ -1,5 +1,6 @@
-./resource/sample_playable.png
+./resource/playable_stand.png
+./resource/playable_jump.png
 #
-./resource/sample_ground.png
-./resource/sample_stone.png
-./resource/sample_coin_block.png
+./resource/ground.png
+./resource/stone.png
+./resource/coin_block.png

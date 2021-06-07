@@ -17,6 +17,8 @@ class GameObject
 private:
 	GLuint* mTexture;
 	int mTextureCount;
+	int mCurrentFrame = 0;
+
 	float mTextureRate = 0.0625f;
 
 
@@ -31,11 +33,14 @@ private:
 	bool isBottomCollision = false;
 	bool isJumpDeceleration = false;
 
+	
+
+
+public:
 	eDirectionStatus mDirectionStatus = eDirectionStatus::RIGHT;
 	eMoveStatus mMoveStatus = eMoveStatus::STOP;
 	eJumpStatus mJumpStatus = eJumpStatus::FALL;
 
-public:
 	GameObject(GLuint* texture, const float& posX, const float& posY)
 	{
 		mTextureCount = 1; // for Test
