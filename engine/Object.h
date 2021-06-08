@@ -12,7 +12,7 @@
 #include "CollisionDirection.h"
 #include "Status.h"
 
-class GameObject
+class Object
 {
 private:
 	GLuint* mTexture;
@@ -33,15 +33,13 @@ private:
 	bool isBottomCollision = false;
 	bool isJumpDeceleration = false;
 
-	
-
-
-public:
 	eDirectionStatus mDirectionStatus = eDirectionStatus::RIGHT;
 	eMoveStatus mMoveStatus = eMoveStatus::STOP;
+
+public:
 	eJumpStatus mJumpStatus = eJumpStatus::FALL;
 
-	GameObject(GLuint* texture, const float& posX, const float& posY)
+	Object(GLuint* texture, const float& posX, const float& posY)
 	{
 		mTextureCount = 1; // for Test
 		mTexture = texture;
@@ -49,7 +47,7 @@ public:
 		mPositionY = posY;
 	}
 
-	~GameObject()
+	~Object()
 	{
 	}
 
@@ -69,22 +67,17 @@ public:
 			mJumpStatus = eJumpStatus::FALL;
 		}
 	}
-	void update(const bool& isEditorMode, const std::vector<GameObject*>& object)
+	void update(const bool& isEditorMode, const std::vector<Object*>& object)
 	{
 		if (isEditorMode == false)
 		{
 			updateGravity();
-		}
-
-		// update game object physics status
-		if (isEditorMode == false)
-		{
 			updateCollision(object);
 		}
 
 		mPositionY = (static_cast<int>(mPositionY * 10.0f) / 10.0f);
 	}
 	void updateGravity();
-	void updateCollision(const std::vector<GameObject*>& objects);
+	void updateCollision(const std::vector<Object*>& objects);
 	void draw(const int& textureNumber);
 };

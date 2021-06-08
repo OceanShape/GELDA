@@ -21,7 +21,7 @@
     <ClCompile Include="engine\Game.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameObject.cpp">
+    <ClCompile Include="engine\Object.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,13 +29,13 @@
     <ClInclude Include="engine\Game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="engine\CollisionDirection.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="engine\Status.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\Object.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

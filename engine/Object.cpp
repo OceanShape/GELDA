@@ -1,6 +1,6 @@
-#include "GameObject.h"
+#include "Object.h"
 
-void GameObject::input(const eInputStatus& input)
+void Object::input(const eInputStatus& input)
 {
 	if (input == eInputStatus::DEBUG_LEFT)
 	{
@@ -62,9 +62,8 @@ void GameObject::input(const eInputStatus& input)
 	}
 }
 
-void GameObject::updateGravity()
+void Object::updateGravity()
 {
-
 	if (mJumpStatus == eJumpStatus::JUMP)
 	{
 		mPositionY += 0.8f;
@@ -92,10 +91,10 @@ void GameObject::updateGravity()
 	}
 }
 
-void GameObject::updateCollision(const std::vector<GameObject*>& objects)
+void Object::updateCollision(const std::vector<Object*>& objects)
 {
 	// ¡Ø Notice: Only C++20 or later only
-	auto reverseObjects = objects | std::views::filter([this](GameObject* g) {return
+	auto reverseObjects = objects | std::views::filter([this](Object* g) {return
 		mPositionX - 2.0f < g->mPositionX && g->mPositionX < mPositionX + 2.0f &&
 		mPositionY - 2.0f < g->mPositionY && g->mPositionY < mPositionY + 2.0f; }) | std::views::reverse;
 
@@ -112,7 +111,7 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 	float lowestTopPlatformY = FLT_MAX;
 	float highestBottomPlatformY = -FLT_MAX;
 
-	for (GameObject* g : reverseObjects)
+	for (Object* g : reverseObjects)
 	{
 		if (this == g)
 		{
@@ -197,7 +196,7 @@ void GameObject::updateCollision(const std::vector<GameObject*>& objects)
 	}
 }
 
-void GameObject::draw(const int& textureNumber)
+void Object::draw(const int& textureNumber)
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);

@@ -33,7 +33,7 @@ Game::Game(const std::string& title, int width, int height, const std::string& r
 	initTexture(resourceDir);
 
 	// Init GameObejcts
-	initGameObject(objectDir);
+	initObject(objectDir);
 
 	std::cout << "Display width = " << width << std::endl
 		<< "Display height = " << height << std::endl
@@ -122,7 +122,7 @@ void Game::initTexture(const std::string& dir)
 	mTexture.push_back(texture);
 }
 
-void Game::initGameObject(const std::string& dir)
+void Game::initObject(const std::string& dir)
 {
 	std::ifstream file(dir, std::ios_base::in);
 
@@ -151,7 +151,7 @@ void Game::initGameObject(const std::string& dir)
 
 		if (i == 3)
 		{
-			mGameObject.push_back(new GameObject(mTexture[buffer[0]] + buffer[1],
+			mObject.push_back(new Object(mTexture[buffer[0]] + buffer[1],
 				buffer[2] * 2 + 1.0f,	// x position
 				buffer[3] * 2 + 1.0f)); // y position
 			i = 0;
@@ -165,7 +165,7 @@ void Game::initGameObject(const std::string& dir)
 	}
 
 	// Set playable object
-	mControllable = mGameObject[0];
+	mControllable = mObject[0];
 }
 
 void Game::update()
@@ -202,7 +202,7 @@ void Game::update()
 	}
 
 
-	mControllable->update(isEditorMode, mGameObject);
+	mControllable->update(isEditorMode, mObject);
 
 	updateKeyStatus();
 }
@@ -257,7 +257,7 @@ void Game::draw()
 
 
 	// draw game objects
-	for (GameObject* g : mGameObject)
+	for (Object* g : mObject)
 	{
 		if (g == mControllable)
 		{
