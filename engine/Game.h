@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Object.h"
+#include "MoveableObject.h"
 
 #define LENGTH 1024
 

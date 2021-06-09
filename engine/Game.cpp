@@ -176,31 +176,31 @@ void Game::update()
 	if (isKeyDown(GLFW_KEY_G))
 	{
 		isEditorMode = !isEditorMode;
+
 		mControllable->setMode(isEditorMode);
 	}
 
 	if (isEditorMode == true)
 	{
-		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::DEBUG_LEFT);
-		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::DEBUG_RIGHT);
-		else if (isKeyPressed(GLFW_KEY_UP))	mControllable->input(eInputStatus::DEBUG_UP);
-		else if (isKeyPressed(GLFW_KEY_DOWN))	mControllable->input(eInputStatus::DEBUG_DOWN);
+		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->inputEditor(eInputStatus::LEFT);
+		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->inputEditor(eInputStatus::RIGHT);
+		else if (isKeyPressed(GLFW_KEY_UP))	mControllable->inputEditor(eInputStatus::UP);
+		else if (isKeyPressed(GLFW_KEY_DOWN))	mControllable->inputEditor(eInputStatus::DOWN);
 		else if (isKeyUp(GLFW_KEY_LEFT)
 			|| isKeyUp(GLFW_KEY_RIGHT)
 			|| isKeyUp(GLFW_KEY_UP)
-			|| isKeyUp(GLFW_KEY_DOWN))		mControllable->input(eInputStatus::DEBUG_ARROW_RELEASE);
+			|| isKeyUp(GLFW_KEY_DOWN))		mControllable->inputEditor(eInputStatus::ARROW_RELEASE);
 	}
 	else
 	{
-		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->input(eInputStatus::LEFT);
-		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->input(eInputStatus::RIGHT);
+		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->inputControl(eInputStatus::LEFT);
+		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->inputControl(eInputStatus::RIGHT);
 		else if (isKeyUp(GLFW_KEY_LEFT)
-			|| isKeyUp(GLFW_KEY_RIGHT))		mControllable->input(eInputStatus::ARROW_RELEASE);
+			|| isKeyUp(GLFW_KEY_RIGHT))		mControllable->inputControl(eInputStatus::ARROW_RELEASE);
 
-		if (isKeyPressed(GLFW_KEY_X))		mControllable->input(eInputStatus::JUMP_PRESS);
-		else if (isKeyReleased(GLFW_KEY_X))	mControllable->input(eInputStatus::JUMP_RELEASE);
+		if (isKeyPressed(GLFW_KEY_X))		mControllable->inputControl(eInputStatus::JUMP_PRESS);
+		else if (isKeyReleased(GLFW_KEY_X))	mControllable->inputControl(eInputStatus::JUMP_RELEASE);
 	}
-
 
 	mControllable->update(isEditorMode, mObject);
 
@@ -259,21 +259,7 @@ void Game::draw()
 	// draw game objects
 	for (Object* g : mObject)
 	{
-		if (g == mControllable)
-		{
-			if (g->mJumpStatus == eJumpStatus::NO_JUMP)
-			{
-				g->draw(0);
-			}
-			else
-			{
-				g->draw(1);
-			}
-		}
-		else
-		{
-			g->draw(0); // static texture number 0 for test
-		}
+		g->draw(0);
 	}
 
 	glFlush();
