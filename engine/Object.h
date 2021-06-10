@@ -75,10 +75,10 @@ public:
 			mPositionY += 0.0f;
 		}
 	}
-	void setMode(const bool& isEditorMode)
+	virtual void setMode(const bool& isEditorMode)
 	{}
-	void update(const bool& isEditorMode, const std::vector<Object*>& object)
+	virtual void update(const bool& isEditorMode, const std::vector<Object*>& object)
 	{}
-	void inputControl(const eInputStatus& input)
+	virtual void inputControl(const eInputStatus& input)
 	{}
 };
