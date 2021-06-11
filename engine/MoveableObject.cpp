@@ -1,5 +1,9 @@
 #include "MoveableObject.h"
 
+GLuint MoveableObject::setTexture()
+{
+	return mTexture[1];
+}
 void MoveableObject::setMode(const bool& isEditorMode)
 {
 	if (isEditorMode == true)

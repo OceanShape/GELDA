@@ -10,7 +10,7 @@ void Object::draw(const int& textureNumber)
 	{
 		glScalef(mTextureRate, mTextureRate, mTextureRate);
 
-		glBindTexture(GL_TEXTURE_2D, mTexture[textureNumber]);
+		glBindTexture(GL_TEXTURE_2D, setTexture());
 
 		glBegin(GL_QUADS);
 

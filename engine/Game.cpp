@@ -148,16 +148,12 @@ void Game::initObject(const std::string& dir)
 	for (size_t i = 0; i < 4; ++i)
 	{
 		buffer[i] = atoi(str);
-
-		if (i == 3)
-		{
-			mObject.push_back(new MoveableObject(mTexture[buffer[0]] + buffer[1],
-				buffer[2] * 2 + 1.0f,	// x position
-				buffer[3] * 2 + 1.0f)); // y position
-		}
-
 		str = strtok_s(NULL, delim.c_str(), &context);
 	}
+	
+	mObject.push_back(new MoveableObject(mTexture[buffer[0]] + buffer[1],
+			buffer[2] * 2 + 1.0f,	// x position
+			buffer[3] * 2 + 1.0f)); // y position
 
 	for (size_t i = 0; str != NULL;)
 	{

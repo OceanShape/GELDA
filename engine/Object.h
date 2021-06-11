@@ -16,17 +16,15 @@ class Object
 {
 protected:
 	GLuint* mTexture;
-	int mTextureCount;
 	int mCurrentFrame = 0;
 	float mTextureRate = 0.0625f;
 
-	float mPositionX = 0.0f;
-	float mPositionY = 0.0f;
+	float mPositionX;
+	float mPositionY;
 
 public:
 	Object(GLuint* texture, const float& posX, const float& posY)
 	{
-		mTextureCount = 1; // for Test
 		mTexture = texture;
 		mPositionX = posX;
 		mPositionY = posY;
@@ -46,7 +44,7 @@ public:
 		return mPositionY;
 	}
 
-	void draw(const int& textureNumber);
+	
 	void inputEditor(const eInputStatus& input)
 	{
 		if (input == eInputStatus::LEFT)
@@ -74,6 +72,13 @@ public:
 			mPositionX += 0.0f;
 			mPositionY += 0.0f;
 		}
+	}
+
+	void draw(const int& textureNumber);
+
+	virtual GLuint setTexture()
+	{
+		return mTexture[0];
 	}
 	virtual void setMode(const bool& isEditorMode)
 	{}
