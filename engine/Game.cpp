@@ -60,17 +60,12 @@ void Game::initTexture(const std::string& dir)
 
 	char* next = nullptr;
 	char* str = strtok_s((char*)data.c_str(), delim.c_str(), &next);
-	GLuint* texture = nullptr;
 
-	for (size_t i = 1; str != NULL; ++i)
+	std::vector<GLuint>* texture = new std::vector<GLuint>;
+
+	while (str != NULL)
 	{
-		if (str[0] == '#')
-		{
-			mTexture.push_back(texture);
-			texture = nullptr;
-			i = 0;
-		}
-		else
+		if (str[0] == '.')
 		{
 			// load texture
 			int width;
@@ -78,8 +73,8 @@ void Game::initTexture(const std::string& dir)
 			int channelCount;
 			unsigned char* imageData;
 
-			texture = (GLuint*)realloc(texture, sizeof(GLuint) * i);
-			glGenTextures(1, texture + i - 1);
+			GLuint text;
+			glGenTextures(1, &text);
 			imageData = stbi_load(str, &width, &height, &channelCount, 0);
 
 			if (imageData == NULL)
@@ -89,7 +84,7 @@ void Game::initTexture(const std::string& dir)
 			}
 			else
 			{
-				glBindTexture(GL_TEXTURE_2D, *(texture + i - 1));
+				glBindTexture(GL_TEXTURE_2D, text);
 
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -112,8 +107,14 @@ void Game::initTexture(const std::string& dir)
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}
 
-
 			stbi_image_free(imageData);
+
+			texture->push_back(text);
+		}
+		else
+		{
+			mTexture.push_back(texture);
+			texture = new std::vector<GLuint>;
 		}
 
 		str = strtok_s(NULL, delim.c_str(), &next);
@@ -143,27 +144,27 @@ void Game::initObject(const std::string& dir)
 
 	char* context = nullptr;
 	char* str = strtok_s((char*)data.c_str(), delim.c_str(), &context);
-	int buffer[4];
+	int buffer[3];
 
-	for (size_t i = 0; i < 4; ++i)
+	for (size_t i = 0; i < 3; ++i)
 	{
 		buffer[i] = atoi(str);
 		str = strtok_s(NULL, delim.c_str(), &context);
 	}
-	
-	mObject.push_back(new MoveableObject(mTexture[buffer[0]] + buffer[1],
-			buffer[2] * 2 + 1.0f,	// x position
-			buffer[3] * 2 + 1.0f)); // y position
+
+	mObject.push_back(new MoveableObject(mTexture[buffer[0]],
+		buffer[1] * 2 + 1.0f,	// x position
+		buffer[2] * 2 + 1.0f)); // y position
 
 	for (size_t i = 0; str != NULL;)
 	{
 		buffer[i] = atoi(str);
 
-		if (i == 3)
+		if (i == 2)
 		{
-			mObject.push_back(new Object(mTexture[buffer[0]] + buffer[1],
-				buffer[2] * 2 + 1.0f,	// x position
-				buffer[3] * 2 + 1.0f)); // y position
+			mObject.push_back(new Object(mTexture[buffer[0]],
+				buffer[1] * 2 + 1.0f,	// x position
+				buffer[2] * 2 + 1.0f)); // y position
 			i = 0;
 		}
 		else

@@ -15,7 +15,7 @@
 class Object
 {
 protected:
-	GLuint* mTexture;
+	std::vector<GLuint>* mTexture;
 	size_t mCurrentFrame = 0;
 	float mTextureRate = 0.0625f;
 
@@ -23,9 +23,8 @@ protected:
 	float mPositionY;
 
 public:
-	Object(GLuint* texture, const float& posX, const float& posY)
+	Object(std::vector<GLuint>* texture, const float& posX, const float& posY) : mTexture(texture)
 	{
-		mTexture = texture;
 		mPositionX = posX;
 		mPositionY = posY;
 	}
@@ -78,7 +77,7 @@ public:
 
 	virtual GLuint getTexture(bool& isRightSide)
 	{
-		return mTexture[0];
+		return (*mTexture)[0];
 	}
 	virtual void setMode(const bool& isEditorMode)
 	{

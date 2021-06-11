@@ -19,8 +19,8 @@ class Game
 private:
 	GLFWwindow* glfwWindow = nullptr;
 	std::vector<Object*> mObject;
-	std::vector<GLuint*> mTexture;
-	std::vector<GLuint> mTextureCount;
+
+	std::vector<std::vector<GLuint>*> mTexture;
 	std::map<int, bool> keyStatus;
 
 	bool isEditorMode = true;
@@ -34,11 +34,6 @@ public:
 		for (Object* p : mObject)
 		{
 			delete p;
-		}
-
-		for (GLuint* p : mTexture)
-		{
-			free(p);
 		}
 	}
 

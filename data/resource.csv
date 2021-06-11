@@ -2,5 +2,7 @@
 ./resource/playable_jump.png
 #
 ./resource/ground.png
+#
 ./resource/stone.png
+#
 ./resource/coin_block.png

@@ -17,7 +17,7 @@ private:
 	eMoveStatus mMoveStatus = eMoveStatus::STOP;
 	eJumpStatus mJumpStatus = eJumpStatus::FALL;
 public:
-	MoveableObject(GLuint* texture, const float& posX, const float& posY) :
+	MoveableObject(std::vector<GLuint>* texture, const float& posX, const float& posY) :
 		Object(texture, posX, posY)
 	{}
 
