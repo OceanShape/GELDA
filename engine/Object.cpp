@@ -8,9 +8,11 @@ void Object::draw(const int& textureNumber)
 
 	glPushMatrix();
 	{
+		bool isRightSide = true;
+
 		glScalef(mTextureRate, mTextureRate, mTextureRate);
 
-		glBindTexture(GL_TEXTURE_2D, setTexture());
+		glBindTexture(GL_TEXTURE_2D, getTexture());
 
 		glBegin(GL_QUADS);
 

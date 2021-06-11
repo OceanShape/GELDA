@@ -16,7 +16,7 @@ class Object
 {
 protected:
 	GLuint* mTexture;
-	int mCurrentFrame = 0;
+	size_t mCurrentFrame = 0;
 	float mTextureRate = 0.0625f;
 
 	float mPositionX;
@@ -76,14 +76,25 @@ public:
 
 	void draw(const int& textureNumber);
 
-	virtual GLuint setTexture()
+	virtual GLuint getTexture()
 	{
 		return mTexture[0];
 	}
 	virtual void setMode(const bool& isEditorMode)
-	{}
+	{
+		mCurrentFrame = 0;
+	}
 	virtual void update(const bool& isEditorMode, const std::vector<Object*>& object)
-	{}
+	{
+		if (isEditorMode == false)
+		{
+			++mCurrentFrame;
+			if (mCurrentFrame == 60)
+			{
+				mCurrentFrame = 0;
+			}
+		}
+	}
 	virtual void inputControl(const eInputStatus& input)
 	{}
 };

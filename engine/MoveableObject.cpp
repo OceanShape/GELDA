@@ -1,13 +1,15 @@
 #include "MoveableObject.h"
 
-GLuint MoveableObject::setTexture()
+GLuint MoveableObject::getTexture()
 {
-	return mTexture[1];
+	return mTexture[mCurrentFrame / 30];
 }
 void MoveableObject::setMode(const bool& isEditorMode)
 {
 	if (isEditorMode == true)
 	{
+		mCurrentFrame = 0;
+
 		mDirectionStatus = eDirectionStatus::RIGHT;
 		mMoveStatus = eMoveStatus::STOP;
 		mJumpStatus = eJumpStatus::NO_JUMP;
@@ -23,6 +25,13 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 {
 	if (isEditorMode == false)
 	{
+		// update frame
+		++mCurrentFrame;
+		if (mCurrentFrame == 60)
+		{
+			mCurrentFrame = 0;
+		}
+
 		// update gravity status
 		if (mJumpStatus == eJumpStatus::JUMP)
 		{
