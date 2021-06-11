@@ -1,7 +1,8 @@
 #include "MoveableObject.h"
 
-GLuint MoveableObject::getTexture()
+GLuint MoveableObject::getTexture(bool& isRightSide)
 {
+	isRightSide = (mDirectionStatus == eDirectionStatus::RIGHT);
 	return mTexture[mCurrentFrame / 30];
 }
 void MoveableObject::setMode(const bool& isEditorMode)

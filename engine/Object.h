@@ -76,7 +76,7 @@ public:
 
 	void draw(const int& textureNumber);
 
-	virtual GLuint getTexture()
+	virtual GLuint getTexture(bool& isRightSide)
 	{
 		return mTexture[0];
 	}

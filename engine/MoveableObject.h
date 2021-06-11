@@ -21,7 +21,7 @@ public:
 		Object(texture, posX, posY)
 	{}
 
-	GLuint getTexture();
+	GLuint getTexture(bool& isRightSide);
 	void setMode(const bool& isEditorMode)override;
 	void update(const bool& isEditorMode, const std::vector<Object*>& objects)override;
 	void inputControl(const eInputStatus& input)override;

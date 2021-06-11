@@ -9,19 +9,22 @@ void Object::draw(const int& textureNumber)
 	glPushMatrix();
 	{
 		bool isRightSide = true;
+		float t;
 
 		glScalef(mTextureRate, mTextureRate, mTextureRate);
 
-		glBindTexture(GL_TEXTURE_2D, getTexture());
+		glBindTexture(GL_TEXTURE_2D, getTexture(isRightSide));
 
 		glBegin(GL_QUADS);
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(mPositionX - 1.0f, mPositionY + 1.0f);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(mPositionX - 1.0f, mPositionY - 1.0f);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(mPositionX + 1.0f, mPositionY - 1.0f);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(mPositionX + 1.0f, mPositionY + 1.0f);
+		t = isRightSide * 2.0f - 1.0f;
+
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(mPositionX - t, mPositionY + 1.0f);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(mPositionX - t, mPositionY - 1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(mPositionX + t, mPositionY - 1.0f);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(mPositionX + t, mPositionY + 1.0f);
 
 		glEnd();
 	}
