@@ -125,7 +125,9 @@ void Game::initTexture(const std::string& dir)
 
 void Game::initObject(const std::string& dir)
 {
-	std::ifstream file(dir, std::ios_base::in);
+	std::ifstream file(dir, std::ios_base::in || std::ios_base::binary);
+	std::string data;
+
 
 	if (file.is_open() == false)
 	{
@@ -133,50 +135,46 @@ void Game::initObject(const std::string& dir)
 		exit(-1);
 	}
 
-	std::string data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	std::string delim(",\n");
+	data.resize(21);
+	file.read(&data[0], data.size());
 
-	if (data.size() == 0)
+	if (file.fail() == true || data != "GELDA GAMEOBJECT FILE")
 	{
-		std::cout << "error: \"" << dir << "\" is not a valid file" << std::endl;
+		std::cout << "error: gameobject.dat is invalid" << std::endl;
 		exit(-1);
 	}
 
-	char* context = nullptr;
-	char* str = strtok_s((char*)data.c_str(), delim.c_str(), &context);
-	int buffer[3];
+	file.seekg(32, std::ios::beg);
+	data.resize(256);
+	file.read(&data[0], data.size());
 
-	for (size_t i = 0; i < 3; ++i)
+	const char* cp = data.c_str();
+
+	for (int i = 0; i < data.size(); ++i)
 	{
-		buffer[i] = atoi(str);
-		str = strtok_s(NULL, delim.c_str(), &context);
+		char c = *cp++;
+		if (c == 1)
+		{
+			Object* o = new MoveableObject(mTexture[0],
+				(i % 16 - 8) * 2 + 1.0f,	// x position
+				(i / 16 - 8) * 2 + 1.0f);	// y position
+			mObject.push_back(o);
+			mControllable = o;
+		}
+		else if (c != 0)
+		{
+			mObject.push_back(new Object(mTexture[c - 1],
+				(i % 16 - 8) * 2 + 1.0f,	// x position
+				(i / 16 - 8) * 2 + 1.0f));	// y position
+		}
 	}
 
-	mObject.push_back(new MoveableObject(mTexture[buffer[0]],
-		buffer[1] * 2 + 1.0f,	// x position
-		buffer[2] * 2 + 1.0f)); // y position
-
-	for (size_t i = 0; str != NULL;)
+	if (mControllable == nullptr)
 	{
-		buffer[i] = atoi(str);
-
-		if (i == 2)
-		{
-			mObject.push_back(new Object(mTexture[buffer[0]],
-				buffer[1] * 2 + 1.0f,	// x position
-				buffer[2] * 2 + 1.0f)); // y position
-			i = 0;
-		}
-		else
-		{
-			++i;
-		}
-
-		str = strtok_s(NULL, delim.c_str(), &context);
+		std::cout << "error: Controllable object is not founded" << std::endl;
+		exit(-1);
 	}
 
-	// Set playable object
-	mControllable = mObject[0];
 }
 
 void Game::update()

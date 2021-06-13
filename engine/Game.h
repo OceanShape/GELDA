@@ -24,7 +24,7 @@ private:
 	std::map<int, bool> keyStatus;
 
 	bool isEditorMode = true;
-	Object* mControllable;
+	Object* mControllable = nullptr;
 
 public:
 	Game(const std::string& title, int width, int height, const std::string& resourceDir, const std::string& objectDir);
