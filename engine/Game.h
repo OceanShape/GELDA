@@ -12,7 +12,7 @@
 #include "Object.h"
 #include "MoveableObject.h"
 
-#define LENGTH 1024
+#define LENGTH 4096
 
 class Game
 {
@@ -32,6 +32,11 @@ public:
 	~Game()
 	{
 		for (Object* p : mObject)
+		{
+			delete p;
+		}
+
+		for (std::vector<GLuint>* p : mTexture)
 		{
 			delete p;
 		}
