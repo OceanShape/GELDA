@@ -91,7 +91,7 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 			float posY = g->getPositionY();
 
 			// bottom collision
-			if (mPositionY - 1.0f > posY)
+			if (mPositionY - posY > 1.0f)
 			{
 				if (posX < mPositionX + 1.0f && mPositionX - 1.0f < posX)
 				{
@@ -113,29 +113,47 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 				{
 					highestBottomPlatformY = posY;
 				}
-			}
-			// right collision
-			else if (mPositionX + 1.8f < posX)
-			{
-				isRightCollision = true;
-				rightPlatformX = posX;
-			}
-			// left collision
-			else if (mPositionX - 1.8f > posX)
-			{
-				isLeftCollision = true;
-				leftPlatformX = posX;
+
+				isBottomCollision = isDownCollision || (isDownLeftCollision || isDownRightCollision);
+
+
+				if (isBottomCollision == true)
+				{
+					if (mPositionY < highestBottomPlatformY + 2.0f)
+					{
+						mPositionY = highestBottomPlatformY + 2.0f;
+					}
+					jumpDecelerationSpendTime = 0.0f;
+					jumpStartPositionY = mPositionY;
+					mJumpStatus = eJumpStatus::NO_JUMP;
+					mMoveStatus = eMoveStatus::STOP;
+				}
+				else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
+				{
+					mJumpStatus = eJumpStatus::FALL;
+				}
 			}
 			// top collision
-			else if (mPositionY + 1.8f < posY)
+			else if (mPositionX - 1.0f < posX && posX < mPositionX + 1.0f && mPositionY + 1.8f < posY)
 			{
 				isTopCollision = true;
 				lowestTopPlatformY = posY;
 				mJumpStatus = eJumpStatus::FALL;
 			}
-		}
+			// left collision
+			else if (mPositionX - 1.8f < posX)
+			{
+				isLeftCollision = true;
+				leftPlatformX = posX;
+			}
+			// right collision
+			else if (mPositionX + 1.8f > posX)
+			{
+				isRightCollision = true;
+				rightPlatformX = posX;
+			}
 
-		isBottomCollision = (isDownCollision || (isDownLeftCollision || isDownRightCollision)) ? true : false;
+		}
 
 		if (isLeftCollision == true)
 		{
@@ -148,23 +166,6 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		else if (isTopCollision == true)
 		{
 			mPositionY = lowestTopPlatformY - 2.0f;
-		}
-		else if (isBottomCollision == true)
-		{
-			if (mPositionY < highestBottomPlatformY + 2.0f)
-			{
-				mPositionY = highestBottomPlatformY + 2.0f;
-			}
-
-			jumpDecelerationSpendTime = 0.0f;
-			jumpStartPositionY = mPositionY;
-
-			mJumpStatus = eJumpStatus::NO_JUMP;
-			mMoveStatus = eMoveStatus::STOP;
-		}
-		else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
-		{
-			mJumpStatus = eJumpStatus::FALL;
 		}
 	}
 
