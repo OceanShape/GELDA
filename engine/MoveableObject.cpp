@@ -114,24 +114,7 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 					highestBottomPlatformY = posY;
 				}
 
-				isBottomCollision = isDownCollision || (isDownLeftCollision || isDownRightCollision);
 
-
-				if (isBottomCollision == true)
-				{
-					if (mPositionY < highestBottomPlatformY + 2.0f)
-					{
-						mPositionY = highestBottomPlatformY + 2.0f;
-					}
-					jumpDecelerationSpendTime = 0.0f;
-					jumpStartPositionY = mPositionY;
-					mJumpStatus = eJumpStatus::NO_JUMP;
-					mMoveStatus = eMoveStatus::STOP;
-				}
-				else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
-				{
-					mJumpStatus = eJumpStatus::FALL;
-				}
 			}
 			// top collision
 			else if (mPositionX - 1.0f < posX && posX < mPositionX + 1.0f && mPositionY + 1.8f < posY)
@@ -140,8 +123,9 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 				lowestTopPlatformY = posY;
 				mJumpStatus = eJumpStatus::FALL;
 			}
+
 			// left collision
-			else if (mPositionX - 1.8f < posX)
+			if (mPositionX - 1.8f < posX)
 			{
 				isLeftCollision = true;
 				leftPlatformX = posX;
@@ -159,13 +143,31 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		{
 			mPositionX = leftPlatformX + 2.0f;
 		}
-		else if (isRightCollision == true)
+		if (isRightCollision == true)
 		{
 			mPositionX = rightPlatformX - 2.0f;
 		}
-		else if (isTopCollision == true)
+		if (isTopCollision == true)
 		{
 			mPositionY = lowestTopPlatformY - 2.0f;
+		}
+		
+		isBottomCollision = isDownCollision || (isDownLeftCollision || isDownRightCollision);
+
+		if (isBottomCollision == true)
+		{
+			if (mPositionY < highestBottomPlatformY + 2.0f)
+			{
+				mPositionY = highestBottomPlatformY + 2.0f;
+			}
+			jumpDecelerationSpendTime = 0.0f;
+			jumpStartPositionY = mPositionY;
+			mJumpStatus = eJumpStatus::NO_JUMP;
+			mMoveStatus = eMoveStatus::STOP;
+		}
+		else if (mJumpStatus == eJumpStatus::NO_JUMP && isPreBottomCollision == true)
+		{
+			mJumpStatus = eJumpStatus::FALL;
 		}
 	}
 
