@@ -177,44 +177,7 @@ void Game::initObject(const std::string& dir)
 
 }
 
-void Game::update()
-{
-	// check control status
-	if (isKeyDown(GLFW_KEY_ESCAPE))		glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
-	if (isKeyDown(GLFW_KEY_G))
-	{
-		isEditorMode = !isEditorMode;
-
-		mControllable->setMode(isEditorMode);
-	}
-
-	if (isEditorMode == true)
-	{
-		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->inputEditor(eInputStatus::LEFT);
-		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->inputEditor(eInputStatus::RIGHT);
-		else if (isKeyPressed(GLFW_KEY_UP))	mControllable->inputEditor(eInputStatus::UP);
-		else if (isKeyPressed(GLFW_KEY_DOWN))	mControllable->inputEditor(eInputStatus::DOWN);
-		else if (isKeyUp(GLFW_KEY_LEFT)
-			|| isKeyUp(GLFW_KEY_RIGHT)
-			|| isKeyUp(GLFW_KEY_UP)
-			|| isKeyUp(GLFW_KEY_DOWN))		mControllable->inputEditor(eInputStatus::ARROW_RELEASE);
-	}
-	else
-	{
-		if (isKeyPressed(GLFW_KEY_LEFT))		mControllable->inputControl(eInputStatus::LEFT);
-		else if (isKeyPressed(GLFW_KEY_RIGHT))	mControllable->inputControl(eInputStatus::RIGHT);
-		else if (isKeyUp(GLFW_KEY_LEFT)
-			|| isKeyUp(GLFW_KEY_RIGHT))		mControllable->inputControl(eInputStatus::ARROW_RELEASE);
-
-		if (isKeyPressed(GLFW_KEY_X))		mControllable->inputControl(eInputStatus::JUMP_PRESS);
-		else if (isKeyReleased(GLFW_KEY_X))	mControllable->inputControl(eInputStatus::JUMP_RELEASE);
-	}
-
-	mControllable->update(isEditorMode, mObject);
-
-	updateKeyStatus();
-}
 
 void Game::draw()
 {

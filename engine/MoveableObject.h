@@ -5,13 +5,14 @@ class MoveableObject :
 	public Object
 {
 private:
-	float gravityAccelerationY = -0.10f;
+	float gravityY = -0.10f;
 	float jumpStartPositionY = 0.0f;
 	float jumpDecelerationStartPositionY = 0.0f;
 	float jumpDecelerationSpendTime = 0.0f;
 
 	bool isBottomCollision = false;
 	bool isJumpDeceleration = false;
+	bool isOnPlatform = false;
 
 	eDirectionStatus mDirectionStatus = eDirectionStatus::RIGHT;
 	eMoveStatus mMoveStatus = eMoveStatus::STOP;

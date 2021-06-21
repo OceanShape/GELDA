@@ -16,7 +16,7 @@
 
 class Game
 {
-private:
+protected:
 	GLFWwindow* glfwWindow = nullptr;
 	std::vector<Object*> mObject;
 
@@ -43,12 +43,12 @@ public:
 	}
 
 	void run();										// Entire game loop
-	void update();									// Update input and game object status
+	virtual void update() {};						// Update input and game object status
 	void draw();									// Draw all game objects
 	void initTexture(const std::string& dir);		// Initialize textures
 	void initObject(const std::string& dir);	// Initialize game objects(texture, position)
 
-private:
+protected:
 	void updateKeyStatus();
 	bool isKeyPressed(const int& key);
 	bool isKeyReleased(const int& key);
