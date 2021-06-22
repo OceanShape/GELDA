@@ -92,7 +92,7 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 			float posY = g->getPositionY();
 
 			// bottom collision
-			if (mPositionY - 1.0f > posY)
+			if (mPositionY - 1.3f > posY)
 			{
 				if (posX < mPositionX + 1.0f && mPositionX - 1.0f < posX)
 				{
@@ -114,11 +114,9 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 				{
 					highestBottomPlatformY = posY;
 				}
-
-
 			}
 			// left collision
-			if (mPositionY - 0.9f < posY && mPositionX - 1.6f > posX)
+			else if (mPositionY - 0.9f < posY && mPositionX - 1.6f > posX)
 			{
 				isLeftCollision = true;
 				leftPlatformX = posX;
@@ -130,7 +128,7 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 				rightPlatformX = posX;
 			}
 			// top collision
-			else if (mPositionY + 1.6f < posY)//mPositionX - 1.0f < posX && posX < mPositionX + 1.0f && 
+			else if (mPositionY + 1.2f < posY)
 			{
 				isTopCollision = true;
 				lowestTopPlatformY = posY;
