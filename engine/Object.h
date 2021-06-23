@@ -43,7 +43,7 @@ public:
 		return mPositionY;
 	}
 
-	
+
 	void inputEditor(const eInputStatus& input)
 	{
 		if (input == eInputStatus::LEFT)
@@ -72,9 +72,9 @@ public:
 			mPositionY += 0.0f;
 		}
 	}
+	virtual void inputControl(const eInputStatus& input) {}
 
 	void draw(const int& textureNumber);
-
 	virtual GLuint getTexture(bool& isRightSide)
 	{
 		return (*mTexture)[0];
@@ -94,6 +94,5 @@ public:
 			}
 		}
 	}
-	virtual void inputControl(const eInputStatus& input)
-	{}
+
 };

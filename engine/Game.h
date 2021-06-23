@@ -31,14 +31,14 @@ public:
 
 	~Game()
 	{
-		for (Object* p : mObject)
+		for (Object* o : mObject)
 		{
-			delete p;
+			delete o;
 		}
 
-		for (std::vector<GLuint>* p : mTexture)
+		for (std::vector<GLuint>* t : mTexture)
 		{
-			delete p;
+			delete t;
 		}
 	}
 

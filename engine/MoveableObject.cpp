@@ -98,13 +98,14 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 				{
 					isDownCollision = true;
 				}
-				else if (isLeftCollision == false && isRightCollision == false)
+				else if (mJumpStatus == eJumpStatus::FALL && 
+					isLeftCollision == false && isRightCollision == false)
 				{
-					if (posX - mPositionX < 1.8f)
+					if (mPositionX + 1.9f > posX)
 					{
 						isDownLeftCollision = true;
 					}
-					else if (mPositionX - posX < 1.8f)
+					else if (mPositionX - 1.9f < posX)
 					{
 						isDownRightCollision = true;
 					}
