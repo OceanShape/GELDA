@@ -98,8 +98,8 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 				{
 					isDownCollision = true;
 				}
-				else if (mJumpStatus == eJumpStatus::FALL && 
-					isLeftCollision == false && isRightCollision == false)
+				else if (mJumpStatus == eJumpStatus::FALL
+					&& isLeftCollision == false && isRightCollision == false)
 				{
 					if (mPositionX + 1.9f > posX)
 					{
@@ -173,6 +173,9 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		{
 			mJumpStatus = eJumpStatus::FALL;
 		}
+
+
+		// check 
 	}
 
 	mPositionY = (static_cast<int>(mPositionY * 10.0f) / 10.0f);

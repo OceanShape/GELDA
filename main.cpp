@@ -14,7 +14,7 @@ public:
 
 	void update() override
 	{
-		// check control status
+		// check input
 		if (isKeyDown(GLFW_KEY_ESCAPE))		glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
 		if (isKeyDown(GLFW_KEY_G))
@@ -52,6 +52,9 @@ public:
 		}
 
 		mControllable->update(isEditorMode, mObject);
+
+		// update total status
+
 
 		updateKeyStatus();
 	}

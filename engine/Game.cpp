@@ -178,7 +178,6 @@ void Game::initObject(const std::string& dir)
 }
 
 
-
 void Game::draw()
 {
 	glClearColor(static_cast<float>(100) / 255.0f, static_cast<float>(149) / 255.0f, static_cast<float>(237) / 255.0f, 1);// background color
