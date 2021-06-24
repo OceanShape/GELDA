@@ -155,6 +155,7 @@
     <ClInclude Include="engine\Game.h" />
     <ClInclude Include="engine\MoveableObject.h" />
     <ClInclude Include="engine\Object.h" />
+    <ClInclude Include="engine\ObjectType.h" />
     <ClInclude Include="engine\Status.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

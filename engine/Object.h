@@ -85,13 +85,10 @@ public:
 	}
 	virtual void update(const bool& isEditorMode, const std::vector<Object*>& object)
 	{
-		if (isEditorMode == false)
+		++mCurrentFrame;
+		if (mCurrentFrame == 60)
 		{
-			++mCurrentFrame;
-			if (mCurrentFrame == 60)
-			{
-				mCurrentFrame = 0;
-			}
+			mCurrentFrame = 0;
 		}
 	}
 

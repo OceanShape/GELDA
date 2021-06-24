@@ -49,12 +49,12 @@ public:
 			{
 				mControllable->inputControl(eInputStatus::JUMP_PRESS);
 			}
+
+			mControllable->update(isEditorMode, mObject);
+
+			// update collision status
+
 		}
-
-		mControllable->update(isEditorMode, mObject);
-
-		// update total status
-
 
 		updateKeyStatus();
 	}
