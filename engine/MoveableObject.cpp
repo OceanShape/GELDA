@@ -67,19 +67,11 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		mPositionY - 2.0f < g->getPositionY() && g->getPositionY() < mPositionY + 2.0f; }) | std::views::reverse;
 
 	// [][Top][][Left][Right][DownLeft][Down][DownRight]
-	bool isTopCollision = false;
-	bool isLeftCollision = false;
-	bool isRightCollision = false;
 	bool isDownCollision = false;
 	bool isDownLeftCollision = false;
 	bool isDownRightCollision = false;
 
 	bool isPreBottomCollision = isBottomCollision;
-
-	float leftPlatformX = -FLT_MAX;
-	float rightPlatformX = FLT_MAX;
-	float topPlatformY = FLT_MAX;
-	float bottomPlatformY = -FLT_MAX;
 
 	Object* leftObj = nullptr;
 	Object* rightObj = nullptr;
@@ -99,83 +91,59 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		// bottom collision
 		if (mPositionY - 1.3f > posY)
 		{
-			if (posX < mPositionX + 1.0f && mPositionX - 1.0f < posX)
+			if ((posX < mPositionX + 1.0f && mPositionX - 1.0f < posX)
+				|| (mJumpStatus == eJumpStatus::FALL
+				&& leftObj == nullptr && rightObj == nullptr
+				&& (mPositionX + 1.9f > posX || mPositionX - 1.9f < posX)))
 			{
-				isDownCollision = true;
+				bottomObj = g;
 			}
-			else if (mJumpStatus == eJumpStatus::FALL
-				&& isLeftCollision == false && isRightCollision == false)
-			{
-				if (mPositionX + 1.9f > posX)
-				{
-					isDownLeftCollision = true;
-				}
-				else if (mPositionX - 1.9f < posX)
-				{
-					isDownRightCollision = true;
-				}
-			}
-
-			bottomObj = g;
 		}
 		// left collision
-		else if (mPositionY - 0.9f < posY && mPositionX - 1.6f > posX)
+		else if (mPositionY - 0.8f < posY && mPositionX - 1.6f > posX)
 		{
-			isLeftCollision = true;
-			//leftPlatformX = posX;
 			leftObj = g;
 		}
 		// right collision
-		else if (mPositionY - 0.9f < posY && mPositionX + 1.6f < posX)
+		else if (mPositionY - 0.8f < posY && mPositionX + 1.6f < posX)
 		{
-			isRightCollision = true;
-			//rightPlatformX = posX;
 			rightObj = g;
 		}
 		// top collision
 		else if (mPositionY + 1.2f < posY)
 		{
-			isTopCollision = true;
-			//topPlatformY = posY;
 			topObj = g;
 			mJumpStatus = eJumpStatus::FALL;
 		}
 	}
 
 
-
-	//if (isRightCollision == true)
 	if (rightObj != nullptr)
 	{
-		//mPositionX = rightPlatformX - 2.0f;
 		mPositionX = rightObj->getPositionX() - 2.0f;
 	}
 
-	//if (isLeftCollision == true)
 	if (leftObj != nullptr)
 	{
-		//mPositionX = leftPlatformX + 2.0f;
 		mPositionX = leftObj->getPositionX() + 2.0f;
 	}
 
-	//if (isTopCollision == true)
 	if (topObj != nullptr)
 	{
-		//mPositionY = topPlatformY - 2.0f;
 		mPositionY = topObj->getPositionY() - 2.0f;
 	}
 
-	isBottomCollision = isDownCollision || (isDownLeftCollision || isDownRightCollision);
-
-	//if (isBottomCollision == true)
 	if (bottomObj != nullptr)
 	{
 		float bottomY = bottomObj->getPositionY() + 2.0f;
+
+		isBottomCollision = true;
 
 		if (mPositionY < bottomY)
 		{
 			mPositionY = bottomY;
 		}
+
 		jumpDecelerationSpendTime = 0.0f;
 		jumpStartPositionY = mPositionY;
 		mJumpStatus = eJumpStatus::NO_JUMP;
