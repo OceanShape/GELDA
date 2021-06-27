@@ -115,7 +115,6 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		}
 	}
 
-	// [TopLeft][Top][TopRight][Left][Right][DownLeft][Down][DownRight]
 
 	if (topObj != nullptr)
 	{
