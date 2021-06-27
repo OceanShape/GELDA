@@ -243,8 +243,6 @@ void Game::run()
 		update();
 		draw();
 
-		updateKeyStatus();
-
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
 	}

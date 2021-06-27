@@ -1,3 +1,5 @@
+#include <bitset>
+
 #include "MoveableObject.h"
 
 GLuint MoveableObject::getTexture(bool& isRightSide)
@@ -66,10 +68,6 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		mPositionX - 2.0f < g->getPositionX() && g->getPositionX() < mPositionX + 2.0f &&
 		mPositionY - 2.0f < g->getPositionY() && g->getPositionY() < mPositionY + 2.0f; }) | std::views::reverse;
 
-	// [][Top][][Left][Right][DownLeft][Down][DownRight]
-	bool isDownCollision = false;
-	bool isDownLeftCollision = false;
-	bool isDownRightCollision = false;
 
 	bool isPreBottomCollision = isBottomCollision;
 
@@ -93,8 +91,8 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		{
 			if ((posX < mPositionX + 1.0f && mPositionX - 1.0f < posX)
 				|| (mJumpStatus == eJumpStatus::FALL
-				&& leftObj == nullptr && rightObj == nullptr
-				&& (mPositionX + 1.9f > posX || mPositionX - 1.9f < posX)))
+					&& leftObj == nullptr && rightObj == nullptr
+					&& (mPositionX + 1.9f > posX || mPositionX - 1.9f < posX)))
 			{
 				bottomObj = g;
 			}
@@ -117,10 +115,11 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		}
 	}
 
+	// [TopLeft][Top][TopRight][Left][Right][DownLeft][Down][DownRight]
 
-	if (rightObj != nullptr)
+	if (topObj != nullptr)
 	{
-		mPositionX = rightObj->getPositionX() - 2.0f;
+		mPositionY = topObj->getPositionY() - 2.0f;
 	}
 
 	if (leftObj != nullptr)
@@ -128,21 +127,16 @@ void MoveableObject::update(const bool& isEditorMode, const std::vector<Object*>
 		mPositionX = leftObj->getPositionX() + 2.0f;
 	}
 
-	if (topObj != nullptr)
+	if (rightObj != nullptr)
 	{
-		mPositionY = topObj->getPositionY() - 2.0f;
+		mPositionX = rightObj->getPositionX() - 2.0f;
 	}
 
 	if (bottomObj != nullptr)
 	{
-		float bottomY = bottomObj->getPositionY() + 2.0f;
-
 		isBottomCollision = true;
 
-		if (mPositionY < bottomY)
-		{
-			mPositionY = bottomY;
-		}
+		mPositionY = bottomObj->getPositionY() + 2.0f;
 
 		jumpDecelerationSpendTime = 0.0f;
 		jumpStartPositionY = mPositionY;

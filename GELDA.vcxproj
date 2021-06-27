@@ -152,8 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\CollisionDirection.h" />
-    <ClInclude Include="engine\CollisionMessage.h" />
     <ClInclude Include="engine\Game.h" />
+    <ClInclude Include="engine\MessageQueue.h" />
     <ClInclude Include="engine\MoveableObject.h" />
     <ClInclude Include="engine\Object.h" />
     <ClInclude Include="engine\ObjectType.h" />
