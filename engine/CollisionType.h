@@ -1,12 +1,7 @@
 #pragma once
-enum class CollisioinType
-{
-	TopLeft,
-	Top,
-	TopRight,
-	Left,
-	Right,
-	DownLeft,
-	Down,
-	DownRight
+enum class CollisionType {
+  Top,
+  Left,
+  Right,
+  Down,
 };

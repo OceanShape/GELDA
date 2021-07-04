@@ -32,9 +32,6 @@
     <ClInclude Include="engine\Game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="engine\CollisionDirection.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="engine\Status.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -51,6 +48,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="engine\CollisionType.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\CollisionMessage.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -151,7 +151,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine\CollisionDirection.h" />
+    <ClInclude Include="engine\CollisionMessage.h" />
     <ClInclude Include="engine\CollisionType.h" />
     <ClInclude Include="engine\Game.h" />
     <ClInclude Include="engine\MessageQueue.h" />
