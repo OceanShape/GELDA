@@ -11,15 +11,12 @@ GLuint MoveableObject::getTexture(bool& isRightSide) {
 void MoveableObject::setMode(const bool& isEditorMode) {
   if (isEditorMode == true) {
     mCurrentFrame = 0;
-
-    mDirectionStatus = eDirectionStatus::RIGHT;
-    mMoveStatus = eMoveStatus::STOP;
     mJumpStatus = eJumpStatus::NO_JUMP;
   } else {
-    mDirectionStatus = eDirectionStatus::RIGHT;
-    mMoveStatus = eMoveStatus::STOP;
     mJumpStatus = eJumpStatus::FALL;
   }
+  mDirectionStatus = eDirectionStatus::RIGHT;
+  mMoveStatus = eMoveStatus::STOP;
 }
 void MoveableObject::update(const bool& isEditorMode,
                             const std::vector<Object*>& objects) {
@@ -49,7 +46,6 @@ void MoveableObject::update(const bool& isEditorMode,
     }
     mPositionY += upSpeed;
   }
-
 
   // check collision status
   // ¡Ø Notice: Only C++20 or later only
@@ -138,35 +134,35 @@ void MoveableObject::update(const bool& isEditorMode,
   mPositionY = (static_cast<int>(mPositionY * 10.0f) / 10.0f);
 }
 
-void MoveableObject::updateCollision(Object* obj, const CollisionType &collisiontype) {
-    if (collisiontype == CollisionType::Top) {
-        mPositionY = obj->getPositionY() - 2.0f;
-    }
+void MoveableObject::updateCollision(Object* obj,
+                                     const CollisionType& collisiontype) {
+  if (collisiontype == CollisionType::Top) {
+    mPositionY = obj->getPositionY() - 2.0f;
+  }
 
-    if (collisiontype == CollisionType::Left) {
-        mPositionX = obj->getPositionX() + 2.0f;
-    }
+  if (collisiontype == CollisionType::Left) {
+    mPositionX = obj->getPositionX() + 2.0f;
+  }
 
-    if (collisiontype == CollisionType::Right) {
-        mPositionX = obj->getPositionX() - 2.0f;
-    }
+  if (collisiontype == CollisionType::Right) {
+    mPositionX = obj->getPositionX() - 2.0f;
+  }
 
-    if (collisiontype == CollisionType::Down) {
-        isBottomCollision = true;
+  if (collisiontype == CollisionType::Down) {
+    isBottomCollision = true;
 
-        mPositionY = obj->getPositionY() + 2.0f;
+    mPositionY = obj->getPositionY() + 2.0f;
 
-        jumpDecelerationSpendTime = 0.0f;
-        jumpStartPositionY = mPositionY;
-        mJumpStatus = eJumpStatus::NO_JUMP;
-        mMoveStatus = eMoveStatus::STOP;
+    jumpDecelerationSpendTime = 0.0f;
+    jumpStartPositionY = mPositionY;
+    mJumpStatus = eJumpStatus::NO_JUMP;
+    mMoveStatus = eMoveStatus::STOP;
 
-        isOnPlatform = true;
-    }
-    else if (mJumpStatus == eJumpStatus::NO_JUMP &&
-        isPreBottomCollision == true) {
-        mJumpStatus = eJumpStatus::FALL;
-    }
+    isOnPlatform = true;
+  } else if (mJumpStatus == eJumpStatus::NO_JUMP &&
+             isPreBottomCollision == true) {
+    mJumpStatus = eJumpStatus::FALL;
+  }
 }
 
 void MoveableObject::inputControl(const eInputStatus& input) {

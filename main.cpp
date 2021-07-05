@@ -18,32 +18,26 @@ class Platformer : public Game {
 
     if (isKeyDown(GLFW_KEY_G)) changeMode();
 
-    if (isEditorMode == true) {
-      if (isKeyPressed(GLFW_KEY_LEFT))
-        mControllable->inputEditor(eInputStatus::LEFT);
-      else if (isKeyPressed(GLFW_KEY_RIGHT))
-        mControllable->inputEditor(eInputStatus::RIGHT);
-      else if (isKeyPressed(GLFW_KEY_UP))
-        mControllable->inputEditor(eInputStatus::UP);
-      else if (isKeyPressed(GLFW_KEY_DOWN))
-        mControllable->inputEditor(eInputStatus::DOWN);
-      else if (isKeyUp(GLFW_KEY_LEFT) || isKeyUp(GLFW_KEY_RIGHT) ||
-               isKeyUp(GLFW_KEY_UP) || isKeyUp(GLFW_KEY_DOWN))
-        mControllable->inputEditor(eInputStatus::ARROW_RELEASE);
-    } else {
-      if (isKeyPressed(GLFW_KEY_LEFT))
-        mControllable->inputControl(eInputStatus::LEFT);
-      else if (isKeyPressed(GLFW_KEY_RIGHT))
-        mControllable->inputControl(eInputStatus::RIGHT);
-      else if (isKeyUp(GLFW_KEY_LEFT) || isKeyUp(GLFW_KEY_RIGHT))
-        mControllable->inputControl(eInputStatus::ARROW_RELEASE);
+    if (isKeyPressed(GLFW_KEY_LEFT))
+      input(eInputStatus::LEFT);
+    else if (isKeyPressed(GLFW_KEY_RIGHT))
+      input(eInputStatus::RIGHT);
+    else if (isKeyPressed(GLFW_KEY_UP))
+      input(eInputStatus::UP);
+    else if (isKeyPressed(GLFW_KEY_DOWN))
+      input(eInputStatus::DOWN);
+    else if (isKeyUp(GLFW_KEY_LEFT) || isKeyUp(GLFW_KEY_RIGHT))
+      input(eInputStatus::ARROW_RELEASE);
 
-      if (isKeyUp(GLFW_KEY_F)) {
-        mControllable->inputControl(eInputStatus::JUMP_RELEASE);
-      } else if (isKeyDown(GLFW_KEY_F)) {
-        mControllable->inputControl(eInputStatus::JUMP_PRESS);
-      }
+    if (isEditorMode == true) {
+      if (isKeyUp(GLFW_KEY_UP) || isKeyUp(GLFW_KEY_DOWN))
+        input(eInputStatus::ARROW_RELEASE);
     }
+
+    if (isKeyUp(GLFW_KEY_F))
+      input(eInputStatus::JUMP_RELEASE);
+    else if (isKeyDown(GLFW_KEY_F))
+      input(eInputStatus::JUMP_PRESS);
 
     updateKeyStatus();
   }

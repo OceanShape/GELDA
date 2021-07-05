@@ -31,9 +31,14 @@ class Object {
   ~Object() {}
 
   float getPositionX() { return mPositionX; }
-
   float getPositionY() { return mPositionY; }
 
+  void input(const bool& isEditorMode, const eInputStatus& inputStatus) {
+    if (isEditorMode == true)
+      inputEditor(inputStatus);
+    else
+      inputControl(inputStatus);
+  }
   void inputEditor(const eInputStatus& input) {
     if (input == eInputStatus::LEFT) {
       mPositionX += -0.5f;
@@ -47,9 +52,6 @@ class Object {
     } else if (input == eInputStatus::DOWN) {
       mPositionX += 0.0f;
       mPositionY += -0.5f;
-    } else if (input == eInputStatus::ARROW_RELEASE) {
-      mPositionX += 0.0f;
-      mPositionY += 0.0f;
     }
   }
   virtual void inputControl(const eInputStatus& input) {}
@@ -60,8 +62,6 @@ class Object {
   virtual void update(const bool& isEditorMode,
                       const std::vector<Object*>& object) {
     ++mCurrentFrame;
-    if (mCurrentFrame == 60) {
-      mCurrentFrame = 0;
-    }
+    if (mCurrentFrame == 60) mCurrentFrame = 0;
   }
 };

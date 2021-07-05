@@ -46,6 +46,9 @@ class Game {
       const std::string& dir);  // Initialize game objects(texture, position)
 
  protected:
+  void input(const eInputStatus& inputStatus) {
+    mControllable->input(isEditorMode, inputStatus);
+  }
   virtual void getInput(){};
   virtual void update(){};  // Update input and game object status
   void changeMode() {
