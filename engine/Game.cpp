@@ -214,7 +214,7 @@ void Game::draw() {
 
 void Game::run() {
   while (!glfwWindowShouldClose(glfwWindow)) {
-    input();
+    getInput();
     update();
     draw();
 

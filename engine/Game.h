@@ -46,7 +46,7 @@ class Game {
       const std::string& dir);  // Initialize game objects(texture, position)
 
  protected:
-  virtual void input(){};
+  virtual void getInput(){};
   virtual void update(){};  // Update input and game object status
   void updateKeyStatus();
   bool isKeyPressed(const int& key);

@@ -12,7 +12,7 @@ class Platformer : public Game {
       : Game(title, width, height, "./data/resource.csv",
              "./data/gameobject.dat") {}
 
-  void input() override {
+  void getInput() override {
     if (isKeyDown(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
