@@ -16,11 +16,7 @@ class Platformer : public Game {
     if (isKeyDown(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
-    if (isKeyDown(GLFW_KEY_G)) {
-      isEditorMode = !isEditorMode;
-
-      mControllable->setMode(isEditorMode);
-    }
+    if (isKeyDown(GLFW_KEY_G)) changeMode();
 
     if (isEditorMode == true) {
       if (isKeyPressed(GLFW_KEY_LEFT))

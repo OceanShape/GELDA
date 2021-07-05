@@ -48,6 +48,10 @@ class Game {
  protected:
   virtual void getInput(){};
   virtual void update(){};  // Update input and game object status
+  void changeMode() {
+    isEditorMode = !isEditorMode;
+    for (Object* o : mObject) o->setMode(isEditorMode);
+  };
   void updateKeyStatus();
   bool isKeyPressed(const int& key);
   bool isKeyReleased(const int& key);
