@@ -50,8 +50,8 @@ void MoveableObject::update(const bool& isEditorMode,
     mPositionY += upSpeed;
   }
 
-  // check collision status
 
+  // check collision status
   // ¡Ø Notice: Only C++20 or later only
   auto reverseObjects = objects | std::views::filter([this](Object* g) {
                           return mPositionX - 2.0f < g->getPositionX() &&
@@ -61,7 +61,7 @@ void MoveableObject::update(const bool& isEditorMode,
                         }) |
                         std::views::reverse;
 
-  bool isPreBottomCollision = isBottomCollision;
+  isPreBottomCollision = isBottomCollision;
 
   Object* leftObj = nullptr;
   Object* rightObj = nullptr;
@@ -104,6 +104,7 @@ void MoveableObject::update(const bool& isEditorMode,
     }
   }
 
+  // update collision
   if (topObj != nullptr) {
     mPositionY = topObj->getPositionY() - 2.0f;
   }
@@ -135,6 +136,37 @@ void MoveableObject::update(const bool& isEditorMode,
   std::cout << MessageQueue::getSize() << std::endl;
 
   mPositionY = (static_cast<int>(mPositionY * 10.0f) / 10.0f);
+}
+
+void MoveableObject::updateCollision(Object* obj, const CollisionType &collisiontype) {
+    if (collisiontype == CollisionType::Top) {
+        mPositionY = obj->getPositionY() - 2.0f;
+    }
+
+    if (collisiontype == CollisionType::Left) {
+        mPositionX = obj->getPositionX() + 2.0f;
+    }
+
+    if (collisiontype == CollisionType::Right) {
+        mPositionX = obj->getPositionX() - 2.0f;
+    }
+
+    if (collisiontype == CollisionType::Down) {
+        isBottomCollision = true;
+
+        mPositionY = obj->getPositionY() + 2.0f;
+
+        jumpDecelerationSpendTime = 0.0f;
+        jumpStartPositionY = mPositionY;
+        mJumpStatus = eJumpStatus::NO_JUMP;
+        mMoveStatus = eMoveStatus::STOP;
+
+        isOnPlatform = true;
+    }
+    else if (mJumpStatus == eJumpStatus::NO_JUMP &&
+        isPreBottomCollision == true) {
+        mJumpStatus = eJumpStatus::FALL;
+    }
 }
 
 void MoveableObject::inputControl(const eInputStatus& input) {

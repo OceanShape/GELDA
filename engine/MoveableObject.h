@@ -8,6 +8,7 @@ class MoveableObject : public Object {
   float jumpDecelerationStartPositionY = 0.0f;
   float jumpDecelerationSpendTime = 0.0f;
 
+  bool isPreBottomCollision = false;
   bool isBottomCollision = false;
   bool isJumpDeceleration = false;
   bool isOnPlatform = false;
@@ -26,4 +27,5 @@ class MoveableObject : public Object {
   void update(const bool& isEditorMode,
               const std::vector<Object*>& objects) override;
   void inputControl(const eInputStatus& input) override;
+  void updateCollision(Object* obj, const CollisionType& collisiontype);
 };
