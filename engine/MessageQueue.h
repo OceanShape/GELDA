@@ -6,8 +6,6 @@
 #include "CollisionType.h"
 #include "Object.h"
 
-static std::queue<CollisionMessage> messages;
-
 class MessageQueue {
  public:
   static MessageQueue& instance() {
@@ -15,11 +13,9 @@ class MessageQueue {
     return *instance;
   }
 
-  static void AddMessage(Object* object, Object* target, CollisionType type) {
-    messages.push({object, target, type});
-  }
+  static void AddMessage(Object* object, Object* target, CollisionType type);
 
-  static int getSize() { return messages.size(); }
+  static int getSize();
 
  private:
   MessageQueue() {}

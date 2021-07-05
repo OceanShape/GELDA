@@ -149,6 +149,7 @@
     <ClCompile Include="engine\MoveableObject.cpp" />
     <ClCompile Include="engine\Object.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MessageQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\CollisionMessage.h" />
