@@ -38,14 +38,16 @@ class Game {
     }
   }
 
-  void run();               // Entire game loop
-  virtual void update(){};  // Update input and game object status
-  void draw();              // Draw all game objects
+  void run();  // Entire game loop
+ private:
+  void draw();                               // Draw all game objects
   void initTexture(const std::string& dir);  // Initialize textures
   void initObject(
       const std::string& dir);  // Initialize game objects(texture, position)
 
  protected:
+  virtual void input(){};
+  virtual void update(){};  // Update input and game object status
   void updateKeyStatus();
   bool isKeyPressed(const int& key);
   bool isKeyReleased(const int& key);

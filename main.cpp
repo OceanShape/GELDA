@@ -12,8 +12,7 @@ class Platformer : public Game {
       : Game(title, width, height, "./data/resource.csv",
              "./data/gameobject.dat") {}
 
-  void update() override {
-    // check input
+  void input() override {
     if (isKeyDown(GLFW_KEY_ESCAPE))
       glfwSetWindowShouldClose(glfwWindow, GLFW_TRUE);
 
@@ -48,13 +47,13 @@ class Platformer : public Game {
       } else if (isKeyDown(GLFW_KEY_F)) {
         mControllable->inputControl(eInputStatus::JUMP_PRESS);
       }
-
-      mControllable->update(isEditorMode, mObject);
-
-      // update collision status
     }
 
     updateKeyStatus();
+  }
+
+  void update() override {
+    if (isEditorMode == false) mControllable->update(isEditorMode, mObject);
   }
 };
 
