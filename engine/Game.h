@@ -13,8 +13,6 @@
 #include "MoveableObject.h"
 #include "Object.h"
 
-#define LENGTH 4096
-
 class Game {
  protected:
   GLFWwindow* glfwWindow = nullptr;
