@@ -44,13 +44,18 @@ class Game {
   void initTexture(const std::string& dir);  // Initialize textures
   void initObject(
       const std::string& dir);  // Initialize game objects(texture, position)
+  void update() {               // Update input and game object status
+    for (Object* o : mObject) {
+      if (o == mControllable && isEditorMode == true) continue;
+      o->update(mObject);
+    }
+  };
 
  protected:
   void input(const eInputStatus& inputStatus) {
     mControllable->input(isEditorMode, inputStatus);
   }
   virtual void getInput(){};
-  virtual void update(){};  // Update input and game object status
   void changeMode() {
     isEditorMode = !isEditorMode;
     for (Object* o : mObject) o->setMode(isEditorMode);

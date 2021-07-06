@@ -41,10 +41,6 @@ class Platformer : public Game {
 
     updateKeyStatus();
   }
-
-  void update() override {
-    if (isEditorMode == false) mControllable->update(isEditorMode, mObject);
-  }
 };
 
 int main() {

@@ -15,7 +15,7 @@ class MessageQueue {
 
   static void AddMessage(Object* object, Object* target, CollisionType type);
 
-  static int getSize();
+  static size_t getSize();
 
  private:
   MessageQueue() {}

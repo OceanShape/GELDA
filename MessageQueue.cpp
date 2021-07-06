@@ -7,4 +7,4 @@ void MessageQueue::AddMessage(Object* object, Object* target,
   messages.push({object, target, type});
 }
 
-int MessageQueue::getSize() { return messages.size(); }
+size_t MessageQueue::getSize() { return messages.size(); }

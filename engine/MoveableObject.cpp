@@ -18,8 +18,7 @@ void MoveableObject::setMode(const bool& isEditorMode) {
   mDirectionStatus = eDirectionStatus::RIGHT;
   mMoveStatus = eMoveStatus::STOP;
 }
-void MoveableObject::update(const bool& isEditorMode,
-                            const std::vector<Object*>& objects) {
+void MoveableObject::update(const std::vector<Object*>& objects) {
   // update frame
   ++mCurrentFrame;
   if (mCurrentFrame == 60) {

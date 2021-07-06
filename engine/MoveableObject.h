@@ -24,8 +24,7 @@ class MoveableObject : public Object {
 
   GLuint getTexture(bool& isRightSide);
   void setMode(const bool& isEditorMode) override;
-  void update(const bool& isEditorMode,
-              const std::vector<Object*>& objects) override;
+  void update(const std::vector<Object*>& objects) override;
   void inputControl(const eInputStatus& input) override;
   void updateCollision(Object* obj, const CollisionType& collisiontype);
 };
