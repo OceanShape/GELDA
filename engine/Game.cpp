@@ -213,7 +213,7 @@ void Game::draw() {
 }
 
 void Game::run() {
-  while (!glfwWindowShouldClose(glfwWindow)) {
+  while (!glfwWindowShouldClose(glfwWindow) && isGameOver == false) {
     getInput();
     update();
     draw();

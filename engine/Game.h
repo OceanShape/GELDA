@@ -21,6 +21,7 @@ class Game {
   std::vector<std::vector<GLuint>*> mTexture;
   std::map<int, bool> keyStatus;
 
+  bool isGameOver = false;
   bool isEditorMode = true;
   Object* mControllable = nullptr;
 
@@ -44,12 +45,15 @@ class Game {
   void initTexture(const std::string& dir);  // Initialize textures
   void initObject(
       const std::string& dir);  // Initialize game objects(texture, position)
-  void update() {               // Update input and game object status
+  void update() {               // Update game object status
     for (Object* o : mObject) {
       if (o == mControllable && isEditorMode == true) continue;
       o->update(mObject);
     }
+
+    isGameOver = manageMessageQueue();
   };
+  bool manageMessageQueue() { return false; }
 
  protected:
   void input(const eInputStatus& inputStatus) {
