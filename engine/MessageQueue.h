@@ -15,6 +15,10 @@ class MessageQueue {
 
   static void push(Object* object, Object* target, CollisionType type);
 
+  static void pop();
+
+  static const CollisionMessage front();
+
   static size_t getSize();
 
  private:
