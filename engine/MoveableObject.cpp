@@ -55,47 +55,45 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 
   isPreBottomCollision = isBottomCollision;
 
-  Object* leftObj = nullptr;
-  Object* rightObj = nullptr;
-  Object* topObj = nullptr;
-  Object* bottomObj = nullptr;
+  bool isLeftCollision = false;
+  bool isRightCollision = false;
+  bool isBottomCollision = false;
 
-  for (Object* t : reverseObjects) {
-    if (this == t) continue;
+  for (Object* target : reverseObjects) {
+    if (this == target) continue;
 
-    float posX = t->mPosX;
-    float posY = t->mPosY;
+    float posX = target->mPosX;
+    float posY = target->mPosY;
 
-    // bottom collision
+    // bottom
     if (mPosY - 1.3f > posY) {
       if ((posX < mPosX + 1.0f && mPosX - 1.0f < posX) ||
-          (mJumpStatus == eJumpStatus::FALL && leftObj == nullptr &&
-           rightObj == nullptr &&
+          (mJumpStatus == eJumpStatus::FALL &&
+           (isLeftCollision == false && isRightCollision == false) &&
            (mPosX + 1.9f > posX || mPosX - 1.9f < posX))) {
-        bottomObj = t;
-        MessageQueue::push(this, t, CollisionType::Down);
+        isBottomCollision = true;
+        MessageQueue::push(this, target, CollisionType::Down);
       }
     }
-    // left collision
+    // left
     else if (mPosY - 0.8f < posY && mPosX - 1.6f > posX) {
-      leftObj = t;
-      MessageQueue::push(this, t, CollisionType::Left);
+      isLeftCollision = true;
+      MessageQueue::push(this, target, CollisionType::Left);
     }
-    // right collision
+    // right
     else if (mPosY - 0.8f < posY && mPosX + 1.6f < posX) {
-      rightObj = t;
-      MessageQueue::push(this, t, CollisionType::Right);
+      isRightCollision = true;
+      MessageQueue::push(this, target, CollisionType::Right);
     }
-    // top collision
+    // top
     else if (mPosY + 1.2f < posY) {
-      topObj = t;
       mJumpStatus = eJumpStatus::FALL;
-      MessageQueue::push(this, t, CollisionType::Top);
+      MessageQueue::push(this, target, CollisionType::Top);
     }
   }
 
-  if (bottomObj == nullptr && mJumpStatus == eJumpStatus::NO_JUMP &&
-      isPreBottomCollision == true) {
+  if (isBottomCollision == false && isPreBottomCollision == true &&
+      mJumpStatus == eJumpStatus::NO_JUMP) {
     MessageQueue::push(this, nullptr, CollisionType::EscapeDown);
   }
 
