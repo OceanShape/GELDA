@@ -225,7 +225,14 @@ void Game::run() {
   glfwTerminate();
 }
 
-bool Game::processMessage() { return false; }
+bool Game::processMessage() {
+  while (MessageQueue::getSize() > 0) {
+    const CollisionMessage msg = MessageQueue::front();
+    msg.object->updateCollision(msg.target, msg.type);
+    MessageQueue::pop();
+  }
+  return false;
+}
 
 void Game::updateKeyStatus() {
   for (const auto& [key, value] : keyStatus) {

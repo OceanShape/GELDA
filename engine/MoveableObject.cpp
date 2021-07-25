@@ -21,9 +21,7 @@ void MoveableObject::setMode(const bool& isEditorMode) {
 void MoveableObject::update(const std::vector<Object*>& objects) {
   // update frame
   ++mCurrentFrame;
-  if (mCurrentFrame == 60) {
-    mCurrentFrame = 0;
-  }
+  if (mCurrentFrame == 60) mCurrentFrame = 0;
 
   // update gravity status
   if (mJumpStatus == eJumpStatus::JUMP) {
@@ -100,28 +98,6 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
       isPreBottomCollision == true) {
     MessageQueue::push(this, nullptr, CollisionType::EscapeDown);
   }
-
-  // update collision
-  if (topObj != nullptr) mPosY = topObj->mPosY - 2.0f;
-  if (leftObj != nullptr) mPosX = leftObj->mPosX + 2.0f;
-  if (rightObj != nullptr) mPosX = rightObj->mPosX - 2.0f;
-  if (bottomObj != nullptr) {
-    isBottomCollision = true;
-
-    mPosY = bottomObj->mPosY + 2.0f;
-
-    jumpDecelerationSpendTime = 0.0f;
-    jumpStartPositionY = mPosY;
-    mJumpStatus = eJumpStatus::NO_JUMP;
-    mMoveStatus = eMoveStatus::STOP;
-
-    isOnPlatform = true;
-  } else if (mJumpStatus == eJumpStatus::NO_JUMP &&
-             isPreBottomCollision == true) {
-    mJumpStatus = eJumpStatus::FALL;
-  }
-
-  std::cout << MessageQueue::getSize() << std::endl;
 
   mPosY = (static_cast<int>(mPosY * 10.0f) / 10.0f);
 }
