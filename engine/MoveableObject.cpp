@@ -63,9 +63,7 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   Object* bottomObj = nullptr;
 
   for (Object* t : reverseObjects) {
-    if (this == t) {
-      continue;
-    }
+    if (this == t) continue;
 
     float posX = t->mPosX;
     float posY = t->mPosY;
@@ -98,19 +96,15 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
     }
   }
 
+  if (bottomObj == nullptr && mJumpStatus == eJumpStatus::NO_JUMP &&
+      isPreBottomCollision == true) {
+    MessageQueue::push(this, nullptr, CollisionType::EscapeDown);
+  }
+
   // update collision
-  if (topObj != nullptr) {
-    mPosY = topObj->mPosY - 2.0f;
-  }
-
-  if (leftObj != nullptr) {
-    mPosX = leftObj->mPosX + 2.0f;
-  }
-
-  if (rightObj != nullptr) {
-    mPosX = rightObj->mPosX - 2.0f;
-  }
-
+  if (topObj != nullptr) mPosY = topObj->mPosY - 2.0f;
+  if (leftObj != nullptr) mPosX = leftObj->mPosX + 2.0f;
+  if (rightObj != nullptr) mPosX = rightObj->mPosX - 2.0f;
   if (bottomObj != nullptr) {
     isBottomCollision = true;
 
@@ -133,20 +127,13 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 }
 
 void MoveableObject::updateCollision(Object* obj,
-                                     const CollisionType& collisiontype) {
-  if (collisiontype == CollisionType::Top) {
-    mPosY = obj->mPosY - 2.0f;
-  }
-
-  if (collisiontype == CollisionType::Left) {
-    mPosX = obj->mPosX + 2.0f;
-  }
-
-  if (collisiontype == CollisionType::Right) {
-    mPosX = obj->mPosX - 2.0f;
-  }
-
-  if (collisiontype == CollisionType::Down) {
+                                     const CollisionType& collisionType) {
+  if (collisionType == CollisionType::Top) mPosY = obj->mPosY - 2.0f;
+  if (collisionType == CollisionType::Left) mPosX = obj->mPosX + 2.0f;
+  if (collisionType == CollisionType::Right) mPosX = obj->mPosX - 2.0f;
+  if (collisionType == CollisionType::EscapeDown)
+    mJumpStatus = eJumpStatus::FALL;
+  if (collisionType == CollisionType::Down) {
     isBottomCollision = true;
 
     mPosY = obj->mPosY + 2.0f;
@@ -157,9 +144,6 @@ void MoveableObject::updateCollision(Object* obj,
     mMoveStatus = eMoveStatus::STOP;
 
     isOnPlatform = true;
-  } else if (mJumpStatus == eJumpStatus::NO_JUMP &&
-             isPreBottomCollision == true) {
-    mJumpStatus = eJumpStatus::FALL;
   }
 }
 
