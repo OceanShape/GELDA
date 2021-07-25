@@ -51,9 +51,9 @@ class Game {
       o->update(mObject);
     }
 
-    isGameOver = manageMessageQueue();
+    isGameOver = processMessage();
   };
-  bool manageMessageQueue() { return false; }
+  bool processMessage();
 
  protected:
   void input(const eInputStatus& inputStatus) {

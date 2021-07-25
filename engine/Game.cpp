@@ -225,6 +225,8 @@ void Game::run() {
   glfwTerminate();
 }
 
+bool Game::processMessage() { return false; }
+
 void Game::updateKeyStatus() {
   for (const auto& [key, value] : keyStatus) {
     keyStatus[key] = glfwGetKey(glfwWindow, key) == GLFW_PRESS;
