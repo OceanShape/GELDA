@@ -13,7 +13,7 @@ class MessageQueue {
     return *instance;
   }
 
-  static void AddMessage(Object* object, Object* target, CollisionType type);
+  static void push(Object* object, Object* target, CollisionType type);
 
   static size_t getSize();
 

@@ -78,24 +78,24 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
            rightObj == nullptr &&
            (mPositionX + 1.9f > posX || mPositionX - 1.9f < posX))) {
         bottomObj = t;
-        MessageQueue::AddMessage(this, t, CollisionType::Down);
+        MessageQueue::push(this, t, CollisionType::Down);
       }
     }
     // left collision
     else if (mPositionY - 0.8f < posY && mPositionX - 1.6f > posX) {
       leftObj = t;
-      MessageQueue::AddMessage(this, t, CollisionType::Left);
+      MessageQueue::push(this, t, CollisionType::Left);
     }
     // right collision
     else if (mPositionY - 0.8f < posY && mPositionX + 1.6f < posX) {
       rightObj = t;
-      MessageQueue::AddMessage(this, t, CollisionType::Right);
+      MessageQueue::push(this, t, CollisionType::Right);
     }
     // top collision
     else if (mPositionY + 1.2f < posY) {
       topObj = t;
       mJumpStatus = eJumpStatus::FALL;
-      MessageQueue::AddMessage(this, t, CollisionType::Top);
+      MessageQueue::push(this, t, CollisionType::Top);
     }
   }
 
