@@ -49,10 +49,10 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   // check collision status
   // ¡Ø Notice: Only C++20 or later only
   auto reverseObjects = objects | std::views::filter([this](Object* g) {
-                          return mPositionX - 2.0f < g->getPositionX() &&
-                                 g->getPositionX() < mPositionX + 2.0f &&
-                                 mPositionY - 2.0f < g->getPositionY() &&
-                                 g->getPositionY() < mPositionY + 2.0f;
+                          return mPositionX - 2.0f < g->mPositionX &&
+                                 g->mPositionX < mPositionX + 2.0f &&
+                                 mPositionY - 2.0f < g->mPositionY &&
+                                 g->mPositionY < mPositionY + 2.0f;
                         }) |
                         std::views::reverse;
 
@@ -68,8 +68,8 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
       continue;
     }
 
-    float posX = t->getPositionX();
-    float posY = t->getPositionY();
+    float posX = t->mPositionX;
+    float posY = t->mPositionY;
 
     // bottom collision
     if (mPositionY - 1.3f > posY) {
@@ -101,21 +101,21 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 
   // update collision
   if (topObj != nullptr) {
-    mPositionY = topObj->getPositionY() - 2.0f;
+    mPositionY = topObj->mPositionY - 2.0f;
   }
 
   if (leftObj != nullptr) {
-    mPositionX = leftObj->getPositionX() + 2.0f;
+    mPositionX = leftObj->mPositionX + 2.0f;
   }
 
   if (rightObj != nullptr) {
-    mPositionX = rightObj->getPositionX() - 2.0f;
+    mPositionX = rightObj->mPositionX - 2.0f;
   }
 
   if (bottomObj != nullptr) {
     isBottomCollision = true;
 
-    mPositionY = bottomObj->getPositionY() + 2.0f;
+    mPositionY = bottomObj->mPositionY + 2.0f;
 
     jumpDecelerationSpendTime = 0.0f;
     jumpStartPositionY = mPositionY;
@@ -136,21 +136,21 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 void MoveableObject::updateCollision(Object* obj,
                                      const CollisionType& collisiontype) {
   if (collisiontype == CollisionType::Top) {
-    mPositionY = obj->getPositionY() - 2.0f;
+    mPositionY = obj->mPositionY - 2.0f;
   }
 
   if (collisiontype == CollisionType::Left) {
-    mPositionX = obj->getPositionX() + 2.0f;
+    mPositionX = obj->mPositionX + 2.0f;
   }
 
   if (collisiontype == CollisionType::Right) {
-    mPositionX = obj->getPositionX() - 2.0f;
+    mPositionX = obj->mPositionX - 2.0f;
   }
 
   if (collisiontype == CollisionType::Down) {
     isBottomCollision = true;
 
-    mPositionY = obj->getPositionY() + 2.0f;
+    mPositionY = obj->mPositionY + 2.0f;
 
     jumpDecelerationSpendTime = 0.0f;
     jumpStartPositionY = mPositionY;

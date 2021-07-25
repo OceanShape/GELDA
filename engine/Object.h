@@ -28,13 +28,9 @@ class Object {
     mPositionY = posY;
   }
 
+  friend class MoveableObject;
+
   ~Object() {}
-
-  float getPositionX() { return mPositionX; }
-  float getPositionY() { return mPositionY; }
-
-  float setPositionX(float pos) { mPositionX = pos; };
-  float setPositionY(float pos) { mPositionY = pos; };
 
   void input(const bool& isEditorMode, const eInputStatus& inputStatus) {
     if (isEditorMode == true)
