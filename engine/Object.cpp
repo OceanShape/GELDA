@@ -21,13 +21,13 @@ void Object::draw(const int& textureNumber) {
     t = isRightSide * 2.0f - 1.0f;
 
     glTexCoord2f(0.0f, 0.0f);
-    glVertex2f(mPositionX - t, mPositionY + 1.0f);
+    glVertex2f(mPosX - t, mPosY + 1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex2f(mPositionX - t, mPositionY - 1.0f);
+    glVertex2f(mPosX - t, mPosY - 1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex2f(mPositionX + t, mPositionY - 1.0f);
+    glVertex2f(mPosX + t, mPosY - 1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex2f(mPositionX + t, mPositionY + 1.0f);
+    glVertex2f(mPosX + t, mPosY + 1.0f);
 
     glEnd();
   }

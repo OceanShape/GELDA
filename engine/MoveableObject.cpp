@@ -28,13 +28,13 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   // update gravity status
   if (mJumpStatus == eJumpStatus::JUMP) {
     isOnPlatform = false;
-    mPositionY += 0.6f;
-    if (mPositionY - jumpStartPositionY > 3.0f * 2.0f) {
-      jumpDecelerationStartPositionY = mPositionY;
+    mPosY += 0.6f;
+    if (mPosY - jumpStartPositionY > 3.0f * 2.0f) {
+      jumpDecelerationStartPositionY = mPosY;
       mJumpStatus = eJumpStatus::JUMP_DECELERATION;
     }
   } else if (mJumpStatus == eJumpStatus::FALL) {
-    mPositionY -= 0.6f;
+    mPosY -= 0.6f;
   } else if (mJumpStatus == eJumpStatus::JUMP_DECELERATION) {
     jumpDecelerationSpendTime += 1.0f;
 
@@ -43,18 +43,17 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
     if (upSpeed < -0.6f) {
       mJumpStatus = eJumpStatus::FALL;
     }
-    mPositionY += upSpeed;
+    mPosY += upSpeed;
   }
 
   // check collision status
   // ¡Ø Notice: Only C++20 or later only
-  auto reverseObjects = objects | std::views::filter([this](Object* g) {
-                          return mPositionX - 2.0f < g->mPositionX &&
-                                 g->mPositionX < mPositionX + 2.0f &&
-                                 mPositionY - 2.0f < g->mPositionY &&
-                                 g->mPositionY < mPositionY + 2.0f;
-                        }) |
-                        std::views::reverse;
+  auto reverseObjects =
+      objects | std::views::filter([this](Object* g) {
+        return mPosX - 2.0f < g->mPosX && g->mPosX < mPosX + 2.0f &&
+               mPosY - 2.0f < g->mPosY && g->mPosY < mPosY + 2.0f;
+      }) |
+      std::views::reverse;
 
   isPreBottomCollision = isBottomCollision;
 
@@ -68,31 +67,31 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
       continue;
     }
 
-    float posX = t->mPositionX;
-    float posY = t->mPositionY;
+    float posX = t->mPosX;
+    float posY = t->mPosY;
 
     // bottom collision
-    if (mPositionY - 1.3f > posY) {
-      if ((posX < mPositionX + 1.0f && mPositionX - 1.0f < posX) ||
+    if (mPosY - 1.3f > posY) {
+      if ((posX < mPosX + 1.0f && mPosX - 1.0f < posX) ||
           (mJumpStatus == eJumpStatus::FALL && leftObj == nullptr &&
            rightObj == nullptr &&
-           (mPositionX + 1.9f > posX || mPositionX - 1.9f < posX))) {
+           (mPosX + 1.9f > posX || mPosX - 1.9f < posX))) {
         bottomObj = t;
         MessageQueue::push(this, t, CollisionType::Down);
       }
     }
     // left collision
-    else if (mPositionY - 0.8f < posY && mPositionX - 1.6f > posX) {
+    else if (mPosY - 0.8f < posY && mPosX - 1.6f > posX) {
       leftObj = t;
       MessageQueue::push(this, t, CollisionType::Left);
     }
     // right collision
-    else if (mPositionY - 0.8f < posY && mPositionX + 1.6f < posX) {
+    else if (mPosY - 0.8f < posY && mPosX + 1.6f < posX) {
       rightObj = t;
       MessageQueue::push(this, t, CollisionType::Right);
     }
     // top collision
-    else if (mPositionY + 1.2f < posY) {
+    else if (mPosY + 1.2f < posY) {
       topObj = t;
       mJumpStatus = eJumpStatus::FALL;
       MessageQueue::push(this, t, CollisionType::Top);
@@ -101,24 +100,24 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 
   // update collision
   if (topObj != nullptr) {
-    mPositionY = topObj->mPositionY - 2.0f;
+    mPosY = topObj->mPosY - 2.0f;
   }
 
   if (leftObj != nullptr) {
-    mPositionX = leftObj->mPositionX + 2.0f;
+    mPosX = leftObj->mPosX + 2.0f;
   }
 
   if (rightObj != nullptr) {
-    mPositionX = rightObj->mPositionX - 2.0f;
+    mPosX = rightObj->mPosX - 2.0f;
   }
 
   if (bottomObj != nullptr) {
     isBottomCollision = true;
 
-    mPositionY = bottomObj->mPositionY + 2.0f;
+    mPosY = bottomObj->mPosY + 2.0f;
 
     jumpDecelerationSpendTime = 0.0f;
-    jumpStartPositionY = mPositionY;
+    jumpStartPositionY = mPosY;
     mJumpStatus = eJumpStatus::NO_JUMP;
     mMoveStatus = eMoveStatus::STOP;
 
@@ -130,30 +129,30 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 
   std::cout << MessageQueue::getSize() << std::endl;
 
-  mPositionY = (static_cast<int>(mPositionY * 10.0f) / 10.0f);
+  mPosY = (static_cast<int>(mPosY * 10.0f) / 10.0f);
 }
 
 void MoveableObject::updateCollision(Object* obj,
                                      const CollisionType& collisiontype) {
   if (collisiontype == CollisionType::Top) {
-    mPositionY = obj->mPositionY - 2.0f;
+    mPosY = obj->mPosY - 2.0f;
   }
 
   if (collisiontype == CollisionType::Left) {
-    mPositionX = obj->mPositionX + 2.0f;
+    mPosX = obj->mPosX + 2.0f;
   }
 
   if (collisiontype == CollisionType::Right) {
-    mPositionX = obj->mPositionX - 2.0f;
+    mPosX = obj->mPosX - 2.0f;
   }
 
   if (collisiontype == CollisionType::Down) {
     isBottomCollision = true;
 
-    mPositionY = obj->mPositionY + 2.0f;
+    mPosY = obj->mPosY + 2.0f;
 
     jumpDecelerationSpendTime = 0.0f;
-    jumpStartPositionY = mPositionY;
+    jumpStartPositionY = mPosY;
     mJumpStatus = eJumpStatus::NO_JUMP;
     mMoveStatus = eMoveStatus::STOP;
 
@@ -166,28 +165,28 @@ void MoveableObject::updateCollision(Object* obj,
 
 void MoveableObject::inputControl(const eInputStatus& input) {
   if (input == eInputStatus::LEFT) {
-    mPositionX += -0.3f;
+    mPosX += -0.3f;
     mMoveStatus = eMoveStatus::MOVE;
     mDirectionStatus = eDirectionStatus::LEFT;
   } else if (input == eInputStatus::RIGHT) {
-    mPositionX += 0.3f;
+    mPosX += 0.3f;
     mMoveStatus = eMoveStatus::MOVE;
     mDirectionStatus = eDirectionStatus::RIGHT;
   } else if (input == eInputStatus::ARROW_RELEASE) {
-    mPositionX += 0.0f;
+    mPosX += 0.0f;
     mMoveStatus = eMoveStatus::STOP;
   } else if (input == eInputStatus::JUMP_PRESS) {
     // if (mJumpStatus == eJumpStatus::NO_JUMP)
     if ((mJumpStatus == eJumpStatus::NO_JUMP ||
          mJumpStatus == eJumpStatus::FALL) &&
-        isOnPlatform == true && (jumpStartPositionY - mPositionY <= 0.05f)) {
+        isOnPlatform == true && (jumpStartPositionY - mPosY <= 0.05f)) {
       isOnPlatform = false;
-      jumpStartPositionY = mPositionY;
+      jumpStartPositionY = mPosY;
       mJumpStatus = eJumpStatus::JUMP;
     }
   } else if (input == eInputStatus::JUMP_RELEASE) {
     if (mJumpStatus == eJumpStatus::JUMP) {
-      jumpDecelerationStartPositionY = mPositionY;
+      jumpDecelerationStartPositionY = mPosY;
       mJumpStatus = eJumpStatus::JUMP_DECELERATION;
     }
   }

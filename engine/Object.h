@@ -18,14 +18,14 @@ class Object {
   size_t mCurrentFrame = 0;
   float mTextureRate = 0.0625f;
 
-  float mPositionX;
-  float mPositionY;
+  float mPosX;
+  float mPosY;
 
  public:
   Object(std::vector<GLuint>* texture, const float& posX, const float& posY)
       : mTexture(texture) {
-    mPositionX = posX;
-    mPositionY = posY;
+    mPosX = posX;
+    mPosY = posY;
   }
 
   friend class MoveableObject;
@@ -40,13 +40,13 @@ class Object {
   }
   void inputEditor(const eInputStatus& input) {
     if (input == eInputStatus::LEFT)
-      mPositionX += -0.5f;
+      mPosX += -0.5f;
     else if (input == eInputStatus::RIGHT)
-      mPositionX += 0.5f;
+      mPosX += 0.5f;
     else if (input == eInputStatus::UP)
-      mPositionY += 0.5f;
+      mPosY += 0.5f;
     else if (input == eInputStatus::DOWN)
-      mPositionY += -0.5f;
+      mPosY += -0.5f;
   }
   virtual void inputControl(const eInputStatus& input) {}
 
