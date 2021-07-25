@@ -100,7 +100,7 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   mPosY = (static_cast<int>(mPosY * 10.0f) / 10.0f);
 }
 
-void MoveableObject::updateCollision(Object* obj,
+void MoveableObject::updatePosition(Object* obj,
                                      const CollisionType& collisionType) {
   if (collisionType == CollisionType::Top) mPosY = obj->mPosY - 2.0f;
   if (collisionType == CollisionType::Left) mPosX = obj->mPosX + 2.0f;

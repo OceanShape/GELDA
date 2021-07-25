@@ -228,7 +228,7 @@ void Game::run() {
 bool Game::processMessage() {
   while (MessageQueue::getSize() > 0) {
     const CollisionMessage msg = MessageQueue::front();
-    msg.object->updateCollision(msg.target, msg.type);
+    msg.object->updatePosition(msg.target, msg.type);
     MessageQueue::pop();
   }
   return false;
