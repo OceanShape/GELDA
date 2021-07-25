@@ -1,9 +1,9 @@
 #pragma once
 #include "CollisionType.h"
-#include "Object.h"
+#include "MoveableObject.h"
 
 struct CollisionMessage {
-  Object* object;
+  MoveableObject* object;
   Object* target;
   CollisionType type;
 };

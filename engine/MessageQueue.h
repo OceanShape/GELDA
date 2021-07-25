@@ -4,7 +4,7 @@
 
 #include "CollisionMessage.h"
 #include "CollisionType.h"
-#include "Object.h"
+#include "MoveableObject.h"
 
 class MessageQueue {
  public:
@@ -13,7 +13,7 @@ class MessageQueue {
     return *instance;
   }
 
-  static void push(Object* object, Object* target, CollisionType type);
+  static void push(MoveableObject* object, Object* target, CollisionType type);
 
   static void pop();
 

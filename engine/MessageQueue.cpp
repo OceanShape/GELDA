@@ -2,7 +2,7 @@
 
 static std::queue<CollisionMessage> messages;
 
-void MessageQueue::push(Object* object, Object* target, CollisionType type) {
+void MessageQueue::push(MoveableObject* object, Object* target, CollisionType type) {
   messages.push({object, target, type});
 }
 
