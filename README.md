@@ -1,2 +1,3 @@
 # GELDA
-Revision of GELDA_gameEngine
+
+- GELDA is a revision of Game Engine Learning Do Alone
