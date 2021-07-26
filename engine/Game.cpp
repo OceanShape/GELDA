@@ -4,7 +4,8 @@
 
 Game::Game(const std::string& title, int width, int height,
            const std::string& resourceDir, const std::string& objectDir) {
-  assert(glfwInit());
+  if (glfwInit() == false)
+    reportErrorAndExit(__FUNCTION__, "glfw initialization");
 
   const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
@@ -15,12 +16,14 @@ Game::Game(const std::string& title, int width, int height,
   glfwSetWindowPos(glfwWindow, (mode->width - width) / 2,
                    (mode->height - height) / 2);
 
-  assert(glfwWindow);
+  if (!glfwWindow) reportErrorAndExit(__FUNCTION__, "Window initialization");
+
   glfwSwapInterval(1);  // 60fps
 
   // Init GLEW
   glewExperimental = true;
-  assert(glewInit() == GLEW_OK);
+  if (glewInit() != GLEW_OK)
+    reportErrorAndExit(__FUNCTION__, "glew initialization");
 
   glViewport(0, 0, width, height);
   const float aspect_ratio = (float)width / (float)height;
@@ -41,11 +44,12 @@ Game::Game(const std::string& title, int width, int height,
             << "Press Escape key to exit" << std::endl;
 }
 
-void Game::reportErrorAndExit(const std::string& function, const std::string& message) {
-    std::cout << "Error: " << function << " " << message << std::endl;
+void Game::reportErrorAndExit(const std::string& function,
+                              const std::string& message) {
+  std::cout << "Error: " << function << " " << message << std::endl;
 
-    glfwTerminate();
-    exit(1);
+  glfwTerminate();
+  exit(1);
 }
 
 void Game::initTexture(const std::string& dir) {
