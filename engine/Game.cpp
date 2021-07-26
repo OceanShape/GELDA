@@ -29,14 +29,9 @@ Game::Game(const std::string& title, int width, int height,
   const float aspect_ratio = (float)width / (float)height;
   glOrtho(-aspect_ratio, aspect_ratio, -1.0, 1.0, -1.0, 1.0);
 
-  // Init textures
-  initTexture(resourceDir);
-
-  // Init GameObejcts
-  initObject(objectDir);
-
-  // Init MessageQueue
-  MessageQueue::instance();
+  initTexture(resourceDir);  // Init textures
+  initObject(objectDir);     // Init GameObejcts
+  MessageQueue::instance();  // Init MessageQueue
 
   std::cout << "Display width = " << width << std::endl
             << "Display height = " << height << std::endl
@@ -46,8 +41,7 @@ Game::Game(const std::string& title, int width, int height,
 
 void Game::reportErrorAndExit(const std::string& function,
                               const std::string& message) {
-  std::cout << "Error: " << function << " " << message << std::endl;
-
+  std::cout << "Error in " << function << "(): " << message << std::endl;
   glfwTerminate();
   exit(1);
 }
@@ -59,10 +53,8 @@ void Game::initTexture(const std::string& dir) {
 
   std::ifstream file(dir, std::ios_base::in);
 
-  if (file.is_open() == false) {
-    std::cout << "error: Reading \"" << dir << "\"failed\n" << std::endl;
-    exit(-1);
-  }
+  if (file.is_open() == false)
+    reportErrorAndExit(__FUNCTION__, "read \"" + dir + "\"");
 
   std::string data((std::istreambuf_iterator<char>(file)),
                    std::istreambuf_iterator<char>());
@@ -86,9 +78,8 @@ void Game::initTexture(const std::string& dir) {
       imageData = stbi_load(str, &width, &height, &channelCount, 0);
 
       if (imageData == NULL) {
-        std::cout << "error : Failed to load texture \"" << str << "\""
-                  << std::endl;
-        exit(-1);
+        std::string s(str);
+        reportErrorAndExit(__FUNCTION__, "load texture " + s);
       } else {
         glBindTexture(GL_TEXTURE_2D, text);
 
@@ -130,18 +121,14 @@ void Game::initObject(const std::string& dir) {
   std::ifstream file(dir, std::ios_base::in || std::ios_base::binary);
   std::string data;
 
-  if (file.is_open() == false) {
-    std::cout << "error: Reading \"" << dir << "\"failed\n" << std::endl;
-    exit(-1);
-  }
+  if (file.is_open() == false)
+    reportErrorAndExit(__FUNCTION__, "read \"" + dir + "\"");
 
   data.resize(21);
   file.read(&data[0], data.size());
 
-  if (file.fail() == true || data != "GELDA GAMEOBJECT FILE") {
-    std::cout << "error: gameobject.dat is invalid" << std::endl;
-    exit(-1);
-  }
+  if (file.fail() == true || data != "GELDA GAMEOBJECT FILE")
+    reportErrorAndExit(__FUNCTION__, "invalid gameobject.dat");
 
   file.seekg(32, std::ios::beg);
   data.resize(256);
@@ -164,10 +151,8 @@ void Game::initObject(const std::string& dir) {
     }
   }
 
-  if (mControllable == nullptr) {
-    std::cout << "error: Controllable object is not founded" << std::endl;
-    exit(-1);
-  }
+  if (mControllable == nullptr)
+    reportErrorAndExit(__FUNCTION__, "find controllable object");
 }
 
 void Game::draw() {
