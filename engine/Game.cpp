@@ -41,6 +41,13 @@ Game::Game(const std::string& title, int width, int height,
             << "Press Escape key to exit" << std::endl;
 }
 
+void Game::reportErrorAndExit(const std::string& function, const std::string& message) {
+    std::cout << "Error: " << function << " " << message << std::endl;
+
+    glfwTerminate();
+    exit(1);
+}
+
 void Game::initTexture(const std::string& dir) {
   glEnable(GL_BLEND);
   glEnable(GL_TEXTURE_2D);

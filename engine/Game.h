@@ -40,6 +40,9 @@ class Game {
   }
 
   void run();  // Entire game loop
+  void reportErrorAndExit(const std::string& function,
+                          const std::string& message);
+
  private:
   void draw();                               // Draw all game objects
   void initTexture(const std::string& dir);  // Initialize textures
