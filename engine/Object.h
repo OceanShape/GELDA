@@ -21,6 +21,8 @@ class Object {
   float mPosX;
   float mPosY;
 
+  eLifeStatus mLifeStatus = eLifeStatus::ALIVE;
+
  public:
   Object(std::vector<GLuint>* texture, const float& posX, const float& posY)
       : mTexture(texture) {

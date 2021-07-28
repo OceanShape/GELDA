@@ -10,6 +10,8 @@ enum class eInputStatus {
   JUMP_RELEASE
 };
 
+enum class eLifeStatus { ALIVE, DEAD };
+
 enum class eDirectionStatus { LEFT, RIGHT };
 
 enum class eMoveStatus { STOP, MOVE };
