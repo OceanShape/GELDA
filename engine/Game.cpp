@@ -209,9 +209,10 @@ void Game::draw() {
 }
 
 void Game::run() {
-  while (!glfwWindowShouldClose(glfwWindow) && isGameOver == false) {
+  while (glfwWindowShouldClose(glfwWindow) == false) {
     getInput();
     update();
+    if (isGameOver == true) break;
     draw();
 
     glfwSwapBuffers(glfwWindow);
