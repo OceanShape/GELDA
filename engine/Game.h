@@ -49,10 +49,8 @@ class Game {
   void initObject(
       const std::string& dir);  // Initialize game objects(texture, position)
   void update() {               // Update game object status
-    for (Object* o : mObject) {
-      if (o == mControllable && isEditorMode == true) continue;
-      o->update(mObject);
-    }
+    if (isEditorMode == false)
+      for (Object* o : mObject) o->update(mObject);
 
     isGameOver = processMessage();
   };
