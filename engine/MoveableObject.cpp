@@ -19,9 +19,7 @@ void MoveableObject::setMode(const bool& isEditorMode) {
   mMoveStatus = eMoveStatus::STOP;
 }
 void MoveableObject::update(const std::vector<Object*>& objects) {
-  // update frame
-  ++mCurrentFrame;
-  if (mCurrentFrame == 60) mCurrentFrame = 0;
+  updateFrame();
 
   // update gravity status
   if (mJumpStatus == eJumpStatus::JUMP) {
@@ -101,7 +99,7 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 }
 
 void MoveableObject::updatePosition(Object* obj,
-                                     const CollisionType& collisionType) {
+                                    const CollisionType& collisionType) {
   if (collisionType == CollisionType::Top) mPosY = obj->mPosY - 2.0f;
   if (collisionType == CollisionType::Left) mPosX = obj->mPosX + 2.0f;
   if (collisionType == CollisionType::Right) mPosX = obj->mPosX - 2.0f;

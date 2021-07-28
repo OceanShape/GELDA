@@ -55,8 +55,8 @@ class Object {
   void draw(const int& textureNumber);
   virtual GLuint getTexture(bool& isRightSide) { return (*mTexture)[0]; }
   virtual void setMode(const bool& isEditorMode) { mCurrentFrame = 0; }
-  virtual void update(const std::vector<Object*>& object) {
-    ++mCurrentFrame;
-    if (mCurrentFrame == 60) mCurrentFrame = 0;
+  virtual void update(const std::vector<Object*>& object) { updateFrame(); }
+  void updateFrame() {
+    if (++mCurrentFrame == 60) mCurrentFrame = 0;
   }
 };
