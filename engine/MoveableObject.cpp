@@ -42,6 +42,12 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
     mPosY += upSpeed;
   }
 
+  // update life status
+  if (mPosY < -20.0f) {
+    mLifeStatus = eLifeStatus::DEAD;
+    return;
+  }
+
   // check collision status
   // ¡Ø Notice: Only C++20 or later only
   auto reverseObjects =

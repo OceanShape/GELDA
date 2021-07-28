@@ -21,6 +21,7 @@ class MoveableObject : public Object {
   MoveableObject(std::vector<GLuint>* texture, const float& posX,
                  const float& posY)
       : Object(texture, posX, posY) {}
+  friend class Game;
 
   GLuint getTexture(bool& isRightSide);
   void setMode(const bool& isEditorMode) override;

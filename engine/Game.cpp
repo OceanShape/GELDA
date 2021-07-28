@@ -139,9 +139,10 @@ void Game::initObject(const std::string& dir) {
   for (int i = 0; i < data.size(); ++i) {
     char c = *cp++;
     if (c == 1) {
-      Object* o = new MoveableObject(mTexture[0],
-                                     (i % 16 - 8) * 2 + 1.0f,   // x position
-                                     (i / 16 - 8) * 2 + 1.0f);  // y position
+      MoveableObject* o =
+          new MoveableObject(mTexture[0],
+                             (i % 16 - 8) * 2 + 1.0f,   // x position
+                             (i / 16 - 8) * 2 + 1.0f);  // y position
       mObject.push_back(o);
       mControllable = o;
     } else if (c != 0) {

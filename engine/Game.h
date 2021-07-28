@@ -23,7 +23,7 @@ class Game {
 
   bool isGameOver = false;
   bool isEditorMode = true;
-  Object* mControllable = nullptr;
+  MoveableObject* mControllable = nullptr;
 
  public:
   Game(const std::string& title, int width, int height,
@@ -52,6 +52,10 @@ class Game {
     if (isEditorMode == false)
       for (Object* o : mObject) o->update(mObject);
 
+    if (mControllable->mLifeStatus == eLifeStatus::DEAD) {
+      isGameOver = true;
+      return;
+    }
     isGameOver = processMessage();
   };
   bool processMessage();
