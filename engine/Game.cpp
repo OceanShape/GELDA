@@ -202,9 +202,10 @@ void Game::draw() {
   }
 
   // draw game objects
-  for (Object* g : mObject) {
-    g->draw(0);
+  for (Object* o : mObject) {
+    if (o != mControllable) o->draw(0);
   }
+  mControllable->draw(0);
 
   glFlush();
 }
