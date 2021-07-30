@@ -18,9 +18,9 @@ class MoveableObject : public Object {
   eJumpStatus mJumpStatus = eJumpStatus::FALL;
 
  public:
-  MoveableObject(std::vector<GLuint>* texture, const float& posX,
-                 const float& posY)
-      : Object(texture, posX, posY) {}
+  MoveableObject(std::vector<GLuint>* texture, const ObjectType& type,
+                 const float& posX, const float& posY)
+      : Object(texture, type, posX, posY) {}
   friend class Game;
 
   GLuint getTexture(bool& isRightSide);

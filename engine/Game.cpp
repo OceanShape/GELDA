@@ -140,13 +140,17 @@ void Game::initObject(const std::string& dir) {
     char c = *cp++;
     if (c == 1) {
       MoveableObject* o =
-          new MoveableObject(mTexture[0],
+          new MoveableObject(mTexture[0], ObjectType::CHARACTER,
                              (i % 16 - 8) * 2 + 1.0f,   // x position
                              (i / 16 - 8) * 2 + 1.0f);  // y position
       mObject.push_back(o);
       mControllable = o;
     } else if (c != 0) {
-      mObject.push_back(new Object(mTexture[c - 1],
+      ObjectType type;
+      if (c == 2 || c == 3) type = ObjectType::GROUND;
+      if (c == 4) type = ObjectType::BLOCK;
+      if (c == 5) type = ObjectType::BRICK;
+      mObject.push_back(new Object(mTexture[c - 1], type, 
                                    (i % 16 - 8) * 2 + 1.0f,    // x position
                                    (i / 16 - 8) * 2 + 1.0f));  // y position
     }

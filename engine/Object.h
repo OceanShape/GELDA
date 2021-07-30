@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "CollisionType.h"
+#include "ObjectType.h"
 #include "Status.h"
 
 class Object {
@@ -18,14 +19,18 @@ class Object {
   size_t mCurrentFrame = 0;
   float mTextureRate = 0.0625f;
 
+  ObjectType mObjectType;
+
   float mPosX;
   float mPosY;
 
   eLifeStatus mLifeStatus = eLifeStatus::ALIVE;
 
  public:
-  Object(std::vector<GLuint>* texture, const float& posX, const float& posY)
+  Object(std::vector<GLuint>* texture, const ObjectType& type, const float& posX,
+         const float& posY)
       : mTexture(texture) {
+    mObjectType = type;
     mPosX = posX;
     mPosY = posY;
   }
