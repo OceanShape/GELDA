@@ -1,10 +1,11 @@
 ./resource/playable_stand.png
 ./resource/playable_jump.png
 #
-./resource/ground.png
+./resource/ow_blk_ground.png
 #
-./resource/stone.png
+./resource/ow_blk_stone_default.png
 #
-./resource/coin_block.png
+./resource/ow_blk_coin_default1.png
+./resource/ow_blk_coin_default2.png
 #
-./resource/brick.png
+./resource/ow_blk_brick_default.png
