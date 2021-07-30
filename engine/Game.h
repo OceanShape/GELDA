@@ -59,7 +59,7 @@ class Game {
     isGameOver = processMessage();
   };
   bool processMessage();
-
+  
  protected:
   void input(const eInputStatus& inputStatus) {
     mControllable->input(isEditorMode, inputStatus);
