@@ -1,7 +1,5 @@
 #include "MoveableObject.h"
 
-#include <bitset>
-
 #include "MessageQueue.h"
 
 GLuint MoveableObject::getTexture(bool& isRightSide) {
@@ -49,13 +47,12 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   }
 
   // check collision status
-  // ¡Ø Notice: Only C++20 or later only
-  auto reverseObjects =
-      objects | std::views::filter([this](Object* g) {
-        return mPosX - 2.0f < g->mPosX && g->mPosX < mPosX + 2.0f &&
-               mPosY - 2.0f < g->mPosY && g->mPosY < mPosY + 2.0f;
-      }) |
-      std::views::reverse;
+  std::vector<int> collisionRangeObjectsIdx;
+  for (int i = 0; i < objects.size(); ++i) {
+    if (mPosX - 2.0f < objects[i]->mPosX && objects[i]->mPosX < mPosX + 2.0f &&
+        mPosY - 2.0f < objects[i]->mPosY && objects[i]->mPosY < mPosY + 2.0f)
+      collisionRangeObjectsIdx.push_back(i);
+  }
 
   isPreBottomCollision = isBottomCollision;
 
@@ -63,11 +60,12 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   bool isRightCollision = false;
   bool isBottomCollision = false;
 
-  for (Object* target : reverseObjects) {
-    if (this == target) continue;
+  for (auto idx = collisionRangeObjectsIdx.rbegin();
+       idx != collisionRangeObjectsIdx.rend(); ++idx) {
+    if (this == objects[*idx]) continue;
 
-    float posX = target->mPosX;
-    float posY = target->mPosY;
+    float posX = objects[*idx]->mPosX;
+    float posY = objects[*idx]->mPosY;
 
     // bottom
     if (mPosY - 1.3f > posY) {
@@ -76,23 +74,23 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
            (isLeftCollision == false && isRightCollision == false) &&
            (mPosX + 1.9f > posX || mPosX - 1.9f < posX))) {
         isBottomCollision = true;
-        MessageQueue::push(this, target, CollisionType::Down);
+        MessageQueue::push(this, objects[*idx], CollisionType::Down);
       }
     }
     // left
     else if (mPosY - 0.8f < posY && mPosX - 1.6f > posX) {
       isLeftCollision = true;
-      MessageQueue::push(this, target, CollisionType::Left);
+      MessageQueue::push(this, objects[*idx], CollisionType::Left);
     }
     // right
     else if (mPosY - 0.8f < posY && mPosX + 1.6f < posX) {
       isRightCollision = true;
-      MessageQueue::push(this, target, CollisionType::Right);
+      MessageQueue::push(this, objects[*idx], CollisionType::Right);
     }
     // top
     else if (mPosY + 1.2f < posY) {
       mJumpStatus = eJumpStatus::FALL;
-      MessageQueue::push(this, target, CollisionType::Top);
+      MessageQueue::push(this, objects[*idx], CollisionType::Top);
     }
   }
 

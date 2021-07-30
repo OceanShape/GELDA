@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cfloat>
 #include <iostream>
-#include <ranges>  // reverse range(¡Ø Notice: Only C++20 or later only)
 #include <vector>
 
 #include "CollisionType.h"
@@ -27,8 +26,8 @@ class Object {
   eLifeStatus mLifeStatus = eLifeStatus::ALIVE;
 
  public:
-  Object(std::vector<GLuint>* texture, const ObjectType& type, const float& posX,
-         const float& posY)
+  Object(std::vector<GLuint>* texture, const ObjectType& type,
+         const float& posX, const float& posY)
       : mTexture(texture) {
     mObjectType = type;
     mPosX = posX;
