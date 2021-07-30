@@ -60,12 +60,13 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
   bool isRightCollision = false;
   bool isBottomCollision = false;
 
-  for (auto idx = collisionRangeObjectsIdx.rbegin();
-       idx != collisionRangeObjectsIdx.rend(); ++idx) {
-    if (this == objects[*idx]) continue;
+  for (auto it = collisionRangeObjectsIdx.rbegin();
+       it != collisionRangeObjectsIdx.rend(); ++it) {
+    int idx = *it;
+    if (this == objects[idx]) continue;
 
-    float posX = objects[*idx]->mPosX;
-    float posY = objects[*idx]->mPosY;
+    float posX = objects[idx]->mPosX;
+    float posY = objects[idx]->mPosY;
 
     // bottom
     if (mPosY - 1.3f > posY) {
@@ -74,29 +75,29 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
            (isLeftCollision == false && isRightCollision == false) &&
            (mPosX + 1.9f > posX || mPosX - 1.9f < posX))) {
         isBottomCollision = true;
-        MessageQueue::push(this, objects[*idx], CollisionType::Down);
+        MessageQueue::push(this, idx, CollisionType::Down);
       }
     }
     // left
     else if (mPosY - 0.8f < posY && mPosX - 1.6f > posX) {
       isLeftCollision = true;
-      MessageQueue::push(this, objects[*idx], CollisionType::Left);
+      MessageQueue::push(this, idx, CollisionType::Left);
     }
     // right
     else if (mPosY - 0.8f < posY && mPosX + 1.6f < posX) {
       isRightCollision = true;
-      MessageQueue::push(this, objects[*idx], CollisionType::Right);
+      MessageQueue::push(this, idx, CollisionType::Right);
     }
     // top
     else if (mPosY + 1.2f < posY) {
       mJumpStatus = eJumpStatus::FALL;
-      MessageQueue::push(this, objects[*idx], CollisionType::Top);
+      MessageQueue::push(this, idx, CollisionType::Top);
     }
   }
 
   if (isBottomCollision == false && isPreBottomCollision == true &&
       mJumpStatus == eJumpStatus::NO_JUMP) {
-    MessageQueue::push(this, nullptr, CollisionType::EscapeDown);
+    MessageQueue::push(this, -1, CollisionType::EscapeDown);
   }
 
   mPosY = (static_cast<int>(mPosY * 10.0f) / 10.0f);

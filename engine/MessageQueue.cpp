@@ -2,8 +2,9 @@
 
 static std::queue<CollisionMessage> messages;
 
-void MessageQueue::push(MoveableObject* object, Object* target, CollisionType type) {
-  messages.push({object, target, type});
+void MessageQueue::push(MoveableObject* object, const int& targetIdx,
+                        CollisionType type) {
+  messages.push({object, targetIdx, type});
 }
 
 void MessageQueue::pop() { messages.pop(); }

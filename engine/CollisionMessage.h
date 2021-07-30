@@ -4,6 +4,6 @@
 
 struct CollisionMessage {
   MoveableObject* object;
-  Object* target;
-  CollisionType type;
+  const int targetIdx;
+  const CollisionType type;
 };

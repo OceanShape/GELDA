@@ -150,7 +150,7 @@ void Game::initObject(const std::string& dir) {
       if (c == 2 || c == 3) type = ObjectType::GROUND;
       if (c == 4) type = ObjectType::BLOCK;
       if (c == 5) type = ObjectType::BRICK;
-      mObject.push_back(new Object(mTexture[c - 1], type, 
+      mObject.push_back(new Object(mTexture[c - 1], type,
                                    (i % 16 - 8) * 2 + 1.0f,    // x position
                                    (i / 16 - 8) * 2 + 1.0f));  // y position
     }
@@ -231,7 +231,7 @@ void Game::run() {
 bool Game::processMessage() {
   while (MessageQueue::getSize() > 0) {
     const CollisionMessage msg = MessageQueue::front();
-    msg.object->updatePosition(msg.target, msg.type);
+    msg.object->updatePosition(mObject[msg.targetIdx], msg.type);
     MessageQueue::pop();
   }
   return false;

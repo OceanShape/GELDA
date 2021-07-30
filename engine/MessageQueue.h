@@ -13,7 +13,8 @@ class MessageQueue {
     return *instance;
   }
 
-  static void push(MoveableObject* object, Object* target, CollisionType type);
+  static void push(MoveableObject* object, const int& targetIdx,
+                   CollisionType type);
 
   static void pop();
 
