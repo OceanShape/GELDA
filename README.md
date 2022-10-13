@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="12%" src="https://user-images.githubusercontent.com/42532724/127039280-f16ae498-a1a6-4c1f-a3f3-6083fdace241.png"/>
+  <img width="12%" src="resource/readme_main.png"/>
 </p>
 <h1 align="center">GELDA</h1>
 <h3 align="center">Game Engine Learning Do Alone</h3>
