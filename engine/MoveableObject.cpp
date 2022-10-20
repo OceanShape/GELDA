@@ -97,7 +97,7 @@ void MoveableObject::update(const std::vector<Object*>& objects) {
 
   if (isBottomCollision == false && isPreBottomCollision == true &&
       mJumpStatus == eJumpStatus::NO_JUMP) {
-    MessageQueue::push(this, -1, CollisionType::EscapeDown);
+    MessageQueue::push(this, 0, CollisionType::EscapeDown);
   }
 
   mPosY = (static_cast<int>(mPosY * 10.0f) / 10.0f);
